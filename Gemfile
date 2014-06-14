@@ -1,23 +1,42 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.1.1'
+gem 'rails', '4.0.0'
+gem 'rails-api' #Rails on API mode
 
-gem 'rails-api'
+gem 'pg'# Use sqlite3 as the database for Active Record
+gem 'warden', '1.2.3'
+gem 'devise'
+gem 'cancan' #For authorization
+gem 'active_model_serializers'
 
-gem 'spring', :group => :development
+# See https://github.com/sstephenson/execjs#readme for more supported runtimes
+gem 'therubyracer', platforms: :ruby
 
-gem 'pg'
+# Use SCSS for stylesheets
+gem 'sass-rails', '~> 4.0.0.rc1'
 
-gem 'rabl'
+# Use Uglifier as compressor for JavaScript assets
+gem 'uglifier', '>= 1.3.0'
 
-gem 'bcrypt-ruby', '~> 3.1.2'
+group :doc do
+  # bundle exec rake doc:rails generates the API under doc/api.
+  gem 'sdoc', require: false
+end
 
-gem 'jbuilder'
-
+# Use unicorn as the app server
 gem 'unicorn'
 
-# Deploy with Capistrano
-# gem 'capistrano', :group => :development
+# Use Capistrano for deployment
+# gem 'capistrano', group: :development
 
-# To use debugger
-# gem 'ruby-debug19', :require => 'ruby-debug'
+# Use debugger
+gem 'debugger', group: [:development, :test]
+
+#Testing
+gem "rspec-rails", :group => [:development, :test] #Unit test framework
+gem "database_cleaner", :group => :test #For cleaning database during unit tests
+gem "cucumber-rails", :group => :test, :require => false #Behaviour driven development
+gem "factory_girl_rails", :group => [:development, :test] #Factory for DB data
+gem "shoulda-matchers", :group => :test #Collection of Rails testing matchers
+gem 'cucumber-api-steps', :require => false, :group => :test #Cucumber steps for API
+gem 'json_spec', group: :test # JSON matchers for tests
