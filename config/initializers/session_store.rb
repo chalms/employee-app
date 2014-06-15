@@ -1,1 +1,1 @@
-EmployeeApp::Application.config.session_store :cookie_store, key: '_rails-4-api_session'
+EmployeeApp::Application.config.session_store :cookie_store, key: '_employee_app_session'

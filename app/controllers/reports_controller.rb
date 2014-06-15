@@ -2,11 +2,9 @@ class ReportsController < ApplicationController
 
   def show
     ### need to have a request/response pairing here 
-
     @report = Report.find(params[:id])
     format.json { render :json => @chats.as_json }
   end
-
 
   def create
     #~~~~~~~~~~~~~~~~~~ ADMIN

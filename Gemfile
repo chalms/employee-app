@@ -40,3 +40,4 @@ gem "factory_girl_rails", :group => [:development, :test] #Factory for DB data
 gem "shoulda-matchers", :group => :test #Collection of Rails testing matchers
 gem 'cucumber-api-steps', :require => false, :group => :test #Cucumber steps for API
 gem 'json_spec', group: :test # JSON matchers for tests
+gem 'simple_token_authentication'

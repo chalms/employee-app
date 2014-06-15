@@ -17,3 +17,5 @@
 # to avoid deprecation warning.
 # Can be safely removed in a rails3 api-only application.
 EmployeeApp::Application.config.secret_token = 'c7b15e4bf37d418f4d0df04c5c5677e33a82e027d248ff6e23a37855c22856a218ea1210e1d6daf45f8da57f9e94f59a5aa418ac0febf868648985403145f326'
+
+EmployeeApp::Application.config.secret_key_base = 'd0f9da2a42a1728bc77781c6f1705b5142d407aeb3015c89cd6b0cf689758ae27bab1d2bb2a0affd5f10fbd6d5d6dfee88caf9d0f0a38504facaba14c80ac7d2'

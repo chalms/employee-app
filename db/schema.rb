@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140614011418) do
+ActiveRecord::Schema.define(version: 20140614232932) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -96,6 +96,18 @@ ActiveRecord::Schema.define(version: 20140614011418) do
     t.integer  "report_index"
     t.integer  "geo_locations_id"
   end
+
+  create_table "users", force: true do |t|
+    t.string "role",                              null: false
+    t.string "first_name"
+    t.string "last_name"
+    t.string "email",                default: "", null: false
+    t.string "encrypted_password",   default: "", null: false
+    t.string "authentication_token"
+  end
+
+  add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", using: :btree
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
 
   create_table "workers", force: true do |t|
     t.string   "first_name"

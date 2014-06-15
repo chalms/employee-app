@@ -1,7 +1,7 @@
 Given /^"([^"]*)" is a user with email id "([^"]*)" and password "([^"]*)"$/ do |full_name, email, password|
   first_name, last_name = full_name.split
-  @user = Worker.create(email: email, password: password, password_confirmation: password, first_name: first_name.to_s, last_name: last_name.to_s, role: 'user')
-end
+  @user = User.create(email: email, password: password, password_confirmation: password, first_name: first_name.to_s, last_name: last_name.to_s, role: 'user')
+ end
 
 And /^his authentication token is "([^"]*)"$/ do |auth_token|
   @user.authentication_token = auth_token
@@ -12,7 +12,6 @@ And /^his role is "([^"]*)"$/ do |role|
   @user.role = role
   @user.save!
 end
-
 
 And /^the auth_token should be different from "([^"]*)"$/ do |auth_token|
   @user.reload
@@ -25,7 +24,7 @@ And /^the auth_token should still be "([^"]*)"$/ do |auth_token|
 end
 
 Then /^the user with email "([^"]*)" should have "([^"]*)" as his authentication_token$/ do |email, token|
-  JsonSpec.remember(token).should == Worker.where(email: email).first.authentication_token.to_json
+  JsonSpec.remember(token).should == User.where(email: email).first.authentication_token.to_json
 end
 
 And /^his password should be "([^"]*)"$/ do |password|
@@ -34,22 +33,22 @@ And /^his password should be "([^"]*)"$/ do |password|
 end
 
 Then(/^a user should be present with the following$/) do |table|
-  Worker.where(table.rows_hash).present?.should be_true
+  User.find_by(table.rows_hash).should == current_user
 end
 
 Given "the following user exists" do |table|
-  Worker.create!(table.rows_hash)
+  User.create!(table.rows_hash)
 end
 
 Then(/^there should not be any user with email "(.*?)"$/) do |email|
-  Worker.where(email: email).first.should be_nil
+  User.where(email: email).first.should be_nil
 end
 
 Given "the following users exist" do |user_data|
   user_hashes = user_data.hashes
   user_hashes.each do |user_hash|
     user_hash["password_confirmation"] = user_hash["password"]
-    Worker.create!(user_hash)
+    User.create!(user_hash)
   end
-  Worker.count.should == user_hashes.size
+  User.count.should == user_hashes.size
 end

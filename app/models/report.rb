@@ -5,7 +5,15 @@ class Report < ActiveRecord::Base
 	belongs_to :worker
 	belongs_to :client
 
-	def as_json
+	def self.is_active? 
+		if (self.report_date == Date.today) 
+			return true 
+		else 
+			return false 
+		end 
+	end 
+
+	def as_hash
 		h = self.serializable_hash
 		h[:manager] = manager.serializable_hash
 		h[:tasks] = []
@@ -15,9 +23,9 @@ class Report < ActiveRecord::Base
 			h[:tasks] << t.serializable_hash
 		end 
 
-		self.equipment.each do |t| 
-			h[:equipment] << t.serializable_hash
-		end 
+		# self.equipment.each do |t| 
+		# 	h[:equipment] << t.serializable_hash
+		# end 
 		return h
 	end
 		

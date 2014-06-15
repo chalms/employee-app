@@ -4,7 +4,7 @@ class Ability
   def initialize(user)
     # Define abilities for the passed in user here. For example:
     #
-    #   user ||= Worker.new # guest user (not logged in)
+    #   user ||= User.new # guest user (not logged in)
     #   if user.admin?
     #     can :manage, :all
     #   else
@@ -28,13 +28,19 @@ class Ability
     #
     # See the wiki for details:
     # https://github.com/ryanb/cancan/wiki/Defining-Abilities
-    case worker.role
+    case user.role
     when 'admin'
-      can :read, Worker
-    when 'user'
-      # Worker's permissions
+      can :manage, :all
+    # when 'manager'
+    #   can :update, :read, Manager, :manager_id => user.id
+    #   can :create, Report 
+    #   can :read, :update, :destroy, Report, :manager_id => user.id
+    when 'worker'
+      can :read, User
+      # can :update, :read, Worker, :worker_id => user.id 
+      # can :read, Report, :active => true, :worker_id => user.id
     else
-      #Default permissions
+        can :manage, User
     end
   end
 end

@@ -1,12 +1,12 @@
-class AddDeviseToWorkers < ActiveRecord::Migration
+class AddDeviseToUsers < ActiveRecord::Migration
   def self.up
-    change_table(:workers) do |t|
+    create_table(:users) do |t|
           #Non devise user fields
-      t.string :first_name
-      t.string :last_name
       t.string :role, :null => false
 
       ## Database authenticatable
+      t.string :first_name 
+      t.string :last_name
       t.string :email,              :null => false, :default => ""
       t.string :encrypted_password, :null => false, :default => ""
 
@@ -43,7 +43,9 @@ class AddDeviseToWorkers < ActiveRecord::Migration
       # t.timestamps
     end
 
-    add_index :workers, :email,                :unique => true
+    add_index :users, :email,                unique: true
+    add_index :users, :confirmation_token,   unique: true
+    # add_index :users, :unlock_token,         unique: true
   end
 
   def self.down
