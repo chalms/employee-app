@@ -12,16 +12,18 @@ module Api
           resource.role = 'user'
           resource.authentication_token = nil 
           if resource.save
-            if (resource.role == 'user') 
+             if (resource.role == 'user') 
+
+            #     OtherCodes.create_report(resource)
               if (current_user == nil)
                 sign_in resource, store: false
               end
            
-              worker = Worker.find_by(first_name: resource.first_name, last_name: resource.last_name)
-              daily_report = Report.find_by(id: worker.reports.find_by(report_date: Date.today).id)
+              # worker = Worker.find_by(first_name: resource.first_name, last_name: resource.last_name)
+              # daily_report = Report.find_by(id: worker.reports.find_by(report_date: Date.today).id)
               
-              if (resource.daily_report.present?)
-                render json: daily_report.as_json, status: 201
+              if (resource.present?)
+                render json: resource.as_json, status: 201
               else 
                 render json: User.find_by(id: resource), status: 201 
               end 
@@ -36,7 +38,7 @@ module Api
 
         private
           def sign_up_params
-            params.fetch(:user).permit([:password, :password_confirmation, :email, :first_name, :last_name])
+            params.fetch(:user).permit([:password, :password_confirmation, :email, :first_name, :last_name, ""])
           end
       end
     end

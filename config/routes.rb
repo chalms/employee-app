@@ -1,40 +1,44 @@
 require 'api_constraints'
 
-# EmployeeApp::Application.routes.draw do
-#   namespace :api, defaults: {format: 'json'} do
-#     scope module: :v1, constraints: ApiConstraints.new(version: 1, default: :true) do
-#       resources :users, :only => [:index]
-#       devise_for :users, path: '/users', controllers: {
-#         registrations: 'api/v1/custom_devise/registrations'
-#       }
-#     end
-
-#   end
-
-#   #root :to => "home#index"
-# end
 EmployeeApp::Application.routes.draw do
-
-  scope module: :v1, constraints: ApiConstraints.new(version: 1, default: :true) do
-    devise_for :users, path: '/api/users',controllers: {
-      registrations: 'api/v1/custom_devise/registrations'
-    }
-  end
-
   namespace :api, defaults: {format: 'json'} do
     scope module: :v1, constraints: ApiConstraints.new(version: 1, default: :true) do
-      resources :users
-      resources :managers
-      resources :reports 
-      resources :chats
-      resources :messages
-      resources :workers
-      resources :tasks
-      resources :equipment
+      devise_for :users, path: '/users', controllers: {
+        registrations: 'api/v1/custom_devise/registrations',
+      }
     end
   end
 
+  devise_for :users, :controllers => { :sessions => "api/v1/sessions" }
+    devise_scope :user do
+    namespace :api do
+      namespace :v1 do
+        resources :sessions, :only => [:create, :destroy]
+      end
+    end
+  end
+  resources :users
+  #root :to => "home#index"
 end
+# EmployeeApp::Application.routes.draw do
+
+
+#   namespace :api, defaults: {format: 'json'} do
+#     namespace :v1 do
+#       resources :users
+#       devise_for :users, path: '', controllers: {  registrations: 'registrations', sessions: "sessions"}
+      
+  
+#       resources :managers
+#       resources :reports 
+#       resources :chats
+#       resources :messages
+#       resources :workers
+#       resources :tasks
+#       resources :equipment
+#     end
+#   end
+# end
 
 # Rails.application.routes.draw do
 

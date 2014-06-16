@@ -12,7 +12,16 @@ Feature: List Users
         |13|user4@gmail.com |Fourth     |User       |test1234 |auth_token_423      |user |
         |14|user5@gmail.com |Fifth      |User       |test1234 |auth_token_523      |admin|
       When I authenticate as the user "auth_token_523" with the password "random string"
-      And I send a GET request to "/api/users"
+      And I send a POST request to "/api/users/sign_in" with the following:
+      """
+      {
+        "user" : {
+          "email": "user1@gmail.com",
+          "password": "test1234", 
+          "id":10
+        }
+      }
+      """
       And the JSON response should be:
       """
       {
