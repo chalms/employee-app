@@ -1,20 +1,32 @@
 class User < ActiveRecord::Base
-  # Include default devise modules. Others available are:
+  include JsonSerializingModel
+  
+  has_many :reports
+  has_many :chats
+  validates_presence_of :password, on: :create
+  after_initialize :_set_defaults
 
-  # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+  def role(r)
+    if (r.blank?)
+      @role = 'user'
+    end 
+  end 
 
-  def admin?
-    role == 'admin'
+  def is_admin? 
+    return (@role == 'admin') 
+  end 
+
+  def is_manager? 
+    return (@role == 'manager')
+  end 
+
+  def password=(password)
+    write_attribute(:password, BCrypt::Password.create(password))
   end
 
-  def worker?
-    role == 'worker'
-  end
+  private
 
-  def manager?
-    role == 'manager'
+  def _set_defaults
+    self.api_secret ||= MicroToken.generate(128)
   end
-
 end

@@ -3,7 +3,6 @@ class Report < ActiveRecord::Base
 	has_many :equipment
 	belongs_to :manager
 	belongs_to :worker
-	belongs_to :client
 
 	def self.is_active? 
 		if (self.report_date == Date.today) 

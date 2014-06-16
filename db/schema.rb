@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140616055143) do
+ActiveRecord::Schema.define(version: 20140616210253) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,14 @@ ActiveRecord::Schema.define(version: 20140616055143) do
     t.integer  "geo_locations_id"
   end
 
+  create_table "coordinates", force: true do |t|
+    t.string   "address"
+    t.string   "city"
+    t.string   "country"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "equipment", force: true do |t|
     t.string   "description",      null: false
     t.string   "barcode"
@@ -46,17 +54,7 @@ ActiveRecord::Schema.define(version: 20140616055143) do
     t.integer  "geo_locations_id"
   end
 
-  create_table "geo_locations", force: true do |t|
-    t.string   "address"
-    t.string   "city"
-    t.string   "country"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "managers", force: true do |t|
-    t.string   "first_name"
-    t.string   "last_name"
     t.string   "company_name"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -99,16 +97,17 @@ ActiveRecord::Schema.define(version: 20140616055143) do
   end
 
   create_table "users", force: true do |t|
-    t.string "role",                              null: false
-    t.string "first_name"
-    t.string "last_name"
-    t.string "email",                default: "", null: false
-    t.string "encrypted_password",   default: "", null: false
-    t.string "authentication_token"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "email"
+    t.string   "name"
+    t.string   "api_secret"
+    t.integer  "worker_id"
+    t.integer  "manager_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.binary   "password"
   end
-
-  add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", using: :btree
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
 
   create_table "workers", force: true do |t|
     t.string   "first_name"

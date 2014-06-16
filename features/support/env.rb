@@ -5,17 +5,6 @@
 # files.
 
 require 'cucumber/rails'
-require 'cucumber/api_steps'
-require "json_spec/cucumber"
-
-#For json_spec
-def last_json
-  page.source
-end
-
-And "debugger" do
-  require 'debugger'; debugger
-end
 
 # Capybara defaults to XPath selectors rather than Webrat's default of CSS3. In
 # order to ease the transition to Capybara we set the default here. If you'd
@@ -46,14 +35,6 @@ begin
   DatabaseCleaner.strategy = :transaction
 rescue NameError
   raise "You need to add database_cleaner to your Gemfile (in the :test group) if you wish to use it."
-end
-
-Before do
-  DatabaseCleaner.start
-end
-
-After do |scenario|
-  DatabaseCleaner.clean
 end
 
 # You may also want to configure DatabaseCleaner to use different strategies for certain features and scenarios.

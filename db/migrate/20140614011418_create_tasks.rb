@@ -1,8 +1,6 @@
 class CreateTasks < ActiveRecord::Migration
   def change
     create_table :managers do |t|
-      t.string :first_name
-      t.string :last_name 
       t.string :company_name
       t.timestamps
     end
@@ -78,8 +76,7 @@ class CreateTasks < ActiveRecord::Migration
       t.references :clients
     end
 
-
-    create_table :geo_locations do |t|
+    create_table :coordinates do |t|
       t.string :address
       t.string :city
       t.string :country
@@ -98,6 +95,22 @@ class CreateTasks < ActiveRecord::Migration
       t.references :geo_locations
     end 
 
-    add_column :messages, :recipient, :integer
+    change_table :messages do |t|
+      t.integer :recipient
+      t.boolean :read
+    end 
+
+    create_table :users do |t|
+      t.string :first_name
+      t.string :last_name 
+      t.string :email 
+      t.string :name 
+      t.string :password
+      t.string :api_secret
+      t.references :worker 
+      t.references :manager
+
+      t.timestamps
+    end 
   end
 end

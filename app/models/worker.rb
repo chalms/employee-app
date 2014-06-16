@@ -1,3 +1,4 @@
 class Worker < ActiveRecord::Base
-	has_many :reports
+	has_one :user 
+	has_many :managers
 end
