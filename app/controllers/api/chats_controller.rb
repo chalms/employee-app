@@ -1,4 +1,4 @@
-class ChatsController < ApiController
+class Api::ChatsController < ApiController
   def create
     return _not_authorized unless signed_in?
     respond_with current_user.chats.create(chat_params)

@@ -7,9 +7,6 @@ EmployeeApp::Application.routes.draw do
     resources :messages,   only: [:create, :show, :index, :update, :destroy]
    # resources :equipment,  only: [:create, :show, :index, :update, :destroy]
      resources :reports,  only: [:create, :show, :index, :update, :destroy]
-
-
-
     root to: 'api#index'
   end
 

@@ -1,4 +1,4 @@
-class EquipmentController < ApiController
+class Api::EquipmentController < ApiController
 
   def create
     return _not_authorized unless signed_in? 

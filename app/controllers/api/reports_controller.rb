@@ -1,4 +1,4 @@
-class ReportsController < ApiController
+class Api::ReportsController < ApiController
   def create
     return _not_authorized unless signed_in? 
     return _not_authorized unless user.is_manager

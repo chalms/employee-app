@@ -3,5 +3,9 @@
 #
 # Examples:
 #
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
+user = User.create!( first_name: "Amal", last_name: "Hudson", email: "dick@gmail.com", password: "password", password_confirmation: "password")
+manager = Manager.create!(first_name: "Kyle", last_name: "Macklroy", company_name: "cj")
+worker = Worker.create!( first_name: "Amal", last_name: "Hudson",company_name: "yy")
+report = Report.create!(report_date: Date.today, manager: manager, worker: worker)
+Equipment.create!(description: "fix nails", part_name: "screws", report: report)
+Task.create!(description: "run the city", report: report)

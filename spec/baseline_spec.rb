@@ -1,5 +1,5 @@
 require 'spec_helper'
 
-describe Blogomat do
+describe EmployeeApp do
   it { should be }
 end

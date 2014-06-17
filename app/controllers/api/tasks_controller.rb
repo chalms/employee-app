@@ -1,4 +1,4 @@
-class TaskController < ApiController
+class Api::TaskController < ApiController
 
   def create
     return _not_authorized unless signed_in? 

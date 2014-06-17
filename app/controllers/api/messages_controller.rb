@@ -1,35 +1,34 @@
-class MessagesController < ApiController
-
+class Api::MessagesController < ApiController
   def create
-    return _not_authorized unless signed_in?
-    if (current_user.chats.first.manager_id == current_user.id)
-      needed_symbol = worker_id:
-      unneeded_symbol = manager_id:
-    else 
-      unneeded_symbol = worker_id:
-      needed_symbol = manager_id:
-    end                    #this way we have for example: chats.find_by(manager_id: 3)
-    chat = current_user.chats.find_by(needed_symbol params(:recipient_id))
-    if (!chat.present?) 
-      chat = current_user.chats.create!(needed_symbol params(:recipient_id), unneeded_symbol params(:id))
-    end 
-    theMessage = Message.find_by(chat.messages.create!(params))
-    theMessage.update_attributes!(:delivered => true, :delivered_at => DateTime.new) if (theMessage.present?)
-    render theMessage
+    # return _not_authorized unless signed_in?
+    # if (current_user.chats. == current_user.id)
+    #   needed_symbol = worker_id:
+    #   unneeded_symbol = manager_id:
+    # else 
+    #   unneeded_symbol = worker_id:
+    #   needed_symbol = manager_id:
+    # end                    #this way we have for example: chats.find_by(manager_id: 3)
+    # chat = current_user.chats.find_by(needed_symbol params(:recipient_id))
+    # if (!chat.present?) 
+    #   chat = current_user.chats.create!(needed_symbol params(:recipient_id),unneeded_symbol params(:id))
+    # end 
+    # theMessage = Message.find_by(chat.messages.create!(params))
+    # theMessage.update_attributes!(:delivered => true, :delivered_at => DateTime.new) if (theMessage.present?)
+    # render theMessage
   end
 
   def index
-    return _not_authorized unless signed_in?
-    if (current_user.chats.first.manager_id == current_user.id)
-      needed_symbol = worker_id:
-      unneeded_symbol = manager_id:
-    else 
-      unneeded_symbol = worker_id:
-      needed_symbol = manager_id:
-    end   
-    respond_with current_user.chats.find_by(needed_symbol params(:recipient_id)).messages
-      in_reverse_chronological_order.
-      paginate(params[:page_number], params[:per_page] || 20)
+    # return _not_authorized unless signed_in?
+    # if (current_user.chats.first.manager_id == current_user.id)
+    #   needed_symbol = worker_id:
+    #   unneeded_symbol = manager_id:
+    # else 
+    #   unneeded_symbol = worker_id:
+    #   needed_symbol = manager_id:
+    # end   
+    # respond_with current_user.chats.find_by(needed_symbol params(:recipient_id)).messages
+    #   in_reverse_chronological_order.
+    #   paginate(params[:page_number], params[:per_page] || 20)
   end
 
   def show
