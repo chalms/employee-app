@@ -1,28 +1,10 @@
 == README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+The server side ROR code for employee management system. 
 
-Things you may want to cover:
+Runs an html5 website and JSON api that communicates with a mobile client. 
 
-* Ruby version
+A client side android application has been built to use this servers features. 
 
-* System dependencies
+The android code can be found in chalms/Employee-Android-Client
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
