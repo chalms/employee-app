@@ -11,51 +11,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140616210253) do
+ActiveRecord::Schema.define(version: 20140618052202) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "chats", force: true do |t|
-    t.integer  "manager_id", null: false
-    t.integer  "worker_id",  null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "chats", ["manager_id", "worker_id"], name: "index_chats_on_manager_id_and_worker_id", unique: true, using: :btree
-
-  create_table "clients", force: true do |t|
+  create_table "client", force: true do |t|
     t.string   "name"
     t.string   "email"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "geo_locations_id"
   end
 
-  create_table "coordinates", force: true do |t|
+  create_table "client_locations", force: true do |t|
+    t.integer "client_id"
+    t.integer "location_id"
+  end
+
+  create_table "location", force: true do |t|
     t.string   "address"
     t.string   "city"
     t.string   "country"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "equipment", force: true do |t|
-    t.string   "description",      null: false
-    t.string   "barcode"
-    t.text     "photo"
-    t.string   "part_name",        null: false
-    t.integer  "report_id",        null: false
-    t.integer  "report_index"
-    t.boolean  "completed"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "geo_locations_id"
-  end
-
-  create_table "managers", force: true do |t|
-    t.string   "company_name"
+    t.string   "time_of_retrieval"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -63,58 +45,87 @@ ActiveRecord::Schema.define(version: 20140616210253) do
   create_table "messages", force: true do |t|
     t.text     "content"
     t.boolean  "delivered"
+    t.boolean  "read"
     t.integer  "chat_id"
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "recipient"
-    t.boolean  "read"
+  end
+
+  create_table "parts", force: true do |t|
+    t.string  "part_name"
+    t.string  "barcode"
+    t.boolean "scanned",   default: false
+  end
+
+  create_table "photos", force: true do |t|
+    t.text     "data"
+    t.integer  "task_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "reports", force: true do |t|
     t.string   "description"
     t.date     "report_date",                 null: false
-    t.datetime "checkin"
-    t.datetime "checkout"
+    t.integer  "location_id"
     t.boolean  "completed",   default: false
-    t.integer  "manager_id",                  null: false
+    t.integer  "client_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "worker_id",                   null: false
-    t.integer  "clients_id"
   end
+
+  create_table "task_parts", force: true do |t|
+    t.integer "task_id"
+    t.integer "part_id"
+  end
+
+  add_index "task_parts", ["task_id", "part_id"], name: "index_task_parts_on_task_id_and_part_id", using: :btree
+
+  create_table "task_photos", force: true do |t|
+    t.integer "task_id"
+    t.integer "photo_id"
+  end
+
+  add_index "task_photos", ["task_id", "photo_id"], name: "index_task_photos_on_task_id_and_photo_id", using: :btree
 
   create_table "tasks", force: true do |t|
-    t.string   "description"
-    t.boolean  "completed"
-    t.datetime "completed_at"
     t.string   "note"
-    t.text     "photo"
+    t.integer  "report_id"
+    t.string   "description"
+    t.boolean  "completed",   default: false
+    t.integer  "location_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "report_id"
-    t.integer  "report_index"
-    t.integer  "geo_locations_id"
   end
 
+  create_table "user_chats", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "chat_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "user_chats", ["user_id", "chat_id"], name: "index_user_chats_on_user_id_and_chat_id", using: :btree
+
+  create_table "user_reports", force: true do |t|
+    t.integer "user_id"
+    t.integer "report_id"
+  end
+
+  add_index "user_reports", ["user_id", "report_id"], name: "index_user_reports_on_user_id_and_report_id", using: :btree
+
   create_table "users", force: true do |t|
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "email"
     t.string   "name"
+    t.string   "email"
+    t.string   "company_name"
     t.string   "api_secret"
-    t.integer  "worker_id"
-    t.integer  "manager_id"
+    t.string   "type"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.binary   "password"
-  end
-
-  create_table "workers", force: true do |t|
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "company_name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string   "auth_token"
+    t.string   "password_digest"
   end
 
 end

@@ -1,8 +1,9 @@
 class Report < ActiveRecord::Base
 	has_many :tasks
-	has_many :equipment
 	belongs_to :manager
-	belongs_to :worker
+	has_many :users
+	has_one :location, as: :checkin, :polymorphic => :true
+	has_one :location, as: :checkout, :polymorphic => :true
 
 	def self.is_active? 
 		if (self.report_date == Date.today) 
@@ -17,14 +18,9 @@ class Report < ActiveRecord::Base
 		h[:manager] = manager.serializable_hash
 		h[:tasks] = []
 		h[:equipment] = [] 
-
 		self.tasks.each do |t|
 			h[:tasks] << t.serializable_hash
 		end 
-
-		# self.equipment.each do |t| 
-		# 	h[:equipment] << t.serializable_hash
-		# end 
 		return h
 	end
 		
@@ -37,18 +33,6 @@ class Report < ActiveRecord::Base
 					task.update_attributes!(t) if (task.present? && t.size > 0)
 				end 
 			end
-		end 
-	end 
-
-	def update_equipment(equipment_hash)
-		puts "Equipment hash: #{equipment_hash}" 
-		if (equipment_hash.present?)
-			if (equipment_hash.kind_of? (Hash)) 
-				equipment_hash.each do |e|
-					equ = self.equipment.find_by(id: e.delete[:id])
-					equ.update_attributes!(e) if (equ.present? && e.size > 0)
-				end 
-			end 
 		end 
 	end 
 

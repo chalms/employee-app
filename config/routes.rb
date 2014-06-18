@@ -1,20 +1,31 @@
 EmployeeApp::Application.routes.draw do
+
+  get "(*redirect_path)", to: "batman#index", constraints: lambda { |request| request.format == "text/html" }
+
   namespace :api, defaults: { format: :json } do
     resource  :sessions, only: [:create, :show, :destroy]
     resources :users,    only: [:show, :index]
     resources :chats,    only: [:create, :show, :index, :update, :destroy]
     resources :tasks,    only: [:create, :show, :index, :update, :destroy]
     resources :messages,   only: [:create, :show, :index, :update, :destroy]
-   # resources :equipment,  only: [:create, :show, :index, :update, :destroy]
-     resources :reports,  only: [:create, :show, :index, :update, :destroy]
+    resources :reports,  only: [:create, :show, :index, :update, :destroy]
     root to: 'api#index'
   end
 
-  root to: 'home#index'
+  namespace :app do 
+    resources :users, only: [:show, :index]
+    root :to => 'login#sign_up', :as => :sign_up, :constraints => lambda { |request| !request.cookies['auth_token'] }
+    root :to => 'users#show', :as => :show, :constraints => lambda { |request| !!request.cookies['auth_token'] }
+    post "/check_login" => 'login#check_login', :as => :check_login
+    post "/check_sign_up" => 'login#check_sign_up', :as => :check_sign_up
+    get "/welcome" => 'login#welcome', :as => :welcome
+    post "/logout" => 'users#logout', :as => :logout
+  end 
+
+
 end
 
 # EmployeeApp::Application.routes.draw do
-
 
 #   namespace :api, defaults: {format: 'json'} do
 #     namespace :v1 do
@@ -102,3 +113,54 @@ end
 #       resources :registration
 #     end
 # end
+
+# <!DOCTYPE html>
+# <html>
+#   <head>
+#     <title>To Do List</title>
+#     <style type="text/css" media="screen">
+#       html, body {
+#         background-color: #4B7399;
+#         font-family: Verdana, Helvetica, Arial;
+#         font-size: 14px;
+#       }
+#       a { color: #0000FF; }
+
+#       #container {
+#         width: 75%;
+#         margin: 0 auto;
+#         background-color: #FFF;
+#         padding: 20px 40px;
+#         border: solid 1px black;
+#         margin-top: 20px;
+#       }
+#     </style>
+#     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+#     <script type="text/javascript" charset="utf-8">
+#       $(function() {
+#         function addTask(task) {
+#           $('#tasks').append('<li>' + task.name + '</ul>');
+#         }
+
+#         $('#new_task').submit(function(e) {
+#           $.post('/tasks', $(this).serialize(), addTask);
+#           this.reset();
+#           e.preventDefault();
+#         });
+
+#         $.getJSON('/tasks', function(tasks) {
+#           $.each(tasks, function() { addTask(this); });
+#         });
+#       });
+#     </script>
+#   <body>
+#     <div id="container">
+#       <h1>To-Do List</h1>
+#       <form id="new_task">
+#         <input type="text" name="task[name]" id="task_name">
+#         <input type="submit" value="Add">
+#       </form>
+#       <ul id="tasks"></ul>
+#     </div>
+#   </body>
+# </html>

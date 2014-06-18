@@ -1,0 +1,22 @@
+.form.form-inline
+  %p= link_to "Not a member?", 'app/sign_up'
+  = form_tag app_check_login_path do
+    .input-prepend.first
+      %span.add-on
+        %i.icon-envelope
+      %input.span2{:type => "text", :name => "email", :placeholder => "Email", :value => params[:email]}
+    .input-prepend
+      %span.add-on
+        %i.icon-key
+      %input.span2{:type => "password", :name => "password", :placeholder => "Password"}
+    %input{:style => "visibility: hidden;", :type => "submit"}
+    -# %span10
+    -#   .box-featured
+    -#     %label First Name:
+    -#     %input{ :type =>"text", "data-bind" => "firstName"}
+    -#     %label{ Last Name:
+    -#     %label{ :type => "text", "data-bind" => "lastName"} 
+    -#     .data-showif="hasName"
+    -#       Hello, my name is 
+    -#       %span{"data-bind" => "fullName"}
+    -#       %button{ "data-event-click" => "resetName" } Reset name

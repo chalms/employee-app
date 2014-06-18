@@ -1,4 +1,13 @@
-class Manager < ActiveRecord::Base
-	has_one :user 
-	has_many :workers
+class Manager < User
+	def is_manager? 
+		return true 
+	end 
+
+	def is_admin? 
+		return false 
+	end 
+
+	def is_worker? 
+		return false 
+	end 
 end

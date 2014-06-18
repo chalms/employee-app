@@ -1,3 +1,0 @@
-=hb 'render sidebar'
-.small-9.columns
-  =hb 'outlet'

@@ -1,116 +1,105 @@
 class CreateTasks < ActiveRecord::Migration
   def change
-    create_table :managers do |t|
-      t.string :company_name
+    create_table :users do |t|
+      t.string :name
+      t.string :email 
+      t.string :company_name 
+      t.string :password
+      t.string :api_secret
+      t.string :type 
       t.timestamps
-    end
-
-    create_table :tasks do |t|
-      t.string :description
-      t.boolean :completed 
-      t.datetime :completed_at 
-      t.string :note
-      t.text :photo 
-      t.timestamps
-    end
-
-    create_table :reports do |t|
-      t.string :description
-      t.date :report_date, :null => false 
-      t.datetime :checkin 
-      t.datetime :checkout 
-      t.boolean :completed, :default => false
-      t.references :manager, :null => false 
-      t.timestamps
-    end
-
-    change_table :tasks do |t|
-    	t.references :report
-    	t.integer :report_index
-	  end 
-
-	  create_table :equipment do |t|
-      t.string :description, :null => false 
-      t.string :barcode 
-      t.text :photo 
-      t.string :part_name, :null => false  
-      t.references :report, :null => false 
-      t.integer :report_index
-      t.boolean :completed 
-      t.timestamps
-    end
-
-    create_table :workers do |t|
-      t.string :first_name 
-      t.string :last_name 
-      t.string :company_name
-      t.timestamps
-    end
-
-    change_table :reports do |t|
-    	t.references :worker, :null => false 
     end 
 
-    create_table :chats do |t|
-      t.references :manager, :null => false
-      t.references :worker, :null => false
+    create_table :location do |t|
+      t.string :address
+      t.string :city
+      t.string :country
+      t.string :time_of_retrieval 
       t.timestamps
     end
 
-    add_index :chats, [:manager_id, :worker_id], :unique => true
-  	
-  	create_table :messages do |t|
-      t.text :content 
-      t.boolean :delivered 
-      t.references :chat
-      t.timestamps
-    end
-
-    create_table :clients do |t|
+    create_table :client do |t|
       t.string :name
       t.string :email
       t.timestamps
     end
 
-    change_table(:reports, :id => false) do |t|
-      t.references :clients
-    end
+    create_table :client_locations do |t|
+      t.belongs_to :client 
+      t.references :location 
+    end 
 
-    create_table :coordinates do |t|
-      t.string :address
-      t.string :city
-      t.string :country
+    create_table :reports do |t|
+      t.string :description
+      t.date :report_date, :null => false 
+      t.references :location, as: :checkin
+      t.references :location, as: :checkout
+      t.boolean :completed, :default => false
+      t.references :client
       t.timestamps
     end
 
-    change_table :tasks do |t| 
-      t.references :geo_locations
+    create_table :user_reports do |t|
+      t.belongs_to :user
+      t.belongs_to :report
     end 
 
-    change_table :equipment do |t| 
-      t.references :geo_locations
+    add_index :user_reports, [:user_id, :report_id]
+
+    create_table :tasks do |t|
+      t.string :note
+      t.belongs_to :report
+      t.string :description
+      t.boolean :completed, :default => false 
+      t.references :location, as: :completed_location
+      t.timestamps
+    end
+
+    create_table :parts do |t|
+      t.string :part_name 
+      t.string :barcode
+      t.boolean :scanned, :default => false 
     end 
 
-    change_table :clients do |t| 
-      t.references :geo_locations
+    create_table :task_parts do |t|
+      t.belongs_to :task
+      t.belongs_to :part
     end 
 
-    change_table :messages do |t|
-      t.integer :recipient
+    add_index :task_parts, [:task_id, :part_id]
+
+    create_table :photos do |t|
+      t.text :data 
+      t.references :task
+      t.timestamps
+    end 
+
+    create_table :task_photos do |t|
+      t.belongs_to :task
+      t.references :photo
+    end 
+
+    add_index :task_photos, [:task_id, :photo_id]
+
+    create_table :chats do |t|
+      t.timestamps
+    end 
+
+    create_table :user_chats do |t|
+      t.belongs_to :user
+      t.references :chat
+      t.timestamps
+    end
+
+    add_index :user_chats, [:user_id, :chat_id]
+
+  	create_table :messages do |t|
+      t.text :content 
+      t.boolean :delivered 
       t.boolean :read
-    end 
-
-    create_table :users do |t|
-      t.string :first_name
-      t.string :last_name 
-      t.string :email 
-      t.string :name 
-      t.string :password
-      t.string :api_secret
-      t.references :worker 
-      t.references :manager
-
+      t.belongs_to :chat
+      t.integer :user_id, as: :sender 
       t.timestamps
-    end 
+    end
   end
 end

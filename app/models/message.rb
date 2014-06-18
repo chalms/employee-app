@@ -1,6 +1,7 @@
 class Message < ActiveRecord::Base
   include JsonSerializingModel
   belongs_to :chat
+  has_one :sender
 
   def self.published
     where('published_at <= ?', Time.now)

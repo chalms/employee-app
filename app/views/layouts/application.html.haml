@@ -1,0 +1,13 @@
+!!!
+%html
+  %head
+    %title Metrics
+    = stylesheet_link_tag  "application", media: "all", "data-turbolinks-track" => true
+    = javascript_include_tag "application", "data-turbolinks-track" => true
+    = csrf_meta_tags
+    %link{href: "https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css", rel: "stylesheet"}
+    = render :partial => 'layouts/navbar'
+  %body 
+    %batman_define_views{path_to_html: "app/assets/templates/"} 
+    = yield
+    - render :partial => 'layouts/footer'
