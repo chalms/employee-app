@@ -1,6 +1,6 @@
 class Chat < ActiveRecord::Base
   include JsonSerializingModel
-  has_many :users
+  has_and_belongs_to_many :user_chats
   has_many :messages
 
   def self.published

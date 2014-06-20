@@ -1,30 +1,20 @@
 class User < ActiveRecord::Base
   include JsonSerializingModel
   
-  has_many :reports
-  has_many :chats
+  has_many :user_reports
+  has_many :user_chats
 
   after_initialize :_set_defaults
   validates_presence_of :password, :length => {:minimum  => 6},  on: :create!
   validate :email, :format => {:with => /\A[^@]+@[^@]+\.[^@]+\Z/}
-  before_create :generate_auth_token
-  validates_uniqueness_of :auth_token, :on => :create!
-  has_secure_password validations: false
 
-
-  def token 
-    unless self.auth_token.present?  
-      self.auth_token = SecureRandom.urlsafe_base64(180)
-      puts "inside user [before save]-> #{self.auth_token}"
-    end 
-    self.save!
-    puts "inside user [after save] -> #{self.auth_token}"
-    return self.auth_token
+  def chats 
+    return self.user_chats.map{ |ur| ur.chat }
   end 
 
-  def generate_auth_token
-    self.auth_token = SecureRandom.urlsafe_base64(180)
-  end
+  def reports 
+    return self.user_reports.map{ |ur| ur.report }
+  end 
 
   def role(r)
     if (r.blank?)
