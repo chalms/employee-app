@@ -1,15 +1,55 @@
 EmployeeApp::Application.routes.draw do
 
-  get "(*redirect_path)", to: "batman#index", constraints: lambda { |request| request.format == "text/html" }
-
   namespace :api, defaults: { format: :json } do
+
     resource  :sessions, only: [:create, :show, :destroy]
-    resources :users,    only: [:show, :index]
-    resources :chats,    only: [:create, :show, :index, :update, :destroy]
-    resources :tasks,    only: [:create, :show, :index, :update, :destroy]
-    resources :messages,   only: [:create, :show, :index, :update, :destroy]
-    resources :reports,  only: [:create, :show, :index, :update, :destroy]
-    root to: 'api#index'
+
+    resources :parts, only: [:create, :show, :index, :update, :destroy]
+
+    #worker-> client [ show ] 
+    #manager -> clients [ show, create, update, index]
+    resources :clients,  only: [:create, :show, :index, :update, :destroy] do 
+      resources :locations, only: [:create, :index, :show, :destroy]
+      resources :reports, only: [:index, :create]
+    end 
+
+    #for admin 
+    resources :tasks, only: [:show, :destroy, :update] do 
+        #worker -> parts [ show, index, update ] 
+        #manager -> parts [ show, index, update, create, destroy ]
+        resources :parts, only: [:create, :index]
+        resources :photos,    only: [:create, :show, :index, :destroy]
+        resources :locations, only: [:create, :index, :show, :destroy ]
+    end
+
+    resources :chats, only: [:show, :update, :destroy] do 
+          #worker -> messages [ show, index, create, update ] 
+          #manager -> messages [ show, index, update, create ]
+          resources :messages,   only: [:create, :show, :index, :update, :destroy]
+    end 
+
+    resources :reports, only: [:create, :show, :update, :destroy] do 
+        #worker -> tasks [ show, index, update ] 
+        #manager -> tasks [ show, index, update, create, destroy ]
+        resources :tasks, only: [:create, :index]
+        resources :clients, only: [:create, :index]
+        resources :locations
+    end 
+
+    #worker -> users [ show, create, :update ] 
+    #manager -> users [ show,  create, :update, index_all ]
+    resources :users, only: [:new, :create, :show, :index, :update, :destroy] do
+        #worker-> reports [ show, update, index ] 
+        #manager -> reports [ show, create, update, index]
+        resources :reports, only: [:index]
+
+        #worker -> chats [ show, index, update ] 
+        #manager -> chats [ show, index, update, create, destroy ]
+        resources :chats,  only: [:create, :index]
+    end 
+
+
+    root :to => 'users#new', :as => :new
   end
 
   namespace :app do 
@@ -25,31 +65,29 @@ EmployeeApp::Application.routes.draw do
 
 end
 
-# EmployeeApp::Application.routes.draw do
-
-#   namespace :api, defaults: {format: 'json'} do
-#     namespace :v1 do
-#       resources :users
-#       devise_for :users, path: '', controllers: {  registrations: 'registrations', sessions: "sessions"}
+#   namespace :api do resources :parts, except: [:new, :edit] end
+# #   namespace :api, defaults: {format: 'json'} do
+# #     namespace :v1 do
+# #       resources :users
+# #       devise_for :users, path: '', controllers: {  registrations: 'registrations', sessions: "sessions"}
       
   
-#       resources :managers
-#       resources :reports 
-#       resources :chats
-#       resources :messages
-#       resources :workers
-#       resources :tasks
-#       resources :equipment
-#     end
-#   end
-# end
+# #       resources :managers
+# #       resources :reports 
+# #       resources :chats
+# #       resources :messages
+# #       resources :workers
+# #       resources :tasks
+# #       resources :equipment
+# #     end
+# #   end
+# # end
 
-# Rails.application.routes.draw do
-
- # devise_for :users
-#   devise_for :managers
-#   
-#   resources :tasks, except: [:new, :edit]
+#   namespace :api do resources :parts, except: [:new, :edit] end
+#  # devise_for :users
+# #   devise_for :managers
+# #   
+# #   resources :tasks, except: [:new, :edit]
 #   resources :reports, except: [:new, :edit]
 #   resources :chats, only: [:index, :show]
 #   resources :messages, except: [:edit, :update]
