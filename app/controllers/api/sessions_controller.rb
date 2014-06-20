@@ -4,7 +4,7 @@ class Api::SessionsController < ApiController
   def create
     token = current_api_session_token
     if params[:email]
-      @user = User.find_by_username(params[:email])
+      @user = User.find_by_email(params[:email])
       token.user = @user if _provided_valid_password? || _provided_valid_api_session_token?
     end
     respond_with token
