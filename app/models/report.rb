@@ -1,9 +1,8 @@
 class Report < ActiveRecord::Base
 	has_many :tasks
-	belongs_to :manager
-	has_many :users
-	has_one :location, as: :checkin, :polymorphic => :true
-	has_one :location, as: :checkout, :polymorphic => :true
+	has_and_belongs_to_many :users
+	has_one :location, as: :checkin
+	has_one :location, as: :checkout
 
 	def self.is_active? 
 		if (self.report_date == Date.today) 
@@ -17,7 +16,6 @@ class Report < ActiveRecord::Base
 		h = self.serializable_hash
 		h[:manager] = manager.serializable_hash
 		h[:tasks] = []
-		h[:equipment] = [] 
 		self.tasks.each do |t|
 			h[:tasks] << t.serializable_hash
 		end 
@@ -39,7 +37,6 @@ class Report < ActiveRecord::Base
 	def update(report_updates) 
 		puts "Report Updates : #{equipment_hash}" 
 		update_tasks(report_updates.delete(:tasks))
-		update_equipment(report_updates.delete(:equipment))
 		if (report_updates.size > 0)
 			puts "Updating : #{report_updates}" 
 			self.update_attributes!(report_updates)
