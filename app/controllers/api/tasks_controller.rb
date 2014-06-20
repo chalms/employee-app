@@ -1,49 +1,50 @@
-class Api::TaskController < ApiController
-
-  def create
-    return _not_authorized unless signed_in? 
-    return _not_authorized unless current_user.is_manager?
-    respond_with current_user.tasks.create(chat_params)
-  end
-
+class Api::TasksController < ApiController
+  # GET /api/tasks
+  # GET /api/tasks.json
   def index
-    task = users_daily_task
-    respond_with task
-      in_reverse_chronological_order.
-      paginate(params[:page_number], params[:per_page] || 20)
+    @api_tasks = Task.all
+
+    render json: @api_tasks
   end
 
+  # GET /api/tasks/1
+  # GET /api/tasks/1.json
   def show
-    task = signed_in? ? users_daily_task.find_by_id(params[:id]) : nil 
-    return _not_found unless task
-    respond_with task
+    @api_task = Task.find(params[:id])
+
+    render json: @api_task
   end
 
+  # POST /api/tasks
+  # POST /api/tasks.json
+  def create
+    @api_task = Task.new(params[:api_task])
+
+    if @api_task.save
+      render json: @api_task, status: :created, location: @api_task
+    else
+      render json: @api_task.errors, status: :unprocessable_entity
+    end
+  end
+
+  # PATCH/PUT /api/tasks/1
+  # PATCH/PUT /api/tasks/1.json
   def update
-    task = signed_in? ? users_daily_task.find_by_id(params[:id]) : nil 
-    return _not_found unless task
-    render json: task
+    @api_task = Task.find(params[:id])
+
+    if @api_task.update(params[:api_task])
+      head :no_content
+    else
+      render json: @api_task.errors, status: :unprocessable_entity
+    end
   end
 
+  # DELETE /api/tasks/1
+  # DELETE /api/tasks/1.json
   def destroy
-    task = signed_in? ? current_user.task.find_by_id(params[:id]) : nil
-    return _not_found unless task
-    return _not_authorized unless user.is_manager?
-    task.destroy!
-    respond_with task
-  end
+    @api_task = Task.find(params[:id])
+    @api_task.destroy
 
-  private
-
-  def users_daily_task
-    return current_user.reports.find_by(report_date: Date.today).map { |r| r.task }
-  end 
-
-  def task_params
-    params.require(:task).permit(:note, :description, :completed, :completed_at, :published_at)
-  end
-
-  def task_url(chat)
-    api_task_url(chat)
+    head :no_content
   end
 end

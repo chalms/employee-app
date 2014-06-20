@@ -1,54 +1,50 @@
 class Api::ReportsController < ApiController
-  def create
-    return _not_authorized unless signed_in? 
-    return _not_authorized unless user.is_manager
-    respond_with current_user.reports.create(report_params)
-  end
-
+  # GET /api/reports
+  # GET /api/reports.json
   def index
-    is_manager = signed_in ? current_user.is_manager : nil
-    if (is_manager) 
-      respond_with reports.published.
-        in_reverse_chronological_order.
-        paginate(params[:page_number], params[:per_page] || 20)
-    else 
-      reports = current_user.reports
-      render json: reports
-    end 
+    @api_reports = Report.all
+
+    render json: @api_reports
   end
 
+  # GET /api/reports/1
+  # GET /api/reports/1.json
   def show
-    report = signed_in? ? current_user.reports.find_by_id(params[:id]) : nil
-    if report.present? 
-      respond_with report if (current_user.is_manager || current_user.is_admin) 
-      respond_with report.as_json if (report.report_date == Date.Today) 
-    end 
-    return _not_found unless report.present?
-    render json: report; 
+    @api_report = Report.find(params[:id])
+
+    render json: @api_report
   end
 
+  # POST /api/reports
+  # POST /api/reports.json
+  def create
+    @api_report = Report.new(params[:api_report])
+
+    if @api_report.save
+      render json: @api_report, status: :created, location: @api_report
+    else
+      render json: @api_report.errors, status: :unprocessable_entity
+    end
+  end
+
+  # PATCH/PUT /api/reports/1
+  # PATCH/PUT /api/reports/1.json
   def update
-    report = signed_in? ? current_user.reports.find_by_id(params[:id]) : nil
-    return _not_found unless report
-    report.update_attributes!(report_params)
-    render json: report
+    @api_report = Report.find(params[:id])
+
+    if @api_report.update(params[:api_report])
+      head :no_content
+    else
+      render json: @api_report.errors, status: :unprocessable_entity
+    end
   end
 
+  # DELETE /api/reports/1
+  # DELETE /api/reports/1.json
   def destroy
-    report = signed_in? ? Report.find_by_id(params[:id]) : nil
-    return _not_found unless report 
-    return _not_authorized unless current_user.is_admin?
-    report.destroy!
-    respond_with 
-  end
+    @api_report = Report.find(params[:id])
+    @api_report.destroy
 
-  private
-
-  def report_params
-    params.require(:report).permit(:manager, :report_date, :tasks)
-  end
-
-  def report_url(chat)
-    api_report_url(chat)
+    head :no_content
   end
 end

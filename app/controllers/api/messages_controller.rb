@@ -1,71 +1,50 @@
 class Api::MessagesController < ApiController
-  def create
-    # return _not_authorized unless signed_in?
-    # if (current_user.chats. == current_user.id)
-    #   needed_symbol = worker_id:
-    #   unneeded_symbol = manager_id:
-    # else 
-    #   unneeded_symbol = worker_id:
-    #   needed_symbol = manager_id:
-    # end                    #this way we have for example: chats.find_by(manager_id: 3)
-    # chat = current_user.chats.find_by(needed_symbol params(:recipient_id))
-    # if (!chat.present?) 
-    #   chat = current_user.chats.create!(needed_symbol params(:recipient_id),unneeded_symbol params(:id))
-    # end 
-    # theMessage = Message.find_by(chat.messages.create!(params))
-    # theMessage.update_attributes!(:delivered => true, :delivered_at => DateTime.new) if (theMessage.present?)
-    # render theMessage
-  end
-
+  # GET /api/messages
+  # GET /api/messages.json
   def index
-    # return _not_authorized unless signed_in?
-    # if (current_user.chats.first.manager_id == current_user.id)
-    #   needed_symbol = worker_id:
-    #   unneeded_symbol = manager_id:
-    # else 
-    #   unneeded_symbol = worker_id:
-    #   needed_symbol = manager_id:
-    # end   
-    # respond_with current_user.chats.find_by(needed_symbol params(:recipient_id)).messages
-    #   in_reverse_chronological_order.
-    #   paginate(params[:page_number], params[:per_page] || 20)
+    @api_messages = Message.all
+
+    render json: @api_messages
   end
 
+  # GET /api/messages/1
+  # GET /api/messages/1.json
   def show
-    return _not_authorized unless signed_in? 
-    message = Message.find_by(:id)
-    return _not_found unless message
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render :json => message }
+    @api_message = Message.find(params[:id])
+
+    render json: @api_message
+  end
+
+  # POST /api/messages
+  # POST /api/messages.json
+  def create
+    @api_message = Message.new(params[:api_message])
+
+    if @api_message.save
+      render json: @api_message, status: :created, location: @api_message
+    else
+      render json: @api_message.errors, status: :unprocessable_entity
     end
   end
 
+  # PATCH/PUT /api/messages/1
+  # PATCH/PUT /api/messages/1.json
   def update
-    return _not_authorized unless signed_in? 
-    message = Message.find_by(:id)
-    return _not_found unless message
-    message.update_attributes!()
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render :json => message }
+    @api_message = Message.find(params[:id])
+
+    if @api_message.update(params[:api_message])
+      head :no_content
+    else
+      render json: @api_message.errors, status: :unprocessable_entity
     end
   end
 
+  # DELETE /api/messages/1
+  # DELETE /api/messages/1.json
   def destroy
-    message = signed_in? ? Message.find_by_id(params[:id]) : nil
-    return _not_found unless message 
-    return _not_authorized unless current_user.is_admin?
-    message.destroy!
-    respond_with json: { status:  200 }
-  end
+    @api_message = Message.find(params[:id])
+    @api_message.destroy
 
-  private
-  def message_params
-    params.require(:chat).permit(:body, :delivered, :delivered_at, :read, :recipient, :manager_id, :worker_id, :published_at)
-  end
-
-  def message_url(chat)
-    api_message_url(chat)
+    head :no_content
   end
 end
