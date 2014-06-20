@@ -1,114 +1,112 @@
-// This is a manifest file that'll be compiled into including all the files listed below.
-// Add new JavaScript/Coffee code in separate files in this directory and they'll automatically
-// be included in the compiled file accessible from http://example.com/assets/application.js
-// It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
-// the compiled file.
-//
-//= require jquery
-//= require jquery_ujs
-//= require twitter/bootstrap
-//= require_tree .
+var k;
 
-$(function() {
-    var tokenValue = $("meta[name='csrf-token']").attr('content');
+$(document).ready(function() {
 
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-Token': tokenValue
+    function Token() {
+        var _this = this;
+
+        _this.test = false;
+
+        this.tok = function() {
+            return _this.token;
         }
-    });
-});
 
+        this.ttl = function() {
+            return _this.ttl;
+        }
 
-ApiSessionToken = function() {};
+        this.hasToken = function() {
 
-ApiSessionToken.prototype.token = null;
-
-ApiSessionToken.prototype.ttl = 0;
-
-ApiSessionToken.prototype.user = null;
-
-ApiSessionToken.prototype.isAlive = function() {
-    return this.get("ttl") > 0;
-};
-
-ApiSessionToken.prototype._this = ApiSessionToken;
-
-ApiSessionToken.prototype.hasToken = function() {
-    var token;
-    token = void 0;
-    token = this.get("token");
-    if (token && (typeof token === "string") && (token.length > 0)) {
-        return true;
-    } else {
-        return false;
-    }
-};
-
-ApiSessionToken.prototype.isValid = function() {
-    return this.get("hasToken") && this.get("isAlive");
-};
-
-ApiSessionToken.prototype.needsRefresh = function() {
-    return this.get("ttl") <= 10;
-};
-
-ApiSessionToken.prototype.init = function() {
-    return this.scheduleTtlDecrement();
-};
-
-ApiSessionToken.prototype.decrementTtl = function() {
-    if (this.get("isAlive")) {
-        this.decrementProperty("ttl");
-    }
-    return this.scheduleTtlDecrement();
-};
-
-ApiSessionToken.prototype.scheduleTtlDecrement = function() {
-    callback(function() {
-        return decrementTtl();
-    });
-    return setTimeout(callback, 1000);
-};
-
-ApiSessionToken.prototype.refresh = function() {
-    return this.acquire(this);
-};
-
-ApiSessionToken.prototype.acquire = function(token) {
-    var credentials, password, username;
-    credentials = void 0;
-    password = void 0;
-    username = void 0;
-    token || (token = this.create());
-    credentials = {};
-    username = token.get("user.username");
-    password = token.get("user.password");
-    if (token.get("hasToken")) {
-        credentials.token = token.get("token");
-    }
-    if (username && password) {
-        credentials.username = username;
-        credentials.password = password;
-    }
-    $.ajax({
-        dataType: "json",
-        data: credentials,
-        url: "http://localhost:3000/api/sessions",
-        type: "POST",
-
-        success: function(data, status, xhr) {
-            token.set("token", data.api_session_token.token);
-            token.set("ttl", data.api_session_token.ttl);
-            if (username && password) {
-                return token.get("user").authenticated();
+            if (_this.token.token !== null) {
+                console.log("this has token: " + _this.token.token);
+                return true;
+            } else {
+                console.log("this does not have token");
+                return false;
             }
-        },
-        error: function(xhr, status, error) {
-            return token.set("error", "" + status + ": " + error);
         }
-    });
-    return token;
-};
 
-new ApiSessionToken();
+        this.counter = function() {
+            setInterval(function() {
+                decrementTtl();
+            }, 1000);
+        }
+
+        this.getJSON = function() {
+            var jObj;
+            if (_this.test !== true) {
+                jObj = {
+                    "user": {
+                        "email": _this.email,
+                        "password": _this.password
+                    }
+                }
+                _this.test = true;
+            } else {
+                jObj = {
+                    "api_session_token": {
+                        "token": _this.token,
+                        "ttl": _this.ttl,
+                        "email": _this.email
+                    }
+                }
+            }
+
+            console.log(jObj);
+
+            return jObj;
+        }
+
+        function decrementTtl() {
+            _this.ttl = parseInt(_this.ttl);
+            _this.ttl = _this.ttl - 1;
+            if (_this.ttl <= 10) {
+                renewToken();
+            }
+        }
+
+        function setValues(params) {
+            _this.token = params["api_session_token"]["token"];
+            _this.ttl = params["api_session_token"]["ttl"];
+            _this.ttl = parseInt(_this.ttl);
+
+            if (!_this.test) {
+                _this.password = null;
+                _this.test = true;
+            }
+
+            $(function() {
+                $.ajaxPrefilter(function(newOpts, oldOpts, xhr) {
+                    xhr.setRequestHeader('Authorization', _this.token);
+                });
+            });
+        }
+
+        console.log("renewing token");
+
+        this.renewToken = function() {
+            $(function() {
+                $.ajax({
+                    dataType: "json",
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
+                    },
+                    data: _this.getJSON(),
+                    url: "http://localhost:3000/api/sessions",
+                    type: "POST",
+                    success: function(b) {
+                        var items = {};
+                        console.log(b);
+                        setValues(b);
+                    },
+                    error: function(c, d, e) {
+                        return b.set("error", "" + d + ": " + e)
+                    }
+                })
+            });
+        }
+    }
+
+    var k = new Token();
+
+});

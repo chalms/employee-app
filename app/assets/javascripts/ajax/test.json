@@ -1,0 +1,10 @@
+{
+    "user": {
+        "email": "andrew@chalmers.com",
+        "password": "password"
+    }
+    "api_session_token" {
+        "token": "not the token",
+        "ttl": "100"
+    }
+}
