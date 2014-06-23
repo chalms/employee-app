@@ -3,8 +3,6 @@
 //=require jquery
 //=require underscore
 
-
-
 _.templateSettings = {
     interpolate: /\{\{\=(.+?)\}\}/g,
     evaluate: /\{\{(.+?)\}\}/g
@@ -12,58 +10,88 @@ _.templateSettings = {
 
 var new_client = "<ul id=\"listForm\"> \
 	<li> \
-		<input type=\"text\" name=\"name\" placeholder=\"Client Name\"/> \
+		<input id=\"clientName\" type=\"text\" name=\"name\" placeholder=\"Name\"/> \
 	</li> \
 	<li> \
-	<input type=\"text\" name=\"email\" placeholder=\"email\"/> \
+		<input id=\"clientEmail\" type=\"text\" name=\"email\" placeholder=\"email\"/> \
 	</li> \
 	<li> \
-	<input id=\"clientSubmit\" type=\"submit\" name=\"submit\"/>\
+		<button class=\"btn btn-primary\" id=\"clientSubmit\"/>\
 	</li> \
 </ul>";
 
+var forLoadLater = null; 
+
+var setClient = function(reportData) {
+	forLoadLater['tab-index'] = "-1";
+	var newOption = $("<option value=\"" + reportData.name + "/>");
+	newOption.appendTo($("select[id='select-choice-1']"))
+	newOption['tab-index'] = 0; 
+	newOption.show(); 
+	forLoadLater.hide(); 
+}
+
+var newClient = function(reportData) {
+  $(function() {
+	  $.ajax({
+      dataType: "json",
+      beforeSend: function(xhr) {
+          xhr.setRequestHeader("X-CSRF-Token", $('meta[name="csrf-token"]').attr("content"))
+      },
+      data: reportData,
+      url: "http://localhost:3000/api/clients.json",
+      type: "POST",
+      success: function(b) {
+          setClient(reportData); 
+      },
+      error: function(c, d, e) {
+          return b.set("error", "" + d + ": " + e)
+      }
+	  })
+	})
+}
+
+
+var pathname = window.location.pathname;
 
 // Loads the page below the navabr 
 $(document).ready(function() {
-//     var first = $('div[class="container"]').css('height');
-//     var initial = $('div[class="master-container"]').css({'margin-top':first});
-//     $('div[class="container"]').parentNode().hide().show(); 
 
+		if (pathname === "http://localhost:3000/api") {
+    var first = $('div[class="container"]').css('height');
+    var initial = $('div[class="master-container"]').css({'margin-top':first});
+    $('div[class="container"]').parentNode().hide().show(); 
+
+  } else {
 		var $htmlNewClient = $(new_client);
-
-		var theButton = $("div[data-role='fieldcontain']");
-
+		var theButton = $("form[id='reports']");
 		$("select[id='select-choice-1']")
 			.change(function() {
-				console.log("31");
+
 		    var str = "";
 		    $("select option:selected").each(function() {
 		      str += $( this ).text() + " ";
-		      console.log("35");
-		      console.log(this);
-
 				    if (this['text'] === 'Add Client') {
+				    	forLoadLater = this; 
 				    	$htmlNewClient.insertAfter( theButton );  
 				    	theButton.hide();
-				    	console.log("39");
 				    	$htmlNewClient.show(); 
-
 				    }
 					})
 		    })
 		  .trigger("change");
 
-
-		$("input[id='clientSubmit']").click() {}
-		  var items = [];
-		  $("ul[id='listForm']").each( data, function( key, val ) {
-		    items.push( "<li id='" + key + "'>" + val + "</li>" );
-		  });
-		 
-		  $( "<ul/>", {
-		    "class": "my-new-list",
-		    html: items.join( "" )
-		  }).appendTo( "body" );
+		$("button[id='clientSubmit']").click(function() {
+			var json = {};
+			json["client"] = {};
+			var name = $("input[id='clientName']").attr('name');
+			console.log(name);
+			console.log($("input[id='clientName']").attr('name'));
+			json["client"][name] = $("input[id='clientName']").attr('value');
+			var email = $("input[id='clientEmail']").attr('name');
+			json["client"][email] = $("input[id='clientEmail']").attr('value');
+			newClient(JSON.stringify(json));
 		});
+	}
 });
 

@@ -1,6 +1,7 @@
 class Api::ClientsController < ApiController
   # GET /api/clients
   # GET /api/clients.json
+  skip_before_filter :api_session_token_authenticate!, only: [:create, :new]
   def index
     @api_clients = Client.all
 
@@ -18,7 +19,8 @@ class Api::ClientsController < ApiController
   # POST /api/clients
   # POST /api/clients.json
   def create
-    @api_client = Client.new(params[:api_client])
+    puts params
+    @api_client = Client.new(params[:client])
 
     if @api_client.save
       render json: @api_client, status: :created, location: @api_client
