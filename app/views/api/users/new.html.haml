@@ -1,1 +1,29 @@
-%h2 Hi!
+.master-container 
+  %section{"data-role" => "page"}
+    %article{"data-role" => "content"}
+      %p The best in project management
+      %ul.ul-listview{"data-role" => "listview"}
+        %li.ui-li.ui-li-static.ui-btn-up-c
+          %a{href: "#"} item1
+        %li.ui-li.ui-li-static.ui-btn-up-c
+          %a{href: "#"} item2
+        %li.ui-li.ui-li-static.ui-btn-up-c
+          %a{href: "#"} item3
+  .sub-container.wrap{:style => "width: 45%; float: left; display-inline: block; margin: none; vertical-align: top; padding: 2%; "}
+    %form.form-inline{"accept-charset" => "UTF-8", :action => "api/users", :method=>"post"}
+      .ui-input-text.ui-body-inherit.ui-corner-all.ui-shadow-inset.ui-input-has-clear
+        %input#password{autocomplete: "off", "data-clear-btn" => "false", name: "[:user]password",  placeholder: "password", type: "password", value: ""}
+        %a.ui-input-clear.ui-btn.ui-icon-delete.ui-btn-icon-notext.ui-corner-all{href: "#", title: "Clear text"} Clear text
+      .ui-input-text.ui-body-inherit.ui-corner-all.ui-shadow-inset.ui-input-has-clear
+        %input#email{"data-clear-btn" => "true", name: "[:user]email",  placeholder: "email", type: "email", value: ""}
+        %a.ui-input-clear.ui-btn.ui-icon-delete.ui-btn-icon-notext.ui-corner-all{href: "#", title: "Clear text"} Clear text
+      .ui-input-text.ui-body-inherit.ui-corner-all.ui-shadow-inset.ui-input-has-clear
+        %input#name{"data-clear-btn" => "true", name: "[:user]name",  placeholder: "name", type: "text", value: ""}
+        %a.ui-input-clear.ui-btn.ui-icon-delete.ui-btn-icon-notext.ui-corner-all{href: "#", title: "Clear text"} Clear text
+      .ui-input-text.ui-body-inherit.ui-corner-all.ui-shadow-inset.ui-input-has-clear
+        %input#companyName{"data-clear-btn" => "true", name: "[:user]company_name",  placeholder: "Company ID", type: "text", value: ""}
+        %a.ui-input-clear.ui-btn.ui-icon-delete.ui-btn-icon-notext.ui-corner-all{href: "#", title: "Clear text"} Clear text
+      .ui-input-clear.ui-btn
+        %input{:type=>"submit", :name=>"submit"}
+  %footer{"data-role" => "footer"}
+    %h4 Page footer

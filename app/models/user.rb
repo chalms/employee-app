@@ -8,6 +8,10 @@ class User < ActiveRecord::Base
   validates_presence_of :password, :length => {:minimum  => 6},  on: :create!
   validate :email, :format => {:with => /\A[^@]+@[^@]+\.[^@]+\Z/}
 
+  def clients 
+    return nil
+  end 
+
   def chats 
     return self.user_chats.map{ |ur| ur.chat }
   end 

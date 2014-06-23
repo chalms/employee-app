@@ -23,7 +23,8 @@ gem 'jquery-rails'
 gem 'asset_sync', github: 'jamesotron/asset_sync'
 gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
 gem 'coffee-rails'
-gem 'batman-rails'
+gem 'underscore-rails'
+gem 'andand'
 
 
 # Monitoring

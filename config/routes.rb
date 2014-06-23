@@ -1,6 +1,6 @@
 EmployeeApp::Application.routes.draw do
 
-  namespace :api, defaults: { format: :json } do
+  namespace :api do
 
     resource  :sessions, only: [:create, :show, :destroy]
 
@@ -51,17 +51,6 @@ EmployeeApp::Application.routes.draw do
 
     root :to => 'users#new', :as => :new
   end
-
-  namespace :app do 
-    resources :users, only: [:show, :index]
-    root :to => 'login#sign_up', :as => :sign_up, :constraints => lambda { |request| !request.cookies['auth_token'] }
-    root :to => 'users#show', :as => :show, :constraints => lambda { |request| !!request.cookies['auth_token'] }
-    post "/check_login" => 'login#check_login', :as => :check_login
-    post "/check_sign_up" => 'login#check_sign_up', :as => :check_sign_up
-    get "/welcome" => 'login#welcome', :as => :welcome
-    post "/logout" => 'users#logout', :as => :logout
-  end 
-
 
 end
 
