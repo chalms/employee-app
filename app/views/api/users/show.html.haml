@@ -41,9 +41,10 @@
             Client
           .ui-select
             %a.ui-btn.ui-btn-icon-right.ui-btn-corner-all.ui-shadow.ui-btn-up-c{:href => "#","role"=>"date","data-theme"=>"c", "aria-haspopup"=>"true"}
-              %span.ui-btn-inner.ui-btn-corner-all
-                %span.ui-btn-text  Add Client
-                %span.ui-icon.ui-icon-arrow-d.ui-icon-shadow
+              %a.ui-btn.ui-btn-inline.ui-btn-icon-notext.ui-btn-up-a{"data-corners" => "true", "data-icon" => "plus", "data-iconpos" => "notext", "data-iconshadow" => "true", "data-inline" => "true", "data-role" => "button", "data-shadow" => "true", "data-theme" => "a", "data-wrapperels" => "span", href: "index.html", title: "My button"}
+                %span.ui-btn-inner
+                  %span.ui-btn-text Add Client
+                  %span.ui-icon.ui-icon-plus.ui-icon-shadow  
               %select#select-choice-1{:name => "select-choice-1", :class => "select", "data-native-menu" => "true", "tab-index"=> "-1"}
                 - if (@user.andand.clients)
                   - @user.clients.each do |c|

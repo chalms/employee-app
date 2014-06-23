@@ -21,16 +21,16 @@ ActiveRecord::Schema.define(version: 20140618050938) do
     t.datetime "updated_at"
   end
 
-  create_table "client", force: true do |t|
+  create_table "client_locations", force: true do |t|
+    t.integer "client_id"
+    t.integer "location_id"
+  end
+
+  create_table "clients", force: true do |t|
     t.string   "name"
     t.string   "email"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "client_locations", force: true do |t|
-    t.integer "client_id"
-    t.integer "location_id"
   end
 
   create_table "location", force: true do |t|

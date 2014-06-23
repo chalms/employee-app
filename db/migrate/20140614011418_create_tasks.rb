@@ -18,7 +18,7 @@ class CreateTasks < ActiveRecord::Migration
       t.timestamps
     end
 
-    create_table :client do |t|
+    create_table :clients do |t|
       t.string :name
       t.string :email
       t.timestamps

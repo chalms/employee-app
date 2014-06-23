@@ -21,11 +21,8 @@ class Api::UsersController < ApiController
       token = current_api_session_token
       token.user = @user if _provided_valid_password? || _provided_valid_api_session_token?
       respond_to do |format| 
-        format.json { render json: user };
-        format.html { render 'show' };
+        format.json { render json: {:user => user.as_json}};
       end 
-    else 
-      redirect_to root_url
     end  
   end
 

@@ -20,7 +20,7 @@ class Api::ClientsController < ApiController
   # POST /api/clients.json
   def create
     puts params
-    @api_client = Client.new(params[:client])
+    @api_client = Client.new(params["client"])
 
     if @api_client.save
       render json: @api_client, status: :created, location: @api_client
