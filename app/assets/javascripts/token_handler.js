@@ -29,6 +29,7 @@ Token.prototype.decrementTtl = function() {
 
 Token.prototype.setValues = function(params) {
     this.token = params["api_session_token"]["token"];
+    sessionStorage.auth = this.token; 
 
     var _this = this;
     

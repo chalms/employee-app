@@ -14,7 +14,7 @@ EmployeeApp::Application.routes.draw do
     end 
 
     #for admin 
-    resources :tasks, only: [:show, :destroy, :update] do 
+    resources :tasks, only: [:show, :destroy, :update, :index] do 
         #worker -> parts [ show, index, update ] 
         #manager -> parts [ show, index, update, create, destroy ]
         resources :parts, only: [:create, :index]

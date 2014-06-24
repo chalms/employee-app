@@ -23,6 +23,7 @@ class ApiController < ApplicationController
   end
 
   def _authorization_header
+    puts request.headers['HTTP_AUTHORIZATION']
     request.headers['HTTP_AUTHORIZATION']
   end
 

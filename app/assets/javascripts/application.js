@@ -5,6 +5,8 @@
 //=require underscore
 //=require backbone
 //=require ./token_handler.js
+//=require_tree ./templates
+//=require ./task.js
 
 _.templateSettings = {
     interpolate: /\{\{\=(.+?)\}\}/g,
@@ -34,14 +36,17 @@ var new_client = "<ul id=\"listForm\"> \
 //       <a id=\"clear-completed\">Clear <%= done %> completed <%= done == 1 ? 'item' : 'items' %></a> \
 //     <% } %> \
 //     <div class=\"todo-count\"><b><%= remaining %></b> <%= remaining == 1 ? 'item' : 'items' %> left</div> ";
+
 $(function() {
-    $.ajaxPrefilter(function(newOpts, oldOpts, xhr) {
-        console.log("setting xhr header");
-        if (sessionStorage.auth !== "") {
-            xhr.setRequestHeader("AUTHORIZATION", sessionStorage.auth);
+    $.ajaxSetup({
+        beforeSend: function(xhr) {
+            if (sessionStorage.auth !== "" && sessionStorage.auth !==  "undefined") {
+                xhr.setRequestHeader("AUTHORIZATION", sessionStorage.auth);
+            }
         }
     })
 })
+
 
 var forLoadLater = null;
 var myId;
@@ -58,10 +63,11 @@ function setClient(reportData) {
 
 function setPreFilter() {
     $(function() {
-        $.ajaxPrefilter(function(newOpts, oldOpts, xhr) {
-            console.log("setting xhr header");
-            if (sessionStorage.auth !== "") {
-                xhr.setRequestHeader("AUTHORIZATION", sessionStorage.auth);
+        $.ajaxSetup({
+            beforeSend: function(xhr) {
+                if (sessionStorage.auth !== "" && sessionStorage.auth !==  "undefined") {
+                    xhr.setRequestHeader("AUTHORIZATION", sessionStorage.auth);
+                }
             }
         })
     })
@@ -173,6 +179,7 @@ function getHomePage(user_id, token) {
             $dataVar.css({
                 'margin-top': first
             });
+            launchToDo(getAuth()); 
         },
         error: function(c, d, e) {
             return b.set("error", "" + d + ": " + e)
@@ -187,7 +194,7 @@ var pathname = window.location.pathname;
 $(document).ready(function() {
     // if (pathname === "http://localhost:3000/api") {
 
-    if (sessionStorage.auth !== "") {
+    if  (sessionStorage.auth !== "" && sessionStorage.auth !==  "undefined") {
         if (sessionStorage.user_id !== "") {
             getHomePage(sessionStorage.user_id, sessionStorage.auth );
         }
