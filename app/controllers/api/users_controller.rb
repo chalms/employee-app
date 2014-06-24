@@ -6,12 +6,12 @@ class Api::UsersController < ApiController
   end
   
   def show
-    user = User.find_by_id(params[:id])
-    return _not_found unless user
-    return _not_authorized unless (current_user.is_manager || current_user.is_admin || (current_user == user))
+    @user = User.find_by_id(params[:id])
+    return _not_found unless @user
+    return _not_authorized unless (current_user.is_manager? || current_user.is_admin? || (current_user == @user))
     respond_to do |format| 
-      format.json { render json: user };
-      format.html { render haml: user};
+      format.json { render json: @user };
+      format.html { render @user};
     end 
   end
 
@@ -19,11 +19,11 @@ class Api::UsersController < ApiController
     @user = User.create!(params[:user]) 
     if @user 
       token = current_api_session_token
-      token.user = @user if _provided_valid_password? || _provided_valid_api_session_token?
+      token.user = @user 
       respond_to do |format| 
-        format.json { render json: {:user => user.as_json}};
+        format.json { render json: {:user => @user, :api_session_token => token}};
       end 
-    end  
+    end
   end
 
   def new 

@@ -1,5 +1,5 @@
-EmployeeApp::Application.routes.draw do
 
+EmployeeApp::Application.routes.draw do
   namespace :api do
 
     resource  :sessions, only: [:create, :show, :destroy]

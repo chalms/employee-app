@@ -1,5 +1,4 @@
 // Copyright 2014 Andrew Chalmers
-
 Token = function(jObj) {
     this.jObj = jObj;
     this.setValues(this.jObj);
@@ -30,18 +29,20 @@ Token.prototype.decrementTtl = function() {
 
 Token.prototype.setValues = function(params) {
     this.token = params["api_session_token"]["token"];
-    this.ttl = params["api_session_token"]["ttl"];
-    this.ttl = parseInt(this.ttl);
-    if (!this.test) {
-        this.password = null;
-        this.test = true
-    }
+
     var _this = this;
+    
     $(function() {
         $.ajaxPrefilter(function(newOpts, oldOpts, xhr) {
+            console.log("setting xhr header");
             xhr.setRequestHeader("AUTHORIZATION", _this.token)
         })
     })
+
+    if (params["api_session_token"]["ttl"]) {
+         this.ttl = parseInt(this.ttl);
+    }
+
 }
 
 
@@ -66,5 +67,4 @@ Token.prototype.renewToken = function() {
             }
         })
     })
-}
 }

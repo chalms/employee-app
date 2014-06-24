@@ -41,6 +41,7 @@ class ApiSessionToken
   end
 
   def user=(user)
+    puts "setting token with user who has id #{user.id}"
     _set_with_expire(_user_id_key, user.id)
     @user = user
   end
