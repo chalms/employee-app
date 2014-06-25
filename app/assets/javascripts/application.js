@@ -5,8 +5,9 @@
 //=require underscore
 //=require backbone
 //=require ./token_handler.js
-//=require_tree ./templates
+//=require_tree ./templates/reports
 //=require ./task/task_app.js 
+//=require ./report/report_app.js
 
 TemplateManager = {
     templates: {},
@@ -17,24 +18,11 @@ TemplateManager = {
         } else {
             var that = this;
             $.get(url, function(template) {
-                console.log(template);
                 callback(template);
             });
         }
     }
 }
-
-var new_client = "<ul id=\"listForm\"> \
-	<li> \
-		<input id=\"clientName\" type=\"text\" name=\"name\" placeholder=\"Name\"/> \
-	</li> \
-	<li> \
-		<input id=\"clientEmail\" type=\"text\" name=\"email\" placeholder=\"email\"/> \
-	</li> \
-	<li> \
-		<button class=\"btn btn-primary\" id=\"clientSubmit\"/>\
-	</li> \
-</ul>";
 
 $(function() {
     $.ajaxSetup({
@@ -113,7 +101,6 @@ function getBothForms() {
 }
 
 function submitClient() {
-
     var input1 = $("input[id='clientName']");
     var input2 = $("input[id='clientEmail']");
 
@@ -158,7 +145,8 @@ function getId() {
 }
 
 function getHomePage(user_id, token) {
-    var url = 'api/users/' + user_id
+    var url = 'api/users/' + user_id;
+    var _this = this; 
     $.ajax({
         url: url, //sumbits it to the given url of the form
         dataType: "html",
@@ -170,7 +158,6 @@ function getHomePage(user_id, token) {
         success: function(data) {
             var dom_target = $("div[id='new']");
             var $dataVar = $(data);
-            console.log($dataVar)
             $dataVar.insertAfter(dom_target);
             dom_target.hide();
             $dataVar.show();
@@ -178,10 +165,10 @@ function getHomePage(user_id, token) {
             $dataVar.css({
                 'margin-top': first
             });
-            createTaskApp(getAuth());
+            launchReportApp(getId(), getAuth());
         },
         error: function(c, d, e) {
-            return b.set("error", "" + d + ": " + e)
+     //       return _this.set("error", "" + d + ": " + e);
         }
     });
 }
@@ -189,49 +176,42 @@ function getHomePage(user_id, token) {
 
 var pathname = window.location.pathname;
 
-// Loads the page below the navabr 
 $(document).ready(function() {
-    // if (pathname === "http://localhost:3000/api") {
 
     if (sessionStorage.auth !== "" && sessionStorage.auth !== "undefined") {
-        if (sessionStorage.user_id !== "") {
-            getHomePage(sessionStorage.user_id, sessionStorage.auth);
+        if (sessionStorage.user_id !== "" && sessionStorage.user_id !== "undefined") {
+           getHomePage(sessionStorage.user_id, sessionStorage.auth);
         }
-    }
+    } 
 
     var first = $('div[class="container"]').css('height');
-    var initial = $('div[class="master-container"]').css({
-        'margin-top': first
-    });
-    // $('div[class="container"]').parentNode().hide().show();
+    var initial = $('div[class="master-container"]').css({'margin-top': first});
     var $form = $("form[id='myForm']");
-    console.log($form);
-    console.log("submitting");
+
     $form.submit(function() {
         var valuesToSubmit = $(this).serialize();
-        console.log("sending ajax");
+        var _this = this; 
         $.ajax({
-            url: $(this).attr('action'), //sumbits it to the given url of the form
+            url: $(this).attr('action'), 
             data: valuesToSubmit,
             dataType: "JSON",
             beforeSend: function(xhr) {
                 xhr.setRequestHeader("X-CSRF-Token", $('meta[name="csrf-token"]').attr("content"));
             },
+
             type: "POST",
             success: function(json) {
-                console.log("success:");
-                console.log(json);
                 new Token(json);
                 var token = json['api_session_token']['token'];
                 $('meta[name="csrf-token"]').attr("auth", token);
-                setAuth(json['user']['id'], token)
+                setAuth(json['user']['id'], token);
                 setPreFilter();
                 getHomePage(json['user']['id'], token);
             },
-            error: function(c, d, e) {
-                return b.set("error", "" + d + ": " + e)
-            }
 
+            error: function(c, d, e) {
+            //    return _this.set("error", "" + d + ": " + e);
+            }
         })
         return false; // prevents normal behaviour
     })

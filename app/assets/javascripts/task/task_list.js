@@ -22,7 +22,8 @@ function createTaskList() {
     nextOrder: function() {
       if (!this.length) return 1;
       if (index) index += 1;
-      return this.last().get('report_index') + 1;
+      this.last().set('report_index', index) ;
+      return index - 1; 
     },
 
     comparator: function(task) {

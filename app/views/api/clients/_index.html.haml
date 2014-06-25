@@ -1,0 +1,9 @@
+#report-clients
+  %label{for: "select-choice"} client
+  %span 
+    %button.new 
+  %select#select-choice{name: "select-choice"}
+    - for (@client in clientList) 
+      %option{value: client}= client
+    - 
+  %button.destroy

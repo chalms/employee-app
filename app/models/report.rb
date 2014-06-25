@@ -1,8 +1,11 @@
 class Report < ActiveRecord::Base
-	has_many :tasks
-	has_and_belongs_to_many :users
-	has_one :location, as: :checkin
-	has_one :location, as: :checkout
+	
+  include JsonSerializingModel
+  
+	# has_many :tasks
+	# has_and_belongs_to_many :users
+	# has_one :location, as: :checkin
+	# has_one :location, as: :checkout
 
 	def self.is_active? 
 		if (self.report_date == Date.today) 

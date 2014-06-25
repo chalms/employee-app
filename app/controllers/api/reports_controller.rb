@@ -1,6 +1,8 @@
 class Api::ReportsController < ApiController
   # GET /api/reports
   # GET /api/reports.json
+
+  include ActionController::MimeResponds
   def index
     @api_reports = Report.all
 
@@ -10,20 +12,26 @@ class Api::ReportsController < ApiController
   # GET /api/reports/1
   # GET /api/reports/1.json
   def show
+    puts params
     @api_report = Report.find(params[:id])
 
-    render json: @api_report
+    respond_with json: @api_report, status: :success
   end
+
+  def new 
+    @api_report = Report.new
+    respond_with json: @api_report
+  end 
 
   # POST /api/reports
   # POST /api/reports.json
   def create
+    puts params
     @api_report = Report.new(params[:api_report])
-
     if @api_report.save
-      render json: @api_report, status: :created, location: @api_report
-    else
-      render json: @api_report.errors, status: :unprocessable_entity
+      respond_to do |format| 
+        format.json { render json: @api_report};
+      end 
     end
   end
 
@@ -33,7 +41,7 @@ class Api::ReportsController < ApiController
     @api_report = Report.find(params[:id])
 
     if @api_report.update(params[:api_report])
-      head :no_content
+     render json: @api_report, status: :success
     else
       render json: @api_report.errors, status: :unprocessable_entity
     end

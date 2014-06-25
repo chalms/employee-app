@@ -1,0 +1,19 @@
+#report  
+  %h2 New Report
+  .container
+    %h4 Name
+    #report-name
+      %input#new-name{placeholder: "What is the report name?", type: "text"}
+    %br
+    %h4 Date
+    #report-date
+      .ui-input-date.ui-body-inherit.ui-corner-all.ui-shadow-inset
+        %input#datepicker.hasDatePicker{"data-role" => "date", :type => "date", :name => "report_date"}
+    %br
+    %h4 Description
+    #report-description
+      %textarea#textarea.edit{cols: "40", name: "textarea", rows: "8"}= description
+    %br
+    %h4 Client
+    %a.btn.btn-primary Add Tasks
+    %a.btn.btn-warning Assign Workers

@@ -25,10 +25,10 @@ function createTaskView() {
     },
 
     render: function() {
-      console.log(this.taskTemplate());
+   
       this.$el.toggleClass('completed', this.model.get('completed'));
       this.input = this.$('.edit');
-      console.log(this);
+   
       return this;
     },
 

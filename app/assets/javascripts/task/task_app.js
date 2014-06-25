@@ -17,7 +17,7 @@ function createTaskApp(auth) {
 
     var AppView = Backbone.View.extend({
 
-      el: $("div[id='taskapp'"),
+      el: $("div[id='taskapp']"),
 
       url: function() {
         return 'assets/templates/stats-template.html'
