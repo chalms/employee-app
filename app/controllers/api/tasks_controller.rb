@@ -21,7 +21,7 @@ class Api::TasksController < ApiController
     @api_task = Task.new(params[:api_task])
 
     if @api_task.save
-      render json: @api_task, status: :created, location: @api_task
+      render json: @api_task, status: :created
     else
       render json: @api_task.errors, status: :unprocessable_entity
     end

@@ -1,5 +1,5 @@
 #show 
-  .container.wrap{:style => " width: 80%; float: right; margin-left: 10%; margin-right: 10%; margin-top: 5%; vertical-align:top; display-inline: block; padding: 2px; "}
+  .container
     #taskapp
       %header
         %h1 Tasks
@@ -32,7 +32,7 @@
           .alert.alert-info
             %small The above are the reports that works can receive and fill out in the field 
       - else
-        .sub-container.wrap{:style => "width: 45%; float: left; display-inline: block; margin: none; vertical-align: top; padding: 2%; "}
+        .sub-container.wrap
           %h4 Add a daily report
           %form.wrap#reports{:method => "POST", :action => "/reports" }
             = hidden_field_tag :user_id, user.id

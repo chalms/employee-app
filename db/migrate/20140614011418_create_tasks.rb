@@ -50,6 +50,7 @@ class CreateTasks < ActiveRecord::Migration
       t.string :note
       t.belongs_to :report
       t.string :description
+      t.integer :report_index
       t.boolean :completed, :default => false 
       t.references :location, as: :completed_location
       t.timestamps

@@ -93,7 +93,8 @@ ActiveRecord::Schema.define(version: 20140618050938) do
     t.string   "note"
     t.integer  "report_id"
     t.string   "description"
-    t.boolean  "completed",   default: false
+    t.integer  "report_index"
+    t.boolean  "completed",    default: false
     t.integer  "location_id"
     t.datetime "created_at"
     t.datetime "updated_at"

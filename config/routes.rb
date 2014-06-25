@@ -14,7 +14,7 @@ EmployeeApp::Application.routes.draw do
     end 
 
     #for admin 
-    resources :tasks, only: [:show, :destroy, :update, :index] do 
+    resources :tasks, only: [:show, :destroy, :create, :update, :index] do 
         #worker -> parts [ show, index, update ] 
         #manager -> parts [ show, index, update, create, destroy ]
         resources :parts, only: [:create, :index]
@@ -31,7 +31,7 @@ EmployeeApp::Application.routes.draw do
     resources :reports, only: [:create, :show, :update, :destroy] do 
         #worker -> tasks [ show, index, update ] 
         #manager -> tasks [ show, index, update, create, destroy ]
-        resources :tasks, only: [:create, :index]
+        # resources :tasks, only: [:create, :index]
         resources :clients, only: [:create, :index]
         resources :locations
     end 

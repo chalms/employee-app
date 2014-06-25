@@ -6,12 +6,23 @@
 //=require backbone
 //=require ./token_handler.js
 //=require_tree ./templates
-//=require ./task.js
+//=require ./task/task_app.js 
 
-_.templateSettings = {
-    interpolate: /\{\{\=(.+?)\}\}/g,
-    evaluate: /\{\{(.+?)\}\}/g
-};
+TemplateManager = {
+    templates: {},
+    get: function(url, callback) {
+        var template = this.templates[url];
+        if (template) {
+            callback(template);
+        } else {
+            var that = this;
+            $.get(url, function(template) {
+                console.log(template);
+                callback(template);
+            });
+        }
+    }
+}
 
 var new_client = "<ul id=\"listForm\"> \
 	<li> \
@@ -25,22 +36,10 @@ var new_client = "<ul id=\"listForm\"> \
 	</li> \
 </ul>";
 
-// var item_template = "<div class=\"view\"> \
-//       <input class=\"toggle\" type=\"checkbox\" <%= done \? 'checked=\"checked\"' : '' %>/>  \
-//       <label><%- title %></label> \ 
-//       <a class=\"destroy\"></a > \ 
-//     </div> \
-//     <input class=\"edit\" type=\"text\" value=\"<%- title %>\" /> ";
-
-// var stats_template = " <% if (done) { %> \
-//       <a id=\"clear-completed\">Clear <%= done %> completed <%= done == 1 ? 'item' : 'items' %></a> \
-//     <% } %> \
-//     <div class=\"todo-count\"><b><%= remaining %></b> <%= remaining == 1 ? 'item' : 'items' %> left</div> ";
-
 $(function() {
     $.ajaxSetup({
         beforeSend: function(xhr) {
-            if (sessionStorage.auth !== "" && sessionStorage.auth !==  "undefined") {
+            if (sessionStorage.auth !== "" && sessionStorage.auth !== "undefined") {
                 xhr.setRequestHeader("AUTHORIZATION", sessionStorage.auth);
             }
         }
@@ -65,7 +64,7 @@ function setPreFilter() {
     $(function() {
         $.ajaxSetup({
             beforeSend: function(xhr) {
-                if (sessionStorage.auth !== "" && sessionStorage.auth !==  "undefined") {
+                if (sessionStorage.auth !== "" && sessionStorage.auth !== "undefined") {
                     xhr.setRequestHeader("AUTHORIZATION", sessionStorage.auth);
                 }
             }
@@ -140,27 +139,27 @@ function fixNavBar() {
 function getAuth() {
     if (sessionStorage.auth) {
         return sessionStorage.auth;
-    } else{
+    } else {
         return "";
     }
 }
 
 function setAuth(id, auth) {
-    sessionStorage.user_id = id; 
-    sessionStorage.auth = auth; 
+    sessionStorage.user_id = id;
+    sessionStorage.auth = auth;
 }
 
 function getId() {
     if (sessionStorage.user_id) {
-        return sessionStorage.user_id; 
+        return sessionStorage.user_id;
     } else {
         return "";
     }
 }
 
 function getHomePage(user_id, token) {
-    var url =  'api/users/' + user_id
-     $.ajax({
+    var url = 'api/users/' + user_id
+    $.ajax({
         url: url, //sumbits it to the given url of the form
         dataType: "html",
         beforeSend: function(xhr) {
@@ -170,16 +169,16 @@ function getHomePage(user_id, token) {
         type: "GET",
         success: function(data) {
             var dom_target = $("div[id='new']");
-            var $dataVar = $(data); 
+            var $dataVar = $(data);
             console.log($dataVar)
             $dataVar.insertAfter(dom_target);
             dom_target.hide();
-            $dataVar.show(); 
+            $dataVar.show();
             var first = $('div[class="container"]').css('height');
             $dataVar.css({
                 'margin-top': first
             });
-            launchToDo(getAuth()); 
+            createTaskApp(getAuth());
         },
         error: function(c, d, e) {
             return b.set("error", "" + d + ": " + e)
@@ -194,9 +193,9 @@ var pathname = window.location.pathname;
 $(document).ready(function() {
     // if (pathname === "http://localhost:3000/api") {
 
-    if  (sessionStorage.auth !== "" && sessionStorage.auth !==  "undefined") {
+    if (sessionStorage.auth !== "" && sessionStorage.auth !== "undefined") {
         if (sessionStorage.user_id !== "") {
-            getHomePage(sessionStorage.user_id, sessionStorage.auth );
+            getHomePage(sessionStorage.user_id, sessionStorage.auth);
         }
     }
 
@@ -223,8 +222,8 @@ $(document).ready(function() {
                 console.log("success:");
                 console.log(json);
                 new Token(json);
-                var token =  json['api_session_token']['token'];
-                $('meta[name="csrf-token"]').attr("auth",token); 
+                var token = json['api_session_token']['token'];
+                $('meta[name="csrf-token"]').attr("auth", token);
                 setAuth(json['user']['id'], token)
                 setPreFilter();
                 getHomePage(json['user']['id'], token);
