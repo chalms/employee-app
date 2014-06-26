@@ -24,6 +24,7 @@ module EmployeeApp
     # config.i18n.default_locale = :de
 
      config.autoload_paths += %W[ #{config.root}/lib ]
+     config.active_record.whitelist_attributes
 
     # We're an API-only app, so let's delete the session store.
       config.middleware.delete ActionDispatch::Session::CookieStore

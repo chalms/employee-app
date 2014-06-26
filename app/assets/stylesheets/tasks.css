@@ -1,16 +1,10 @@
 html,
-body {
-	margin: 0;
-	padding: 0;
-}
 
 body {
-	font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
-	line-height: 1.4em;
-	background: #eeeeee;
-	color: #333333;
-	width: 520px;
-	margin: 0 auto;
+	/* font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif; */
+	/* line-height: 1.4em; */
+	/* background: #2A2525; */
+	color: #868686;
 	-webkit-font-smoothing: antialiased;
 }
 
@@ -197,4 +191,11 @@ body {
 
 #instructions a {
 	color: #336699;
+}
+
+#new { 
+	width: 50%; 
+	height: 40%;
+	margin: auto; 
+	margin-top: 20%;
 }

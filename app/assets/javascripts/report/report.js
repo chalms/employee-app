@@ -1,17 +1,13 @@
 
-function createReport(id, theJSON) {
-   var auth = {
-    headers: {
-      "AUTHORIZATION": theJSON
-    }
-  };
-  
+function createReport(id) {
+
+
   return Backbone.Model.extend({
 
     defaults: function() {
       return {
-        "description": "Add a new report!",
-        "report_date": this.currentDay()
+        description: "Add a new report!",
+        report_date: this.currentDay()
       };
     },
 
@@ -34,17 +30,23 @@ function createReport(id, theJSON) {
       return today.toString() 
     },
 
-    setDefaults: function(arr) {
-      for (var str in arr) {
-        if (!this.get(str)) {
-          this.set({str : this.defaults()[str]
-          }, auth);
-        }
-      }
+    setDefaults: function() {
+        if (!this.get("description")) {
+          this.set({ description: this.defaults().description });
+        }; 
+
+        if(!this.get("report_date")) {
+          this.set({ report_date: this.defaults().report_date })
+        }; 
     },
 
     initialize: function() {
       this.setDefaults(["description", "report_date"]);
+      console.log("initialize");
+      console.log(this); 
+      console.log(this.attributes);
+
+      this.save(); 
     },
 
     url: function() {
@@ -57,6 +59,5 @@ function createReport(id, theJSON) {
         return prefix + "/" + this.id
       }
     },
-
   });
 }

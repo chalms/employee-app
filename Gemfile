@@ -21,7 +21,6 @@ gem 'sass-rails', '~> 4.0.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails'
 gem 'asset_sync', github: 'jamesotron/asset_sync'
-gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
 gem 'coffee-rails'
 gem 'underscore-rails'
 gem 'andand'
@@ -33,6 +32,7 @@ gem 'newrelic-redis'
 
 #gem 'newrelic-carrierwave', github: 'tehprofessor/newrelic-carrierwave'
 gem 'newrelic_postgres_plugin'
+gem 'protected_attributes'
 
 # Test
 gem 'rspec-rails'

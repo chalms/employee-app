@@ -9,6 +9,9 @@
 */
 
 /* Some unsets */
+
+
+
 .ui-mobile,
 .ui-mobile body {
 	height: 99.9%;
@@ -196,7 +199,7 @@ div.ui-mobile-viewport {
 	min-height: 1.1em;
 	text-align: center;
 	display: block;
-	margin: 0 30%;
+	/* margin: 0 30%; */
 	padding: .7em 0;
 	text-overflow: ellipsis;
 	overflow: hidden;
@@ -308,7 +311,7 @@ div.ui-mobile-viewport {
 .ui-btn-icon-top:after,
 .ui-btn-icon-bottom:after,
 .ui-btn-icon-notext:after {
-	content: "";
+	content: "X";
 	position: absolute;
 	display: block;
 	width: 22px;
@@ -1485,6 +1488,7 @@ textarea.ui-input-text.ui-textinput-autogrow {
 	margin: .5em 0;
 	border-width: 1px;
 	border-style: solid;
+	/* border-bottom-color: #666; */
 }
 .ui-input-text input,
 .ui-input-search input,
@@ -1505,7 +1509,7 @@ textarea.ui-input-text {
 	min-height: 2.2em;
 	text-align: left; /* Opera aligns type="date" right by default */
 	border: 0;
-	background: transparent none;
+	background: rgba(10, 7, 7, 0) none;
 	-webkit-appearance: none;
 	-webkit-border-radius: inherit;
 	border-radius: inherit;
@@ -1570,7 +1574,7 @@ textarea.ui-mini {
 	top: 50%;
 	margin: -14px .3125em 0;
 	border: 0;
-	background-color: transparent;
+	background-color: rgba(235, 46, 46, 0);
 }
 .ui-input-search .ui-input-clear-hidden,
 .ui-input-text .ui-input-clear-hidden {

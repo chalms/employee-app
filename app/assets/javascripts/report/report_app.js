@@ -1,14 +1,81 @@
 //= require underscore
 //=require ./report.js
+
 function launchReportApp(id, theJSON) {
 
-  var auth = {
-    headers: {
-      "AUTHORIZATION": theJSON
-    }
+  
+// var originalSync = Backbone.sync;
+//   Backbone.sync = function(method, model, options) {
+//     console.log(method); 
+//     console.log(model);
+//     options.headers = options.headers || {};
+//     _.extend(options.headers, {"Authorization":theJSON});
+//     switch (method) {
+//       case 'create':
+//         $.ajax({
+//           type: "POST",
+//           url: "api/reports",
+//           data: model,
+//           success: function () {
+//             console.log("created!");
+//           },
+//           dataType: "json"
+//         });
+//       break;
+
+//       case 'update':
+//         $.ajax({
+//           type: "PUT",
+//           url: "api/reports/" + model.id,
+//           data: model,
+//           success: function () {
+//             console.log("saved!");
+//           },
+//           dataType: "json"
+//         });
+//       break;
+
+//       case 'delete':
+//         $.ajax({
+//           type: "DELETE",
+//           url: "api/reports/" + model.id,
+//           success: function () {
+//             console.log("deleted!");
+//           },
+//           dataType: "json"
+//         });
+//       break;
+
+//       case 'read':
+//         $.ajax({
+//           type: "GET",
+//           url: "api/reports/" + model.id,
+//           success: function () {
+//             console.log("read!");
+//           },
+//           dataType: "json"
+//         });
+//       break;
+//     }
+//   }
+
+  Backbone.ajax = function() {
+      var args = Array.prototype.slice.call(arguments, 0);
+
+      // Here, I add the OAuth token (or any other token)
+      // But before, I check that data exists, if not I add it
+      console.log("args");
+      console.log(args);
+      if (args[0]['data'] === undefined) {
+          args[0]['data'] = {};
+      }
+      args[0]['headers'] = {}; 
+      args[0]['headers']['AUTHORIZATION'] = theJSON;
+
+      return Backbone.$.ajax.apply(Backbone.$, args);
   };
 
-  Report = createReport(id, theJSON); 
+  var Report = createReport(id); 
   ReportView = Backbone.View.extend({
 
 		el: $("div[id='reportapp']"),
@@ -21,6 +88,8 @@ function launchReportApp(id, theJSON) {
       "onSelect .datapicker": "datePicked"
     },
 
+    model: new Report,
+
     url: function(str) {
       urls = {
       	"#report":"assets/templates/reports/report.html", 
@@ -31,13 +100,20 @@ function launchReportApp(id, theJSON) {
       return urls[str]; 
     },
 
-    getSubTemplate: function (url, attrs) { 
+    getSubTemplate: function () { 
     	var that = this;
-      console.log(url); 
-      nicks = this.url(url);
-      TemplateManager.get(nicks, function(template) {
-        that.$el.find(url).html(_.template(template, attrs)); 
-      });
+      for (var url in this.model.changed) {
+        var val = this.model.changed[url]; 
+        var attrs = {}; 
+        attrs[url] = val; 
+        var u = "#" + url; 
+        console.log(u);
+        console.log(attrs);
+        TemplateManager.get(this.url(u), function(template) {
+          that.$el.find(u).html(_.template(template, attrs)); 
+        });
+      }
+    
       return this.$el; 
     },
 
@@ -83,18 +159,18 @@ function launchReportApp(id, theJSON) {
     },
 
     render: function() {
-    	this.getTemplate("#report");
 
-    	 var arr = [["#name", "name"],["#report_date","report_date"],["#description","description"]];
-    	for (i = 0; i < arr.length; i++) this.getCorrectTemplate(arr[0][i], this.model.get(arr[0][i]), arr[0][i]);
+    	//  var arr = [["#name", "name"],["#report_date","report_date"],["#description","description"]];
+    	// for (i = 0; i < arr.length; i++) this.getCorrectTemplate(arr[0][i], this.model.get(arr[0][i]), arr[0][i]);
       return this.el;
     },
 
-    initialize: function(model) {
-      this.model = model.model; 
+    initialize: function() { 
       this.listenTo(this.model, 'change', this.render);
       this.listenTo(this.model, 'destroy', this.remove);
-      this.render(); 
+      this.listenTo(this.model, 'save', this.getSubTemplate);
+      this.getTemplate("#report");
+
     },
 
     edit: function(e) {
@@ -104,7 +180,9 @@ function launchReportApp(id, theJSON) {
     },
 
     closeWithValue: function(e) {
+      console.log(e);
       var element = $(e.currentTarget);
+      console.log(element);
       value = element.context.value; 
       var pID = element.context.parentNode.getAttribute('id');
       var hash = {} 
@@ -114,25 +192,10 @@ function launchReportApp(id, theJSON) {
       if (!value) {
         this.clear();
       } else {
-        console.log("saving!");
+        console.log(hash);
         this.model.set(hash);
-        var h = { 
-          success: function(model, response) {
-              console.log("model!");
-              console.log(model);
-              console.log("response!")
-              console.log(response);
-               var q = "#" + pID; 
-              _this.getSubTemplate(q,model.attributes);
-              console.log('success');
-          },
-          error: function(model, response) {
-              console.log(model);
-          },
-          wait: true // Add this
-        }; 
-        var z = $.extend(auth, h);
-        this.model.save(hash, z);
+        this.model.save();
+        this.getSubTemplate();
       }
     },
 
@@ -148,5 +211,5 @@ function launchReportApp(id, theJSON) {
       this.model.destroy();
     }
   });
-  var App = new ReportView({model: new Report});
+  var App = new ReportView();
 }
