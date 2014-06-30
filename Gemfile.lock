@@ -6,6 +6,13 @@ GIT
       activemodel
       fog (>= 1.8.0)
 
+GIT
+  remote: https://github.com/bradphelan/jasminerice.git
+  revision: 091349c27343bfa728b8e5745675f9ddbb7d9699
+  specs:
+    jasminerice (0.1.0)
+      coffee-rails
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -85,6 +92,7 @@ GEM
     dotenv-deployment (0.0.2)
     dotenv-rails (0.11.1)
       dotenv (= 0.11.1)
+    ejs (1.1.1)
     em-synchrony (1.0.3)
       eventmachine (>= 1.0.0.beta.1)
     erubis (2.7.0)
@@ -312,6 +320,7 @@ DEPENDENCIES
   cucumber-rails
   database_cleaner
   dotenv-rails
+  ejs
   em-synchrony
   fabrication
   faker
@@ -325,6 +334,7 @@ DEPENDENCIES
   guard-sidekiq
   haml-rails
   hiredis
+  jasminerice!
   jquery-rails
   mail_safe
   micro_token

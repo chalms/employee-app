@@ -1,20 +1,18 @@
-/*global TodoMVC */
-'use strict';
-
-TodoMVC.module('Task', function (Task, App, Backbone) {
-  // Todo Model
+/*global TaskMVC */
+TaskApp.module("MyModule", function(MyModule, MyApp, Backbone, Marionette, $, _){
+  // Task Model
   // ----------
-  Task.Todo = Backbone.Model.extend({
+  Tasks.Task = Backbone.Model.extend({
     defaults: {
       description: '',
       completed: false,
       created: 0, 
-      report_date: null
+      parts: [] 
     },
 
     initialize: function () {
       if (this.isNew()) {
-        this.set('report_date', Date.now());
+        this.set('created', Date.now());
       }
     },
 
@@ -27,12 +25,12 @@ TodoMVC.module('Task', function (Task, App, Backbone) {
     }
   });
 
-  // Todo Collection
+  // Task Collection
   // ---------------
   Tasks.TaskList = Backbone.Collection.extend({
-    model: Task.Todo,
+    model: Tasks.Task,
 
-    localStorage: new Backbone.LocalStorage('todos-backbone-marionette'),
+    localStorage: new Backbone.LocalStorage('tasks-backbone-marionette'),
 
     getCompleted: function () {
       return this.filter(this._isCompleted);
@@ -44,50 +42,8 @@ TodoMVC.module('Task', function (Task, App, Backbone) {
 
     comparator: 'created',
 
-    _isCompleted: function (todo) {
-      return todo.isCompleted();
+    _isCompleted: function (task) {
+      return task.isCompleted();
     }
   });
 });
-
-
-// function createTask(theJSON) {
-//   return Backbone.Model.extend({
-//     defaults: function() {
-//       return {
-//         description: "empty task...",
-//         report_index: index,
-//         completed: false,
-//         reports: []
-//       };
-//     },
-
-//     setDefaults: function(arr) {
-//       for (var str in arr) {
-//         if (!this.get(str)) {
-//           this.set({
-//             str: this.defaults().description
-//           }, theJSON);
-//         }
-//       }
-//     },
-
-//     initialize: function() {
-//       this.setDefaults(["description", "reports", "report_index", "completed"]);
-//     },
-
-//     url: function() {
-//       if (this.id) {
-//         return 'api/tasks' + "/" + this.id;
-//       } else {
-//         return 'api/tasks'
-//       }
-//     },
-
-//     toggle: function() {
-//       this.save({
-//         "completed": !this.get("completed")
-//       }, theJSON);
-//     }
-//   });
-// }

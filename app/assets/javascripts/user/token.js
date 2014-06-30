@@ -1,8 +1,23 @@
 // Copyright 2014 Andrew Chalmers
+
+
 Token = function(jObj) {
     this.jObj = jObj;
     this.setValues(this.jObj);
 }
+
+Token.prototype.setPreFilter = function() {
+    $(function() {
+        $.ajaxSetup({
+            beforeSend: function(xhr) {
+                if (sessionStorage.auth !== "" && sessionStorage.auth !== "undefined") {
+                    xhr.setRequestHeader("AUTHORIZATION", sessionStorage.auth);
+                }
+            }
+        })
+    })
+}
+
 
 Token.prototype.hasToken = function() {
     if (this.token.token !== null) {

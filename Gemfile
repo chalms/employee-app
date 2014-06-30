@@ -24,7 +24,7 @@ gem 'asset_sync', github: 'jamesotron/asset_sync'
 gem 'coffee-rails'
 gem 'underscore-rails'
 gem 'andand'
-
+gem 'ejs'
 
 # Monitoring
 gem 'newrelic_rpm', '~> 3.6.0'
@@ -41,6 +41,9 @@ gem 'mail_safe'
 gem 'fabrication'
 gem 'database_cleaner'
 gem 'poltergeist'
+gem "jasminerice", :git => 'https://github.com/bradphelan/jasminerice.git'
+
+
 
 # Dev tools
 gem 'guard'

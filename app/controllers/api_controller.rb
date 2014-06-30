@@ -1,4 +1,4 @@
-class ApiController < ApplicationController
+class ApiController < ActionController::Base
   skip_before_action :verify_authenticity_token
   respond_to :json
   rescue_from UserAuthenticationService::NotAuthorized, with: :_not_authorized
