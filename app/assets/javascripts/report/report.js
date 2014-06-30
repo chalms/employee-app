@@ -1,7 +1,5 @@
 
 function createReport(id) {
-
-
   return Backbone.Model.extend({
 
     defaults: function() {

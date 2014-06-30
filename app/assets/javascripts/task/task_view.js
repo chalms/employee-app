@@ -12,7 +12,7 @@ function createTaskView() {
     },
 
     url: function() {
-      return 'assets/templates/task-template.html';
+      return 'assets/templates/tasks/task-template.html';
     },
 
     taskTemplate: function() {

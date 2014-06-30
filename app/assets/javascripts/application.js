@@ -4,8 +4,10 @@
 //=require jquery_ujs
 //=require underscore
 //=require backbone
-//=require ./token_handler.js
+//=require marionette 
 //=require_tree ./templates/reports
+//=require_tree ./templates/tasks
+//=require ./token_handler.js
 //=require ./task/task_app.js 
 //=require ./report/report_app.js
 
@@ -144,6 +146,11 @@ function getId() {
     }
 }
 
+function launchModules() {
+    launchReportApp(getId(), getAuth());
+    createTaskApp(getAuth());
+}
+
 function getHomePage(user_id, token) {
     var url = 'api/users/' + user_id;
     var _this = this; 
@@ -165,7 +172,7 @@ function getHomePage(user_id, token) {
             $dataVar.css({
                 'margin-top': first
             });
-            launchReportApp(getId(), getAuth());
+            launchModules(); 
         },
         error: function(c, d, e) {
      //       return _this.set("error", "" + d + ": " + e);

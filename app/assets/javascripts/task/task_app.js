@@ -1,6 +1,6 @@
-//=require ./task 
-//=require ./task_list 
-//=require ./task_view 
+//=require ./task.js
+//=require ./task_list.js
+//=require ./task_view.js
 
 function createTaskApp(auth) {
   var theJSON = {
@@ -20,7 +20,7 @@ function createTaskApp(auth) {
       el: $("div[id='taskapp']"),
 
       url: function() {
-        return 'assets/templates/stats-template.html'
+        return 'assets/templates/tasks/stats-template.html'
       },
 
       events: {
@@ -54,7 +54,7 @@ function createTaskApp(auth) {
       render: function() {
         var completed = Tasks.completed().length || 0;
         var remaining = Tasks.remaining().length || completed;
-        if (Tasks.length) {
+        if (true) {
           this.main.show();
           this.footer.show();
           this.statsTemplate(completed, remaining);
@@ -62,8 +62,12 @@ function createTaskApp(auth) {
           this.main.hide();
           this.footer.hide();
         }
-        this.allCheckbox.checked = !remaining;
+        if (this.allCheckbox) { 
+          this.allCheckbox.checked = !remaining;
+        }
       },
+
+
 
       addOne: function(task) {
         var view = new TaskView({
@@ -101,5 +105,6 @@ function createTaskApp(auth) {
       }
     });
     var App = new AppView;
+
   })
 };

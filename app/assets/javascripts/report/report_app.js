@@ -203,8 +203,12 @@ function launchReportApp(id, theJSON) {
       this.closeWithValue(e);
     },
 
-    updateOnEnter: function(e) {
+    updateOnEnter: function(e) { 
+      var id = $(e.currentTarget).getAttribute('id'); 
+      if (id === "new-task") { App.updateOnEnter(e); } else {
+         $(e.currentTarget);
       if (e.keyCode == 13) this.closeWithValue(e);
+      }
     },
 
     clear: function() {
@@ -213,3 +217,23 @@ function launchReportApp(id, theJSON) {
   });
   var App = new ReportView();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
