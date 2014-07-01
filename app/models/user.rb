@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   
   has_many :user_reports
   has_many :user_chats
+  attr_accessible :email, :id, :name, :company_name
 
   after_initialize :_set_defaults
   validates_presence_of :password, :length => {:minimum  => 6},  on: :create!

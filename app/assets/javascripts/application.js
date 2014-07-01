@@ -10,6 +10,11 @@
 //= require backbone.wreqr
 //= require backbone.marionette
 //= require jquery.csv.js
+//= require bootstrap.js
+//= require bootstrap-datepicker.js
+//= require bootstrap-switch.js
+//= require bootstrap-editable.js
+//= require bootstrap_override
 //= require app
 //= require_tree ./helpers
 //= require_tree ./templates
@@ -20,7 +25,7 @@
 
 $.beforeSend = function(xhr) {
   xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
-  if (sessionStorage.auth && (sessionStorage.auth !== "undefined") {
+  if (sessionStorage.auth && sessionStorage.auth !== "undefined") {
   	xhr.setRequestHeader('AUTHENTICATION', sessionStorage.auth); 
   }
 }

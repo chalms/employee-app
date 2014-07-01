@@ -6,6 +6,9 @@ Metrics.Routers.AppRouter = Backbone.Router.extend
     #json = $.parseJSON($('#navigation').attr('user_hash'))
 
     data = $('#user-data').attr('user_hash')
+    auth = $('#session-token').attr('token')
+
+    sessionStorage.auth = auth
     console.log data
 
     json = $.parseJSON(data)
@@ -13,7 +16,8 @@ Metrics.Routers.AppRouter = Backbone.Router.extend
 
     $('meta[name = "csrf-token"]').each ->
       console.log @
-      json['auth_token'] = @.content
+      json['csrf-token'] = @.content
+    json['auth_token'] = auth
 
     console.log json
 
@@ -120,7 +124,7 @@ Metrics.Routers.AppRouter = Backbone.Router.extend
   getClients: ->
     that = @
     $.ajax
-      url: '/clients.json'
+      url: 'api/reports'
       type: 'GET'
       error: (jqXHR, textStatus, errorThrown) ->
         console.log "Failure"

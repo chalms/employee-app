@@ -6,6 +6,11 @@ class HomeController < ApplicationController
 	def login
 	end 
 
+	def signout 
+		current_api_session_token.delete!
+		render :sign_up
+	end 
+
 	def authenticate 
 		puts params
 		if (params[:user].present?) 
@@ -16,13 +21,15 @@ class HomeController < ApplicationController
 					:company_name => params[:user][:company_name],
 					:password => params[:user][:password]
 				}
-				@user = User.create!(hash)
+				user = User.create!(hash)
 				token = current_api_session_token
-				token.user = @user
+				token.user = user
+				@token = token.token
 			end 
 		end 
-		raise Exceptions::StdError, "Invalid Params" unless (@user && token)
-		redirect_to :home, {:user => @user, :api_session_token => token} 
+		@user = UserSerializer.new(user).to_json
+		raise Exceptions::StdError, "Invalid Params" unless (@user && @token)
+		render :home
 rescue Exceptions::StdError => e
 		puts "error message #{e}"
 		flash[:error] = e

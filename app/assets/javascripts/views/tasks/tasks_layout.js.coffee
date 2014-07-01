@@ -1,5 +1,5 @@
 class Metrics.Views.TasksLayout extends Marionette.Layout
-	template: JST['templates/tasks_layout']
+	template: JST['templates/tasks/task-template']
 
   regions: {
     header: '#task_header',

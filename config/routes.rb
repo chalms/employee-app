@@ -39,7 +39,7 @@ Metrics::Application.routes.draw do
     #worker -> users [ show, create, :update ] 
     #manager -> users [ show,  create, :update, index_all ]
     resources :users, only: [:new, :create, :show, :index, :update, :destroy] do
-        #worker-> reports [ show, update, index ] 
+        resources :reports, only: [:show, :update, :index ] 
         #manager -> reports [ show, create, update, index]
         # resources :reports, only: [:index]
 
@@ -51,8 +51,7 @@ Metrics::Application.routes.draw do
 
     root :to => 'users#new', :as => :new
   end
-
-
+    get '/signout' => 'home#signout'
     get '/login' => 'home#login', :as => :login
     root :to => 'home#sign_up', :as => :sign_up
     get '/home' => 'home#home', :as => :home

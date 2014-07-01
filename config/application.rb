@@ -33,8 +33,6 @@ module Metrics
       
       config.assets.initialize_on_precompile = false
       config.assets.enabled = true
-
-      config.active_support.escape_html_entities_in_json = true
   end
 end
 

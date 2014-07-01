@@ -1,22 +1,9 @@
-#cssmenu.ui-header.ui-bar-f{"data-role" => "header", "data-theme" => "f", role: "banner"}
+#cssmenu.ui-header.ui-bar-f{"data-role" => "header", "data-theme" => "f", role: "banner"}  
   %h1.ui-title{"aria-level" => "1", role: "heading"} TimeCard.com
-  %ul
+  .navbar.nav
     %li.active
-      %a{:href=>"#home", "data-toggle"=>"tab"} Home
+      %a{:href=>"#home", "data-toggle"=>"tab"} Clients
     %li
-      %a{:href=>"#kiva", "data-toggle"=>"tab"} Reports
-    - if @email
-      %li
-        %a{"data-method" => "delete", href: "/users/sign_out", rel: "nofollow"} Logout
-    - else
-      %li
-        %a#login{:href=>'#login'} Login
-    - if @email
-      %li
-        %a#edit-account{:href => '#'} Account
-    - else
-      %li
-        %a#signup{:href => '#'} Sign Up
-    - if @admin
-      %li
-        %a#content-manager{:href => '#'} Data
+      %a{:href=>"#kiva", "data-toggle"=>"tab"} Employees
+    %li
+      %a{"data-method" => "delete", href: "/users/sign_out", rel: "nofollow"} Logout
