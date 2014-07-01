@@ -18,11 +18,8 @@ Metrics.Routers.AppRouter = Backbone.Router.extend
     console.log json
 
     user = new Metrics.Models.User(json)
-
-
     @siteLayout = new Metrics.Views.SiteLayout(model: user)
     siteNavbar = new Metrics.Views.SiteNavbar(model: user)
-    siteShirts = new Metrics.Views.SiteShirts()
     siteFooter = new Metrics.Views.SiteFooter(model: user)
     siteHome = new Metrics.Views.SiteHome(model: user)
 

@@ -1,36 +1,5 @@
-
-
-
-#global TaskApp 
-"use strict"
-TaskApp.module "Layout", (Layout, App, Backbone) ->
-  
-  # Layout Header View
-  # ------------------
-  Layout.Header = Backbone.Marionette.ItemView.extend(
-    template: "#template-header"
-    
-    # UI bindings create cached attributes that
-    # point to jQuery selected objects
-    ui:
-      input: "#new-task"
-
-    events:
-      "keypress #new-task": "onInputKeypress"
-
-    onInputKeypress: (e) ->
-      ENTER_KEY = 13
-      taskText = @ui.input.val().trim()
-      if e.which is ENTER_KEY and taskText
-        @collection.create title: taskText
-        @ui.input.val ""
-      return
-  )
-  
-  # Layout Footer View
-  # ------------------
-  Layout.Footer = Backbone.Marionette.ItemView.extend(
-    template: "#template-footer"
+class Metrics.Views.TasksFooter extends Marionette.ItemView
+  template: "#template-footer"
     
     # UI bindings create cached attributes that
     # point to jQuery selected objects
@@ -78,5 +47,3 @@ TaskApp.module "Layout", (Layout, App, Backbone) ->
         return
 
       return
-  )
-  return

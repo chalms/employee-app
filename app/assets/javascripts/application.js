@@ -8,11 +8,6 @@
 //=require marionette 
 //=require ./app.js
 //=require_tree ./templates
-//=require ./authentication/authentication_app.js
-//=require ./report/report_app.js
-//=require ./task/task_app.js
-//=require ./client/client_list.js
-//=require ./user/user_app.js
 
 
 
