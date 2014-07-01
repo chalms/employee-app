@@ -1,5 +1,5 @@
 class Metrics.Views.SiteLayout extends Marionette.Layout
-  template: JST['templates/site_layout']
+  template: JST['templates/site/site_layout']
 
   regions: {
     siteNavbar: "#site-navbar",

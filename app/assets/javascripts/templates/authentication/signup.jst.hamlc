@@ -1,6 +1,7 @@
-.form.form-inline
+%form.form-inline
   %p= link_to "Already a member?", '/app/welcome'
-  = form_tag '/app/check_sign_up' do
+  %p This is it!
+  = form_tag :authenticate do
     .input-prepend.first
       %span.add-on
         %i.icon-envelope

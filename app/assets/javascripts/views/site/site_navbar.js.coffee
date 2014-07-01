@@ -1,5 +1,5 @@
 class Metrics.Views.SiteNavbar extends Marionette.ItemView
-  template: JST['templates/site_navbar']
+  template: JST['templates/site/site_navbar']
   tagName: "li"
   className: "dropdown"
   events:

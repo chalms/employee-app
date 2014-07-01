@@ -1,7 +1,8 @@
 class Metrics.Views.Task extends Marionette.ItemView
 
   tagName: "li"
-  template: "#template-taskItemView" #'assets/templates/tasks/task-template.html'
+  template: JST["task-item-view"] #'assets/templates/tasks/task-template.html'
+  
   ui:
     edit: ".edit"
 

@@ -1,5 +1,5 @@
 
-EmployeeApp::Application.routes.draw do
+Metrics::Application.routes.draw do
   namespace :api do
 
     resource  :sessions, only: [:create, :show, :destroy]
@@ -52,6 +52,11 @@ EmployeeApp::Application.routes.draw do
     root :to => 'users#new', :as => :new
   end
 
+
+    get '/login' => 'home#login', :as => :login
+    root :to => 'home#sign_up', :as => :sign_up
+    get '/home' => 'home#home', :as => :home
+    post '/authenticate' => 'home#authenticate', :as => :authenticate
 end
 
 #   namespace :api do resources :parts, except: [:new, :edit] end

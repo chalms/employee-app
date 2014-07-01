@@ -1,7 +1,6 @@
-%form.form-inline
-  %p= link_to "Not a member?", 'app/sign_up'
-  %p This is it!
-  = form_tag app_check_login_path do
+.form.form-inline
+  %p= link_to "Not a member?", '/'
+  = form_tag '/authenticate' do
     .input-prepend.first
       %span.add-on
         %i.icon-envelope

@@ -8,13 +8,12 @@
         %th Date
         %th Client
         %th Employees
-      - for (var report in reports) {
-      %tr
-        %td= report.description
-        %td= report.report_date
-        %td= report.workers
-        %td
-          %button.btn View Report
-      - }
+      - for report in reports
+        %tr
+          %td= report.description
+          %td= report.report_date
+          %td= report.workers
+          %td
+            %button.btn View Report
   .alert.alert-info
     %small The above are the reports that works can receive and fill out in the field

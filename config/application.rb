@@ -6,10 +6,10 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module EmployeeApp
+module Metrics
   class Application < Rails::Application
 
-    config.assets.precompile += ['employee_app.js']
+    config.assets.precompile += ['app.js']
 
     # config.middleware.insert_after ActiveRecord::QueryCache, ActionDispatch::Cookies
     # Settings in config/environments/* take precedence over those specified here.
@@ -24,10 +24,17 @@ module EmployeeApp
     # config.i18n.default_locale = :de
 
      config.autoload_paths += %W[ #{config.root}/lib ]
+     config.middleware.use ActionDispatch::Flash
      config.active_record.whitelist_attributes
 
     # We're an API-only app, so let's delete the session store.
       config.middleware.delete ActionDispatch::Session::CookieStore
+      
+      
+      config.assets.initialize_on_precompile = false
+      config.assets.enabled = true
+
+      config.active_support.escape_html_entities_in_json = true
   end
 end
 

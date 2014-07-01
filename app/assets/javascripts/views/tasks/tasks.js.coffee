@@ -1,5 +1,5 @@
 class Metrics.Views.Tasks extends Marionette.ItemView
-  template: "#template-taskListCompositeView"
+  template: JST["templates/tasks/task-composite-view"]
   itemView: Views.ItemView
   itemViewContainer: "#task-list"
   ui:

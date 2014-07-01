@@ -2,9 +2,9 @@ class Metrics.Views.TasksLayout extends Marionette.Layout
 	template: JST['templates/tasks_layout']
 
   regions: {
-	  header: '#taskapp',
-	  main: '#main',
-	  footer: '#footer'
+    header: '#task_header',
+	  main: '#taskapp',
+	  footer: '#task_footer'
   }
   
   # Start the app by showing the appropriate views
@@ -20,17 +20,17 @@ class Metrics.Views.TasksLayout extends Marionette.Layout
     return
 
   showHeader: (taskList) ->
-    header = new App.Layout.Header(collection: taskList)
+    header = new Metrics.Views.TaskHeader(collection: taskList)
     App.header.show header
     return
 
   showFooter: (taskList) ->
-    footer = new App.Layout.Footer(collection: taskList)
+    footer = new Metrics.Views.TaskFooter(collection: taskList)
     App.footer.show footer
     return
 
   showTaskList: (taskList) ->
-    App.main.show new TaskList.Views.ListView(collection: taskList)
+    App.main.show new Metrics.Views.Tasks(collection: taskList)
     return
 
   

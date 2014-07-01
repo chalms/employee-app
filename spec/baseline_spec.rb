@@ -1,5 +1,5 @@
 require 'spec_helper'
 
-describe EmployeeApp do
+describe Metrics do
   it { should be }
 end

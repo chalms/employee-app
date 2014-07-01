@@ -8,8 +8,7 @@
     %a{href: "#active"} Active
   %li.completed
     %a{href: "#completed"} Completed
-%button#clear-completed
-- if (!completedCount) {
-class="hidden"
-- }
-Clear completed (#{completedCount})
+-# - if completedCount is undefined do 
+-# 	%button#clear-completed{ :class=> "hidden"} 
+-# - else 
+-# 	%button#clear-completed="Clear completed (#{completedCount})"

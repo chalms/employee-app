@@ -1,5 +1,5 @@
 class Metrics.Views.TasksHeader extends Marionette.ItemView
-    template: "#template-header"
+    template: JST["templates/tasks/task-header"]
     
     # UI bindings create cached attributes that
     # point to jQuery selected objects

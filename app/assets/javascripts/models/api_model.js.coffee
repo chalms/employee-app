@@ -67,6 +67,8 @@ App.ApiModel = Backbone.Model.extend
       url= @url()+path
     else
       url= @url+path
+    console.log "apiCall -> url"
+    console.log url
     $.ajax
       type: type
       url : url

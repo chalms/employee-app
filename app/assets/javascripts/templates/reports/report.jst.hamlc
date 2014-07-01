@@ -20,7 +20,7 @@
           %span.label Tasks
       %li#taskapp.ui-li-static.ui-body-inherit
         %header
-          %input#new-task{placeholder: "What needs to be done?", type: "text"}/
+          %input#new-task{placeholder: "What needs to be done?", type: "text"}
         %section#main
           %input#toggle-all{type: "checkbox"}
           %label{for: "toggle-all"} Mark all as complete

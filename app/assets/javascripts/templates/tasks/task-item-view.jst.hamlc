@@ -1,9 +1,6 @@
 .view
   %input.toggle{type: "checkbox"}
-  - if (completed) {
-  checked
-  - }
-  \>
+  - if (completed) then checked
   %label
     - description
   %button.destroy

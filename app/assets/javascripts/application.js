@@ -1,15 +1,22 @@
 //=require html5.js 
-//=require jquery.mobile.custom.js 
-//=require jquery
-//=require jquery_ujs
-//=require underscore
-//=require handlebars
-//=require backbone
-//=require marionette 
-//=require ./app.js
-//=require_tree ./templates
-
-
+//= require jquery.mobile.custom.js 
+//= require jquery
+//= require jquery_ujs
+//= require hamlcoffee
+//= require json2
+//= require underscore
+//= require backbone
+//= require backbone.babysitter
+//= require backbone.wreqr
+//= require backbone.marionette
+//= require jquery.csv.js
+//= require app
+//= require_tree ./helpers
+//= require_tree ./templates
+//= require_tree ./models
+//= require_tree ./collections
+//= require_tree ./routers
+//= require_tree ./views
 
 $.beforeSend = function(xhr) {
   xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
