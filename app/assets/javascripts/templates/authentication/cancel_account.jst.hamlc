@@ -1,0 +1,9 @@
+.authform
+  %h3 Cancel Account
+  %p Unhappy? We'll be sad to see you go.
+  %form.button_to{action: "/users", method: "post"}
+    %div
+      %input{name: "_method", type: "hidden", value: "delete"}
+      %input.button.right{"data-confirm" => "Are you sure?", type: "submit", value: "Cancel my account"}
+      %input{name: "authenticity_token", type: "hidden", value: @auth_token}
+

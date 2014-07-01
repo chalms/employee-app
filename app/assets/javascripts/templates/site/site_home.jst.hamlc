@@ -1,0 +1,24 @@
+.container.marketing
+  %hr.featurette-divider
+  .featurette
+    %h2.featurette-heading
+      100%.
+      %span.muted Thats our motto. We live by it.
+    %p.lead
+      At Metrics, 100% of the money for shirts sold go to build developing economy's.
+      %a{href: "#"} I want to help
+  %hr.featurette-divider
+  .featurette
+    %h2.featurette-heading
+      The finest in social apparel.
+      %span.muted Bamboo Shirts.
+    %p.lead
+      All shirts by Metrics(R) are made from organic bamboo from Polynesia. Your money goes back into funding some of the worlds best, and most exotic, tailors.
+  %hr.featurette-divider
+  .featurette
+    %h2.featurette-heading
+      Business does not have to be evil.
+      %span.muted Honestly.
+    %p.lead
+      At Metrics, we take our business seriously, but we take our integrity more seriously. No cents off your
+      dollar and no marketing gimics.

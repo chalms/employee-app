@@ -1,0 +1,36 @@
+.ui-widget
+  .ui-widget-header
+    %h2#name{style: "display: inline-block; float: middle;"}
+      New Report
+    %h4#name{style: "display: inline-block;"}
+      Date
+  .ui-widget-content
+    %ul#reportlist.ui-listview.ui-listview-inset
+      %li.ui-li-static.ui-body-inherit.ui-first-child.ui-list-divider{"data-role" => "list-divider"}
+        %label
+          %span.label Description
+      %li#description.ui-li-static.ui-body-inherit
+        %textarea.ui-input-text.ui-body-c.ui-corner-all.ui-shadow-inset{name: "textarea"}
+      %li.ui-li-static.ui-body-inherit.ui-list-divider{"data-role" => "list-divider"}
+        %label
+          %span.label Clients
+      %li#clients.ui-li-static.ui-body-inherit
+      %li.ui-li-static.ui-body-inherit.ui-list-divider{"data-role" => "list-divider"}
+        %label
+          %span.label Tasks
+      %li#taskapp.ui-li-static.ui-body-inherit
+        %header
+          %input#new-task{placeholder: "What needs to be done?", type: "text"}/
+        %section#main
+          %input#toggle-all{type: "checkbox"}
+          %label{for: "toggle-all"} Mark all as complete
+          %ul#task-list
+        %footer
+          %a#clear-completed Clear completed
+        #task-count
+      %li.ui-li-static.ui-body-inherit.ui-list-divider{"data-role" => "list-divider"}
+        %label
+          %span.label Workers
+      %li#workers.ui-li-static.ui-body-inherit
+      %li#launch.ui-li-static.ui-body-inherit
+        %button.ui-button Submit

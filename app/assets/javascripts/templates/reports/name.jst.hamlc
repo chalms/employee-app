@@ -1,0 +1,5 @@
+.view
+  %label{for: "name"}
+    = name
+  %button.destroy
+%input.edit{value: name}

@@ -1,0 +1,5 @@
+.view
+  %label{for: "report_date"}
+    = report_date
+  %button.destroy
+%input.datepicker.edit{name: "report_date", type: "date", value: report_date}

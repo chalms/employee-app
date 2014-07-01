@@ -1,2 +1,9 @@
-#reportapp
-#taskapp
+%body#user-data{user_hash: @current_user.to_json}
+  :javascript
+    Metrics.setUser = function() { Metrics.Data.user.set(#{@current_user ? @current_user.to_json(root: false) : {} } ) }
+
+    $(document).ready(function(){
+      if (Backbone.History.started == false) {
+        Metrics.initialize();
+      }
+    });

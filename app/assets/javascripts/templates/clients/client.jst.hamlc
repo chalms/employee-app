@@ -1,0 +1,6 @@
+.grid-row
+  .well{:style => "height: 230px; width: 80%; margin:auto;"}
+    .div{:style => "float: left; display: inline-block; width: 40%;"}
+      %h3="#{@name}"
+      %h5="Email: #{@email}"
+      %h5="Location: #{@location}"
