@@ -1,4 +1,4 @@
-class Metrics.Views.Tasks extends Marionette.ItemView
+class Metrics.Views.Tasks extends Marionette.CompositeView
   template: JST["templates/tasks/task_composite_view"]
   itemView: Metrics.Views.Task
   itemViewContainer: "#task-list"

@@ -3,59 +3,58 @@ Metrics.Routers.AppRouter = Backbone.Router.extend
   json: null
 
   initialize: ->
-    @json = @setAuthToken()
+    data = $('#user-data').attr('user_hash')
+    auth = $('#session-token').attr('token')
+    sessionStorage.auth = auth
+    json = $.parseJSON(data)
+    $('meta[name = "csrf-token"]').each ->
+      json['csrf-token'] = @.content
+    json['auth_token'] = auth
+    @json = json 
 
   launch: -> 
     user = new Metrics.Models.User(@json.user)
     @siteLayout = new Metrics.Views.SiteLayout(model: user)
     navbar = new Metrics.Views.SiteNavbar(model: user)
     footer = new Metrics.Views.SiteFooter(model: user)
-
     $('#user-data').html(@siteLayout.render().el)
-
     @siteLayout.siteNavbar.show navbar
     @siteLayout.showHome()
     @siteLayout.siteFooter.show footer
 
-  setAuthToken: -> 
-    console.log "Set auth token"
-    data = $('#user-data').attr('user_hash')
-    auth = $('#session-token').attr('token')
-    sessionStorage.auth = auth
-    console.log data
-    console.log auth
-    json = $.parseJSON(data)
-    console.log json
-    $('meta[name = "csrf-token"]').each ->
-      console.log @
-      json['csrf-token'] = @.content
-    json['auth_token'] = auth
-    console.log json
-    return json 
+  user_reports: (user) -> 
+    return new Metrics.Collections.Reports(user.reports)
 
-  reports: (user) -> 
-    return new Metrics.Views.Reports(model: user) 
-    
+  report_tasks: (report) -> 
+    return new Metrics.Collections.Tasks(report.tasks)
+
+  view_reports: (user) -> 
+    if @reports == undefined then @reports = new Metrics.Views.Reports(collection: user_reports(user)) 
+
   new_report: (user) -> 
-    console.log "creating new report"
-    return new Metrics.Views.NewReport(model: user)
+    return if @report == undefined then @report = new Metrics.Views.NewReport(model: new Metrics.Models.Report({user: user}))
 
   tasks: (report) -> 
-    @employees = new Metrics.Views.Tasks(model: user)
+    @employees = new Metrics.Views.Tasks(collection: report_tasks(report))
 
-  taskApp: (user) -> 
-    return new Metrics.Views.TasksLayout(model: user)
+  taskApp: (report) -> 
+    return new Metrics.Views.TasksLayout(model: report)
 
   reportClient: (user) -> 
     return new Metrics.Views.ClientLayout(model: user)
 
+  showHeader: (taskList) ->
+    return new Metrics.Views.TasksHeader(model: taskList)
+
+  showFooter: (taskList) ->
+    return new Metrics.Views.TasksFooter(collection: taskList)
+
+  showTaskList: (taskList) ->
+    return new Metrics.Views.Tasks(model: taskList)
+
   editPressed: (user) ->
     @siteForm = new Metrics.Views.EditAccount(model: user)
     @siteLayout.siteForm.show @siteForm
-    $(document).ready ->
-      $('#editAccount').modal 'show'
-      $('#editAccount').on 'shown', ->
-        $("#user_password").focus()
 
   routes:
     '/users/:': 'show',
@@ -66,21 +65,16 @@ Metrics.Routers.AppRouter = Backbone.Router.extend
       url: 'api/reports'
       type: 'GET'
       error: (jqXHR, textStatus, errorThrown) ->
-        console.log "Failure"
+        console.log errorThrown
       success: (data, textStatus, jqXHR) ->
-        console.log data
         json = data
-        console.log json
         i = 0
         collection = new Metrics.Collections.Clients()
-        console.log collection
         for k, v of json
           collection.add(v)
-
         clients = new Metrics.Views.Clients(collection: collection)
-        console.log clients
-        console.log that.siteLayout
         that.siteLayout.clients.show clients
         clients.render()
+
 
 

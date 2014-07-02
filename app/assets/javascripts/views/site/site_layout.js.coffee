@@ -13,6 +13,5 @@ class Metrics.Views.SiteLayout extends Marionette.Layout
     else 
       @home = Metrics.Routers.appRouter.__proto__.new_report(@.model)
 
-  showHome: -> 
-    console.log "showing home"
+  showHome: ->
     $('#site-home').html(@home.render().el)

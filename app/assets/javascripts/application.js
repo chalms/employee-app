@@ -34,6 +34,7 @@ function log(text) {
   if(window && window.console) console.log(text);
 }
 
+
 var menuOpen;
 
 $(function() {

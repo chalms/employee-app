@@ -1,18 +1,21 @@
 class Metrics.Views.NewReport extends Marionette.Layout
   template: JST['templates/reports/new']
   regions: {
-    taskApp: "#taskApp",
-    reportClient: "#reportClient" 
+    t: "#t",
+    client: "#client" 
   }
 
-  initialize: -> 
-    t = @.model 
-    @task_app = Metrics.Routers.appRouter.__proto__.taskApp(t)
-    @client = Metrics.Routers.appRouter.__proto__.reportClient(t)
+  initialize: (model) -> 
+    console.log "@.model"
+    console.log @.model 
+
+    @task_app = Metrics.Routers.appRouter.__proto__.taskApp(@.model.user)
+    @client = Metrics.Routers.appRouter.__proto__.reportClient(@.model)
 
   render: -> 
     if (@task_app != undefined)
-      $("#taskApp").html(@task_app.render().el)
+      console.log @task_app
+      $("#t").html(@task_app.render().el)
     else 
       console.log "task app is undefined"
     if (@client != undefined)
