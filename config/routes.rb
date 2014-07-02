@@ -1,5 +1,5 @@
 
-EmployeeApp::Application.routes.draw do
+Metrics::Application.routes.draw do
   namespace :api do
 
     resource  :sessions, only: [:create, :show, :destroy]
@@ -39,7 +39,7 @@ EmployeeApp::Application.routes.draw do
     #worker -> users [ show, create, :update ] 
     #manager -> users [ show,  create, :update, index_all ]
     resources :users, only: [:new, :create, :show, :index, :update, :destroy] do
-        #worker-> reports [ show, update, index ] 
+        resources :reports, only: [:show, :update, :index ] 
         #manager -> reports [ show, create, update, index]
         # resources :reports, only: [:index]
 
@@ -51,7 +51,11 @@ EmployeeApp::Application.routes.draw do
 
     root :to => 'users#new', :as => :new
   end
-
+    get '/signout' => 'home#signout'
+    get '/login' => 'home#login', :as => :login
+    root :to => 'home#sign_up', :as => :sign_up
+    get '/home' => 'home#home', :as => :home
+    post '/authenticate' => 'home#authenticate', :as => :authenticate
 end
 
 #   namespace :api do resources :parts, except: [:new, :edit] end

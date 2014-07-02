@@ -1,0 +1,4 @@
+#reports-index
+  %button#new-report-button Add New Report
+  %h3 Reports
+  %ul

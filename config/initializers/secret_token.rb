@@ -16,4 +16,4 @@
 # Using secret_token for rails3 compatibility. Change to secret_key_base
 # to avoid deprecation warning.
 
-EmployeeApp::Application.config.secret_key_base = '9c11455ffc9e49bd824ef8f6308778aab0b4fcca7dfcb8af57168c40354310611334848ecbdaffae3e215ba6afc1cfa43aaa88a39c96097887635c3a450f0f7d'
+Metrics::Application.config.secret_key_base = '9c11455ffc9e49bd824ef8f6308778aab0b4fcca7dfcb8af57168c40354310611334848ecbdaffae3e215ba6afc1cfa43aaa88a39c96097887635c3a450f0f7d'

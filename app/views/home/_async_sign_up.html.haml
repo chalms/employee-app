@@ -1,0 +1,15 @@
+%form.form-inline{"accept-charset" => "UTF-8", :action => "login", :method=>"post",  "data-remote"=>"true"}
+  %p= link_to "Already a member?", '/login'
+  .ui-input-text.ui-body-inherit.ui-corner-all.ui-shadow-inset.ui-input-has-clear
+    %input#password{autocomplete: "off", "data-clear-btn" => "false", name: "[:user]password",  placeholder: "password", type: "password", value: ""}
+    %a.ui-input-clear.ui-btn.ui-icon-delete.ui-btn-icon-notext.ui-corner-all{href: "#", title: "Clear text"} Clear text
+  .ui-input-text.ui-body-inherit.ui-corner-all.ui-shadow-inset.ui-input-has-clear
+    %input#email{"data-clear-btn" => "true", name: "[:user]email",  placeholder: "email", type: "email", value: ""}
+    %a.ui-input-clear.ui-btn.ui-icon-delete.ui-btn-icon-notext.ui-corner-all{href: "#", title: "Clear text"} Clear text
+  .ui-input-text.ui-body-inherit.ui-corner-all.ui-shadow-inset.ui-input-has-clear
+    %input#name{"data-clear-btn" => "true", name: "[:user]name",  placeholder: "name", type: "text", value: ""}
+    %a.ui-input-clear.ui-btn.ui-icon-delete.ui-btn-icon-notext.ui-corner-all{href: "#", title: "Clear text"} Clear text
+  .ui-input-text.ui-body-inherit.ui-corner-all.ui-shadow-inset.ui-input-has-clear
+    %input#companyName{"data-clear-btn" => "true", name: "[:user]company_name",  placeholder: "Company ID", type: "text", value: ""}
+    %a.ui-input-clear.ui-btn.ui-icon-delete.ui-btn-icon-notext.ui-corner-all{href: "#", title: "Clear text"} Clear text
+  %button.ui-button.ui-widget.ui-state-default.ui-corner-all#buttonsignup{:type=>"submit", :name=>"submit"}Sign up

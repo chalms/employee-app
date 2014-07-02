@@ -7,7 +7,6 @@ gem 'rails-api'
 gem 'pg'
 gem 'sidekiq'
 gem 'thin'
-gem 'haml-rails'
 gem 'stateflow'
 gem 'active_model_serializers'
 gem 'bcrypt-ruby', '~> 3.0.0', require: 'bcrypt'
@@ -19,12 +18,16 @@ gem 'em-synchrony'
 # Assets
 gem 'sass-rails', '~> 4.0.0'
 gem 'uglifier', '>= 1.3.0'
+
 gem 'jquery-rails'
+
 gem 'asset_sync', github: 'jamesotron/asset_sync'
+gem 'ejs'
+gem 'haml'
 gem 'coffee-rails'
 gem 'underscore-rails'
 gem 'andand'
-
+gem 'haml_coffee_assets'
 
 # Monitoring
 gem 'newrelic_rpm', '~> 3.6.0'
@@ -41,6 +44,7 @@ gem 'mail_safe'
 gem 'fabrication'
 gem 'database_cleaner'
 gem 'poltergeist'
+gem "jasminerice", :git => 'https://github.com/bradphelan/jasminerice.git'
 
 # Dev tools
 gem 'guard'

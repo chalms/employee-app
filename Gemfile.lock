@@ -6,6 +6,13 @@ GIT
       activemodel
       fog (>= 1.8.0)
 
+GIT
+  remote: https://github.com/bradphelan/jasminerice.git
+  revision: 091349c27343bfa728b8e5745675f9ddbb7d9699
+  specs:
+    jasminerice (0.1.0)
+      coffee-rails
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -85,12 +92,13 @@ GEM
     dotenv-deployment (0.0.2)
     dotenv-rails (0.11.1)
       dotenv (= 0.11.1)
+    ejs (1.1.1)
     em-synchrony (1.0.3)
       eventmachine (>= 1.0.0.beta.1)
     erubis (2.7.0)
     eventmachine (1.0.3)
     excon (0.37.0)
-    execjs (2.2.0)
+    execjs (2.2.1)
     fabrication (2.11.3)
     faker (1.3.0)
       i18n (~> 0.5)
@@ -101,9 +109,10 @@ GEM
       fog-json
       ipaddress (~> 0.5)
       nokogiri (~> 1.5, >= 1.5.11)
-    fog-brightbox (0.0.2)
-      fog-core
+    fog-brightbox (0.1.1)
+      fog-core (~> 1.22)
       fog-json
+      inflecto
     fog-core (1.22.0)
       builder
       excon (~> 0.33)
@@ -146,16 +155,16 @@ GEM
       sidekiq
     haml (4.0.5)
       tilt
-    haml-rails (0.5.1)
-      actionpack (~> 4.0.0)
-      activesupport (~> 4.0.0)
-      haml (>= 3.1, < 5.0)
-      railties (~> 4.0.0)
+    haml_coffee_assets (1.16.0)
+      coffee-script (~> 2.0)
+      sprockets (~> 2.0)
+      tilt (~> 1.1)
     hike (1.2.3)
     hiredis (0.5.2)
     i18n (0.6.9)
+    inflecto (0.0.2)
     ipaddress (0.8.0)
-    jquery-rails (3.1.0)
+    jquery-rails (3.1.1)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
     json (1.8.1)
@@ -163,7 +172,7 @@ GEM
       celluloid (>= 0.15.2)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
-    lumberjack (1.0.7)
+    lumberjack (1.0.9)
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
@@ -231,9 +240,9 @@ GEM
     rb-fsevent (0.9.4)
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
-    redis (3.0.7)
-    redis-namespace (1.4.1)
-      redis (~> 3.0.4)
+    redis (3.1.0)
+    redis-namespace (1.5.0)
+      redis (~> 3.0, >= 3.0.4)
     rspec (3.0.0)
       rspec-core (~> 3.0.0)
       rspec-expectations (~> 3.0.0)
@@ -312,6 +321,7 @@ DEPENDENCIES
   cucumber-rails
   database_cleaner
   dotenv-rails
+  ejs
   em-synchrony
   fabrication
   faker
@@ -323,8 +333,10 @@ DEPENDENCIES
   guard-rails
   guard-rspec
   guard-sidekiq
-  haml-rails
+  haml
+  haml_coffee_assets
   hiredis
+  jasminerice!
   jquery-rails
   mail_safe
   micro_token
