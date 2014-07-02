@@ -1,11 +1,11 @@
 class Metrics.Views.TasksLayout extends Marionette.Layout
-	template: JST['templates/tasks/task_template']
+	template: JST["templates/tasks/task_template"]
   regions: {
-    header: '#task_header',
-	  main: '#task_list',
-	  footer: '#task_footer'
+    header: "#task_header",
+    main: "#task_list",
+    footer: "#task_footer"
   }
-  
+
   # Start the app by showing the appropriate views
   # and fetching the list of task items, if there are any
   render: -> 
@@ -15,6 +15,7 @@ class Metrics.Views.TasksLayout extends Marionette.Layout
     "api/tasks"
 
   start: ->
+    @tasks
     @showHeader @taskList
     @showFooter @taskList
     @showTaskList @taskList
