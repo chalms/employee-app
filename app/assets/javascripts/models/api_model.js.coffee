@@ -67,8 +67,10 @@ App.ApiModel = Backbone.Model.extend
       url= @url()+path
     else
       url= @url+path
+      
     console.log "apiCall -> url"
     console.log url
+
     $.ajax
       type: type
       url : url
@@ -77,6 +79,9 @@ App.ApiModel = Backbone.Model.extend
       contentType: 'application/json' #sending json
       
       success: (data, textStatus, jqXHR ) ->
+        console.log "Api Call"
+        console.log data 
+
         if opts['success']
           Metrics.modal.hide()
           opts['success'](data, textStatus, jqXHR)

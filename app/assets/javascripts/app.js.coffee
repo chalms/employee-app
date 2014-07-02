@@ -11,7 +11,7 @@ window.Metrics =
   initialize: ->
     console.log "initializing routes"
     Metrics.Routers.appRouter = new Metrics.Routers.AppRouter()
-    Metrics.launch()
+    Metrics.Routers.appRouter.launch()
 
   launch: ->
     console.log "launching app"

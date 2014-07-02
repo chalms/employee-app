@@ -2,8 +2,8 @@
   %h1.ui-title{"aria-level" => "1", role: "heading"} TimeCard.com
   .navbar.nav
     %li.active
-      %a{:href=>"#home", "data-toggle"=>"tab"} Clients
+      %a{:href=>"#reports", "data-toggle"=>"tab"} Reports
     %li
-      %a{:href=>"#kiva", "data-toggle"=>"tab"} Employees
+      %a{:href=>"#employees", "data-toggle"=>"tab"} Employees
     %li
-      %a{"data-method" => "delete", href: "/users/sign_out", rel: "nofollow"} Logout
+      %a{href: "/signout"} Logout

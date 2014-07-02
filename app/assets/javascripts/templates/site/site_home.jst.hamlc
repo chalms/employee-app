@@ -1,6 +1,0 @@
-.sidebar
-  %h2#reports Reports
-.sidebar 
-  %h2#clients Clients 
-.sidebar 
-  %h2#employees

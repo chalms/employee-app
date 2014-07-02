@@ -1,4 +1,0 @@
-.view
-  %small{for: description}= description
-  %button.destroy
-%textarea#description-input.edit{cols: "40", name: "textarea", rows: "8", value: description}= description
