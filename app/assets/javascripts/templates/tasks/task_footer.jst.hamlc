@@ -1,6 +1,5 @@
 %span#task-count
-  %strong= activeCount
-  = activeCountLabel()
+  %strong
 %ul#filters
   %li.all
     %a{href: "#"} All

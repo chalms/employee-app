@@ -10,7 +10,6 @@ Metrics.Models.Task = App.ApiModel.extend
       description: ""
       completed: false
       created: 0
-      parts: []
       report_id: null
 
     @set "created", Date.now()  if @isNew()

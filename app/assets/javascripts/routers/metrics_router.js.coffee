@@ -1,97 +1,141 @@
 Metrics.Routers.AppRouter = Backbone.Router.extend
   siteLayout: null
-  json: null
-  newReportLayout: null
-  taskApp: null
+  siteNav: null 
+  siteFooter: null 
 
+  report: null 
+  reports: null 
+  newReportLayout: null
+
+  task: null
+  taskCollection: null
+  tasksCompositeView: null 
+  tasksHeader: null 
+  tasksFooter: null 
+  tasksLayout: null 
+
+  client: null 
+  clients: null 
+  clientLayout: null 
+
+  editAccountView: null 
+
+  json: null
+  user: null 
+  data: null 
+  auth: null 
 
   initialize: ->
-    data = $('#user-data').attr('user_hash')
-    auth = $('#session-token').attr('token')
-    sessionStorage.auth = auth
+    @setSession()  
+
+  launch: -> 
+    $('#user-data').html(@getSiteLayout().render().el)
+    @getSiteLayout().siteNavbar.show @getSiteNavbar()
+    @getSiteLayout().siteHome.show @getNewReportLayout()
+    @getSiteLayout().siteFooter.show @getSiteFooter()
+
+  showTaskLayout: (str) -> 
+    $(str).html(@getTasksLayout().render().el)
+    @getTasksLayout().taskHeader.show @getTasksHeader() 
+    @getTasksLayout().taskList.show @getTasksCompositeView()
+    @getTasksLayout().taskFooter.show @getTasksFooter()
+
+  setUser: (u) -> 
+    @user = new Metrics.Models.User(u)
+
+  getUser: -> 
+    if @user is null then @user = new Metrics.Models.User(@json.user)
+    return @user
+
+  setSession: -> 
+    @setJson($('#user-data').attr('user_hash'))
+    @setAuth($('#session-token').attr('token')) 
+
+  setJson: (data) -> 
     json = $.parseJSON(data)
     $('meta[name = "csrf-token"]').each ->
       json['csrf-token'] = @.content
-    json['auth_token'] = auth
-    @json = json 
+    @json = json
 
-  launch: -> 
-    user = new Metrics.Models.User(@json.user)
-    @siteLayout = new Metrics.Views.SiteLayout(model: user)
-    navbar = new Metrics.Views.SiteNavbar(model: user)
-    footer = new Metrics.Views.SiteFooter(model: user)
-    $('#user-data').html(@siteLayout.render().el)
+  getAuth: -> 
+    if @auth is null or undefined then @auth = sessionStorage.auth 
+    return @auth 
 
-    @siteLayout.siteNavbar.show navbar
-    console.log "calling new report"
-    @build_report(@siteLayout.siteHome)
-    @siteLayout.siteFooter.show footer
+  setAuth: (t) -> 
+    if t then sessionStorage.auth = t and @auth = t 
 
-  task_app: (holder, report) -> 
-    @taskApp = new Metrics.Views.TasksLayout(model: report)
-    console.log @taskApp
+  getSiteLayout: -> 
+    if @siteLayout is null then @siteLayout = new Metrics.Views.SiteLayout(model: @getUser())
+    return @siteLayout
 
-    header = @tasks_header(report)
-    taskList =  @tasks_composite_view(report)
-    footer = @tasks_footer(report)
+  getSiteNavbar: -> 
+    if @siteNav is null then @siteNav = new Metrics.Views.SiteNavbar(model: @getUser())
+    return @siteNav 
 
-    $('#t').html(@taskApp.render().el)
-    console.log $('#t').html()
+  getSiteFooter: -> 
+    if @siteFooter is null then @siteFoot = new Metrics.Views.SiteFooter(model: @getUser())
+    return @siteFooter
 
 
+  getReport: -> 
+    if @report is null then @report = new Metrics.Models.Report(user_id: @getUser().id)
+    return @report 
 
-    console.log header
-    console.log @taskApp
-    console.log @taskApp.regions
+  setReport: (r) -> 
+    @report = new Metrics.Models.Report(r)
+
+  getUserReports: -> 
+    if @reports is null then @reports = new Metrics.Collections.Reports(@getUser().reports)
+    return @reports
+
+  getNewReportLayout: (str) -> 
+    if @newReportLayout is null then @newReportLayout = new Metrics.Views.NewReportLayout(model: @getReport())
+    $(str).html(@newReportLayout.render().el)
+    @showTaskLayout('#t') 
+    return @newReportLayout
+
+  getReportsView: -> 
+    if @reportsView is null then @reportsView = new Metrics.Views.Reports(collection: @getUserReports()) 
+    return @reportsView 
 
 
-    @taskApp.taskHeader.show header
-    @taskApp.taskList.show taskList
-    @taskApp.taskFooter.show footer
-
-  build_report: (holder) -> 
-    console.log "new report called"
-    report = @new_report(@json.user)
-    @newReportLayout = @new_report_layout(report)
-    $('#site-home').html(@newReportLayout.render().el)
-    @task_app(@newReportLayout.task_app, report) 
-    holder.show @newReportLayout
+  getTaskCollection: -> 
+    if @taskCollection is null then @taskCollection = new Metrics.Collections.Tasks(@getReport().tasks)
+    return @taskCollection
 
 
-  user_reports: (user) -> 
-    return new Metrics.Collections.Reports(user.reports)
+  getTasksLayout: -> 
+    if @tasksLayout is null then @tasksLayout = new Metrics.Views.TasksLayout(model: @getReport())
+    return @tasksLayout
 
-  report_tasks: (report) -> 
-    console.log "choosing to show new task collection --- change later"
-    return new Metrics.Collections.Tasks
+  getTasksHeader: -> 
+    if @tasksHeader is null then @tasksHeader = new Metrics.Views.TasksHeader(model: @getTaskCollection())
+    return @tasksHeader 
 
-  view_reports: (user) -> 
-    if @reports == undefined then @reports = new Metrics.Views.Reports(collection: @user_reports(user)) 
+  getTasksFooter: -> 
+    if @tasksFooter is null then @tasksFooter = new Metrics.Views.TasksFooter(model: @getTaskCollection())
+    return @tasksFooter
 
-  new_report: (user) -> 
-    return new Metrics.Models.Report(user: user)
+  getTasksCompositeView: (report) -> 
+    if @tasksCompositeView is null then @tasksCompositeView = new Metrics.Views.Tasks(collection: @getTaskCollection(), model: @getReport())
+    return @tasksCompositeView 
 
-  new_report_layout: (report) -> 
-    return new Metrics.Views.NewReportLayout(model: report)
 
-  tasks_composite_view: (report) -> 
-    return new Metrics.Views.Tasks(collection: @report_tasks(report), model: report)
+  getUserClients: -> 
+    if @clients is null then @clients = new Metrics.Collections.Clients(@getUser().clients)
+    return @clients
 
-  tasks_layout: (report) -> 
-    return new Metrics.Views.TasksLayout(model: report)
+  clientLayout: -> 
+    if @clientLayout is null then @clientLayout = new Matrics.Views.ClientLayout(model: @getUserClients())
+    return @clientLayout
 
-  reportClient: (user) -> 
-    return new Metrics.Views.ClientLayout(model: user)
+  getEditAccountView: -> 
+    if @editAccountView is null then @editAccountView =  new Metrics.Views.EditAccount(model: @getUser())
+    return @editAccountView 
 
-  tasks_header: (report) ->
-    return new Metrics.Views.TasksHeader(model: report)
-
-  tasks_footer: (report) ->
-    return new Metrics.Views.TasksFooter(model: report)
-
-  editPressed: (user) ->
-    @siteForm = new Metrics.Views.EditAccount(model: user)
-    @siteLayout.siteForm.show @siteForm
+  editPressed: ->
+    @siteLayout.siteHome.hide 
+    @siteLayout.siteHome.show @getEditAccountView()
 
   routes:
     '/users/:': 'show',

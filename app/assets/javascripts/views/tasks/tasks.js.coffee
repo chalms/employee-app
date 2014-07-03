@@ -12,9 +12,14 @@ class Metrics.Views.Tasks extends Marionette.CompositeView
   collectionEvents:
     all: "update"
 
+  initialize: -> 
+    console.log @
+    console.log "@collection"
+    console.log @collection.length
+
   onRender: ->
     console.log "calling onRender in tasks"
-    @update()
+    # @update()
     return
 
   serializeData: -> 
@@ -25,7 +30,7 @@ class Metrics.Views.Tasks extends Marionette.CompositeView
       left and right.get("completed")
     allCompleted = @collection.reduce(reduceCompleted, true)
     @ui.toggle.prop "checked", allCompleted
-    @$el.parent().toggle !!@collection.length
+    @$el.parent().toggle !! @collection.length
     return
 
   onToggleAllClick: (e) ->
@@ -33,5 +38,4 @@ class Metrics.Views.Tasks extends Marionette.CompositeView
     @collection.each (task) ->
       task.save completed: isChecked
       return
-
     return
