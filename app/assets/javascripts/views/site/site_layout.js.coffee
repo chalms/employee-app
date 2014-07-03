@@ -7,11 +7,12 @@ class Metrics.Views.SiteLayout extends Marionette.Layout
     siteFooter: "#site-footer"
   }  
 
-  initialize: -> 
-    if (@.model.attributes["reports"].length > 0) 
-      @home = Metrics.Routers.appRouter.__proto__.reports(@.model)
-    else 
-      @home = Metrics.Routers.appRouter.__proto__.new_report(@.model)
+  # initialize: -> 
+  #   if (@.model.attributes["reports"].length > 0) 
+  #     @siteHome = Metrics.Routers.appRouter.__proto__.reports(@.model)
+  #   else 
+  #     @siteHome = Metrics.Routers.appRouter.__proto__.new_report(@.model)
 
   showHome: ->
-    $('#site-home').html(@home.render().el)
+    $('#site-home').html(@siteHome.render().el)
+    

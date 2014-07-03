@@ -21,17 +21,18 @@ class Metrics.Views.TasksFooter extends Marionette.ItemView
       ((if @activeCount is 1 then "item" else "items")) + " left"
 
   initialize: ->
-    @listenTo App.vent, "taskList:filter", @updateFilterSelection, this
-    return
+    # @listenTo App.vent, "taskList:filter", @updateFilterSelection, this
+    # return
 
   serializeData: ->
-    active = @collection.getActive().length
-    total = @collection.length
-    activeCount: active
-    totalCount: total
-    completedCount: total - active
+    # active = @collection.getActive().length
+    # total = @collection.length
+    activeCount: 1
+    totalCount: 2
+    completedCount: 1
 
   onRender: ->
+    console.log "calling onRender"
     @$el.parent().toggle @collection.length > 0
     @updateFilterSelection()
     return

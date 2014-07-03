@@ -1,7 +1,8 @@
 class Metrics.Views.Tasks extends Marionette.CompositeView
   template: JST["templates/tasks/task_composite_view"]
-  itemView: Metrics.Views.Task
-  itemViewContainer: "#task-list"
+  childViewContainer: "#task-list"
+  childView: Metrics.Views.Task
+  
   ui:
     toggle: "#toggle-all"
 
@@ -12,8 +13,12 @@ class Metrics.Views.Tasks extends Marionette.CompositeView
     all: "update"
 
   onRender: ->
+    console.log "calling onRender in tasks"
     @update()
     return
+
+  serializeData: -> 
+    console.log "serialized"
 
   update: ->
     reduceCompleted = (left, right) ->

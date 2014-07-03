@@ -2,6 +2,8 @@ Metrics.Models.Task = App.ApiModel.extend
   resourceKey: -> 'task'
 
   initialize: ->
+    console.log "trying to create a task model"
+
     @url = Metrics.Models.Task.apiPath    
 
     defaults:
@@ -9,13 +11,20 @@ Metrics.Models.Task = App.ApiModel.extend
       completed: false
       created: 0
       parts: []
+      report_id: null
 
-    initialize: ->
-      @set "created", Date.now()  if @isNew()
-      return
+    @set "created", Date.now()  if @isNew()
+    return
 
-    toggle: ->
-      @set "completed", not @isCompleted()
+  toggle: ->
+    @set "completed", not @isCompleted()
 
-    isCompleted: ->
-      @get "completed"
+  isCompleted: ->
+    @get "completed"
+
+  set_data: (h) =>
+   console.log "set_data: (h)"
+   console.log h
+
+, 
+  apiPath: '/task'

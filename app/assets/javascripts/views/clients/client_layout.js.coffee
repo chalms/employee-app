@@ -7,4 +7,5 @@ class Metrics.Views.ClientLayout extends Marionette.Layout
 		clientList: "#clientList"
 	}
 
-
+	show: ->
+		console.log "show client layout called"

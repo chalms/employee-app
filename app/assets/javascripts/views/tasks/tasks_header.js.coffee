@@ -16,3 +16,7 @@ class Metrics.Views.TasksHeader extends Marionette.ItemView
       @collection.create title: taskText
       @ui.input.val ""
     return
+
+
+  serializeData: -> 
+    console.log "serialized"

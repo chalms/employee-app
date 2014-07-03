@@ -17,12 +17,18 @@ class Metrics.Views.Task extends Marionette.ItemView
     change: "render"
 
   onRender: ->
+    console.log "calling on render task"
     @$el.removeClass "active completed"
     if @model.get("completed")
       @$el.addClass "completed"
     else
       @$el.addClass "active"
     return
+
+  
+  serializeData: -> 
+    console.log "serialized"
+
 
   destroy: ->
     @model.destroy()

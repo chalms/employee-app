@@ -1,6 +1,9 @@
 Metrics.Routers.AppRouter = Backbone.Router.extend
   siteLayout: null
   json: null
+  newReportLayout: null
+  taskApp: null
+
 
   initialize: ->
     data = $('#user-data').attr('user_hash')
@@ -18,39 +21,73 @@ Metrics.Routers.AppRouter = Backbone.Router.extend
     navbar = new Metrics.Views.SiteNavbar(model: user)
     footer = new Metrics.Views.SiteFooter(model: user)
     $('#user-data').html(@siteLayout.render().el)
+
     @siteLayout.siteNavbar.show navbar
-    @siteLayout.showHome()
+    console.log "calling new report"
+    @build_report(@siteLayout.siteHome)
     @siteLayout.siteFooter.show footer
+
+  task_app: (holder, report) -> 
+    @taskApp = new Metrics.Views.TasksLayout(model: report)
+    console.log @taskApp
+
+    header = @tasks_header(report)
+    taskList =  @tasks_composite_view(report)
+    footer = @tasks_footer(report)
+
+    $('#t').html(@taskApp.render().el)
+    console.log $('#t').html()
+
+
+
+    console.log header
+    console.log @taskApp
+    console.log @taskApp.regions
+
+
+    @taskApp.taskHeader.show header
+    @taskApp.taskList.show taskList
+    @taskApp.taskFooter.show footer
+
+  build_report: (holder) -> 
+    console.log "new report called"
+    report = @new_report(@json.user)
+    @newReportLayout = @new_report_layout(report)
+    $('#site-home').html(@newReportLayout.render().el)
+    @task_app(@newReportLayout.task_app, report) 
+    holder.show @newReportLayout
+
 
   user_reports: (user) -> 
     return new Metrics.Collections.Reports(user.reports)
 
   report_tasks: (report) -> 
-    return new Metrics.Collections.Tasks(report.tasks)
+    console.log "choosing to show new task collection --- change later"
+    return new Metrics.Collections.Tasks
 
   view_reports: (user) -> 
-    if @reports == undefined then @reports = new Metrics.Views.Reports(collection: user_reports(user)) 
+    if @reports == undefined then @reports = new Metrics.Views.Reports(collection: @user_reports(user)) 
 
   new_report: (user) -> 
-    return if @report == undefined then @report = new Metrics.Views.NewReport(model: new Metrics.Models.Report({user: user}))
+    return new Metrics.Models.Report(user: user)
 
-  tasks: (report) -> 
-    @employees = new Metrics.Views.Tasks(collection: report_tasks(report))
+  new_report_layout: (report) -> 
+    return new Metrics.Views.NewReportLayout(model: report)
 
-  taskApp: (report) -> 
+  tasks_composite_view: (report) -> 
+    return new Metrics.Views.Tasks(collection: @report_tasks(report), model: report)
+
+  tasks_layout: (report) -> 
     return new Metrics.Views.TasksLayout(model: report)
 
   reportClient: (user) -> 
     return new Metrics.Views.ClientLayout(model: user)
 
-  showHeader: (taskList) ->
-    return new Metrics.Views.TasksHeader(model: taskList)
+  tasks_header: (report) ->
+    return new Metrics.Views.TasksHeader(model: report)
 
-  showFooter: (taskList) ->
-    return new Metrics.Views.TasksFooter(collection: taskList)
-
-  showTaskList: (taskList) ->
-    return new Metrics.Views.Tasks(model: taskList)
+  tasks_footer: (report) ->
+    return new Metrics.Views.TasksFooter(model: report)
 
   editPressed: (user) ->
     @siteForm = new Metrics.Views.EditAccount(model: user)
