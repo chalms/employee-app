@@ -13,9 +13,7 @@ Metrics.Models.Report = App.ApiModel.extend
       
 
   set_data: (h) =>
-     console.log "set_data: (h)"
-     console.log h
-
+    
 ,
   apiPath: '/report'
 

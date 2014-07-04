@@ -3,7 +3,6 @@ class Metrics.Views.TasksHeader extends Marionette.ItemView
   
   # UI bindings create cached attributes that
   # point to jQuery selected objects
-  collection: null
 
   ui:
     input: "#new-task"

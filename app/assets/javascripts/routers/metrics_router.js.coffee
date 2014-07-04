@@ -31,7 +31,8 @@ Metrics.Routers.AppRouter = Backbone.Router.extend
   launch: -> 
     $('#user-data').html(@getSiteLayout().render().el)
     @getSiteLayout().siteNavbar.show @getSiteNavbar()
-    @getSiteLayout().siteHome.show @getNewReportLayout()
+    @getSiteLayout().siteHome.show @getNewReportLayout('#site-home')
+    @showTaskLayout('#t') 
     @getSiteLayout().siteFooter.show @getSiteFooter()
 
   showTaskLayout: (str) -> 
@@ -73,7 +74,7 @@ Metrics.Routers.AppRouter = Backbone.Router.extend
     return @siteNav 
 
   getSiteFooter: -> 
-    if @siteFooter is null then @siteFoot = new Metrics.Views.SiteFooter(model: @getUser())
+    if @siteFooter is null then @siteFooter = new Metrics.Views.SiteFooter(model: @getUser())
     return @siteFooter
 
 
@@ -91,7 +92,6 @@ Metrics.Routers.AppRouter = Backbone.Router.extend
   getNewReportLayout: (str) -> 
     if @newReportLayout is null then @newReportLayout = new Metrics.Views.NewReportLayout(model: @getReport())
     $(str).html(@newReportLayout.render().el)
-    @showTaskLayout('#t') 
     return @newReportLayout
 
   getReportsView: -> 
@@ -109,11 +109,11 @@ Metrics.Routers.AppRouter = Backbone.Router.extend
     return @tasksLayout
 
   getTasksHeader: -> 
-    if @tasksHeader is null then @tasksHeader = new Metrics.Views.TasksHeader(model: @getTaskCollection())
+    if @tasksHeader is null then @tasksHeader = new Metrics.Views.TasksHeader(collection: @getTaskCollection())
     return @tasksHeader 
 
   getTasksFooter: -> 
-    if @tasksFooter is null then @tasksFooter = new Metrics.Views.TasksFooter(model: @getTaskCollection())
+    if @tasksFooter is null then @tasksFooter = new Metrics.Views.TasksFooter(collection: @getTaskCollection())
     return @tasksFooter
 
   getTasksCompositeView: (report) -> 
