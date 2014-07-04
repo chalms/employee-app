@@ -2,6 +2,7 @@
 //= require jquery.mobile.custom.js 
 //= require jquery
 //= require jquery_ujs
+//= require jquery.json-2.4.js
 //= require hamlcoffee
 //= require json2
 //= require underscore
@@ -33,6 +34,7 @@ $.beforeSend = function(xhr) {
 function log(text) {
   if(window && window.console) console.log(text);
 }
+
 
 var menuOpen;
 

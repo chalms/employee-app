@@ -16,6 +16,10 @@ window.Metrics =
   launch: ->
     console.log "launching app"
     Metrics.Data.user = new Metrics.Models.User()
+    Metrics.Data.task = new Metrics.Models.Task()
+    Metrics.Data.report = new Metrics.Models.Report()
+
+    console.log Metrics.Data
     Metrics.setUser()
     console.log "user set"
     Backbone.history.start

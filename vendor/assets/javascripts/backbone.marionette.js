@@ -1170,11 +1170,20 @@ _.extend(Marionette.TemplateCache.prototype, {
   // https://github.com/marionettejs/backbone.marionette/wiki/Using-marionette-with-requirejs
   loadTemplate: function(templateId){
     var template = Marionette.$(templateId).html();
-
     if (!template || template.length === 0){
-      throwError("Could not find template: '" + templateId + "'", "NoTemplateError");
+      return this.tryTemplate(templateId); 
+    } else {
+      return template; 
     }
+  },
 
+  tryTemplate: function(template) {
+    if (!template || template.length === 0){
+        var msg = "Could not find template: '" + templateId + "'";
+        var err = new Error(msg);
+        err.name = "NoTemplateError";
+        throw err;
+    }
     return template;
   },
 

@@ -1,5 +1,5 @@
 Metrics.Collections.Reports = App.ApiCollection.extend
-  model: Metrics.Models.Task
+  model: Metrics.Models.Report
   getCompleted: ->
     @filter @_isCompleted
 

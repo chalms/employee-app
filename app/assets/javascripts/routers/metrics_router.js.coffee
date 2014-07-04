@@ -1,61 +1,141 @@
 Metrics.Routers.AppRouter = Backbone.Router.extend
   siteLayout: null
+  siteNav: null 
+  siteFooter: null 
+
+  report: null 
+  reports: null 
+  newReportLayout: null
+
+  task: null
+  taskCollection: null
+  tasksCompositeView: null 
+  tasksHeader: null 
+  tasksFooter: null 
+  tasksLayout: null 
+
+  client: null 
+  clients: null 
+  clientLayout: null 
+
+  editAccountView: null 
+
   json: null
+  user: null 
+  data: null 
+  auth: null 
 
   initialize: ->
-    @json = @setAuthToken()
+    @setSession()  
 
   launch: -> 
-    user = new Metrics.Models.User(@json.user)
-    @siteLayout = new Metrics.Views.SiteLayout(model: user)
-    navbar = new Metrics.Views.SiteNavbar(model: user)
-    footer = new Metrics.Views.SiteFooter(model: user)
+    $('#user-data').html(@getSiteLayout().render().el)
+    @getSiteLayout().siteNavbar.show @getSiteNavbar()
+    @getSiteLayout().siteHome.show @getNewReportLayout('#site-home')
+    @showTaskLayout('#t') 
+    @getSiteLayout().siteFooter.show @getSiteFooter()
 
-    $('#user-data').html(@siteLayout.render().el)
+  showTaskLayout: (str) -> 
+    $(str).html(@getTasksLayout().render().el)
+    @getTasksLayout().taskHeader.show @getTasksHeader() 
+    @getTasksLayout().taskList.show @getTasksCompositeView()
+    @getTasksLayout().taskFooter.show @getTasksFooter()
 
-    @siteLayout.siteNavbar.show navbar
-    @siteLayout.showHome()
-    @siteLayout.siteFooter.show footer
+  setUser: (u) -> 
+    @user = new Metrics.Models.User(u)
 
-  setAuthToken: -> 
-    console.log "Set auth token"
-    data = $('#user-data').attr('user_hash')
-    auth = $('#session-token').attr('token')
-    sessionStorage.auth = auth
-    console.log data
-    console.log auth
+  getUser: -> 
+    if @user is null then @user = new Metrics.Models.User(@json.user)
+    return @user
+
+  setSession: -> 
+    @setJson($('#user-data').attr('user_hash'))
+    @setAuth($('#session-token').attr('token')) 
+
+  setJson: (data) -> 
     json = $.parseJSON(data)
-    console.log json
     $('meta[name = "csrf-token"]').each ->
-      console.log @
       json['csrf-token'] = @.content
-    json['auth_token'] = auth
-    console.log json
-    return json 
+    @json = json
 
-  reports: (user) -> 
-    return new Metrics.Views.Reports(model: user) 
-    
-  new_report: (user) -> 
-    console.log "creating new report"
-    return new Metrics.Views.NewReport(model: user)
+  getAuth: -> 
+    if @auth is null or undefined then @auth = sessionStorage.auth 
+    return @auth 
 
-  tasks: (report) -> 
-    @employees = new Metrics.Views.Tasks(model: user)
+  setAuth: (t) -> 
+    if t then sessionStorage.auth = t and @auth = t 
 
-  taskApp: (user) -> 
-    return new Metrics.Views.TasksLayout(model: user)
+  getSiteLayout: -> 
+    if @siteLayout is null then @siteLayout = new Metrics.Views.SiteLayout(model: @getUser())
+    return @siteLayout
 
-  reportClient: (user) -> 
-    return new Metrics.Views.ClientLayout(model: user)
+  getSiteNavbar: -> 
+    if @siteNav is null then @siteNav = new Metrics.Views.SiteNavbar(model: @getUser())
+    return @siteNav 
 
-  editPressed: (user) ->
-    @siteForm = new Metrics.Views.EditAccount(model: user)
-    @siteLayout.siteForm.show @siteForm
-    $(document).ready ->
-      $('#editAccount').modal 'show'
-      $('#editAccount').on 'shown', ->
-        $("#user_password").focus()
+  getSiteFooter: -> 
+    if @siteFooter is null then @siteFooter = new Metrics.Views.SiteFooter(model: @getUser())
+    return @siteFooter
+
+
+  getReport: -> 
+    if @report is null then @report = new Metrics.Models.Report(user_id: @getUser().id)
+    return @report 
+
+  setReport: (r) -> 
+    @report = new Metrics.Models.Report(r)
+
+  getUserReports: -> 
+    if @reports is null then @reports = new Metrics.Collections.Reports(@getUser().reports)
+    return @reports
+
+  getNewReportLayout: (str) -> 
+    if @newReportLayout is null then @newReportLayout = new Metrics.Views.NewReportLayout(model: @getReport())
+    $(str).html(@newReportLayout.render().el)
+    return @newReportLayout
+
+  getReportsView: -> 
+    if @reportsView is null then @reportsView = new Metrics.Views.Reports(collection: @getUserReports()) 
+    return @reportsView 
+
+
+  getTaskCollection: -> 
+    if @taskCollection is null then @taskCollection = new Metrics.Collections.Tasks(@getReport().tasks)
+    return @taskCollection
+
+
+  getTasksLayout: -> 
+    if @tasksLayout is null then @tasksLayout = new Metrics.Views.TasksLayout(model: @getReport())
+    return @tasksLayout
+
+  getTasksHeader: -> 
+    if @tasksHeader is null then @tasksHeader = new Metrics.Views.TasksHeader(collection: @getTaskCollection())
+    return @tasksHeader 
+
+  getTasksFooter: -> 
+    if @tasksFooter is null then @tasksFooter = new Metrics.Views.TasksFooter(collection: @getTaskCollection())
+    return @tasksFooter
+
+  getTasksCompositeView: (report) -> 
+    if @tasksCompositeView is null then @tasksCompositeView = new Metrics.Views.Tasks(collection: @getTaskCollection(), model: @getReport())
+    return @tasksCompositeView 
+
+
+  getUserClients: -> 
+    if @clients is null then @clients = new Metrics.Collections.Clients(@getUser().clients)
+    return @clients
+
+  clientLayout: -> 
+    if @clientLayout is null then @clientLayout = new Matrics.Views.ClientLayout(model: @getUserClients())
+    return @clientLayout
+
+  getEditAccountView: -> 
+    if @editAccountView is null then @editAccountView =  new Metrics.Views.EditAccount(model: @getUser())
+    return @editAccountView 
+
+  editPressed: ->
+    @siteLayout.siteHome.hide 
+    @siteLayout.siteHome.show @getEditAccountView()
 
   routes:
     '/users/:': 'show',
@@ -66,21 +146,16 @@ Metrics.Routers.AppRouter = Backbone.Router.extend
       url: 'api/reports'
       type: 'GET'
       error: (jqXHR, textStatus, errorThrown) ->
-        console.log "Failure"
+        console.log errorThrown
       success: (data, textStatus, jqXHR) ->
-        console.log data
         json = data
-        console.log json
         i = 0
         collection = new Metrics.Collections.Clients()
-        console.log collection
         for k, v of json
           collection.add(v)
-
         clients = new Metrics.Views.Clients(collection: collection)
-        console.log clients
-        console.log that.siteLayout
         that.siteLayout.clients.show clients
         clients.render()
+
 
 

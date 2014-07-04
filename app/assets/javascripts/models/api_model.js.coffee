@@ -6,6 +6,7 @@ App.ApiModel = Backbone.Model.extend
 
   fetch : (options) ->
     options = options || {}
+    if sessionStorage.auth then options.headers = {'AUTHENTICATION': sessionStorage.auth}
 
     if !options.force && @collectionName && Metrics.Data[@collectionName].get(@id)
       @attributes = Metrics.Data[@collectionName].get(@id).attributes
@@ -25,11 +26,15 @@ App.ApiModel = Backbone.Model.extend
 
   save: (attributes, options) ->
     options = options || {}
+    if sessionStorage.auth then options.headers = {'AUTHORIZATION': sessionStorage.auth}
+
     if typeof(@validate) == 'undefined' || (attributes.responseText = @validate(attributes, options)) == undefined
       options.url = (if typeof @url == 'function' then @url() else @url) if @url
       options.urlRoot = (if typeof @urlRoot == 'function' then @urlRoot() else @urlRoot) if @urlRoot
       method = if @isNew() then 'create' else 'update'
 
+      console.log "attributes"
+      console.log attributes
       modelAttributes = {}
       modelAttributes[@resourceKey()] = attributes
       model = new Backbone.Model modelAttributes
@@ -37,6 +42,9 @@ App.ApiModel = Backbone.Model.extend
       model.set options.extraProperties if options.extraProperties
       #custom error to look for 401 and log user out automatically
       originalError = if options.error then options.error else null
+     
+      console.log "options"
+      console.log options
       newError = (model, xhr, options) ->
         if xhr.status == 401
           Metrics.unauthorized()
@@ -61,6 +69,8 @@ App.ApiModel = Backbone.Model.extend
 
   apiCall: (path, data, returnTo, type, opts) ->
     opts || = {}
+    if sessionStorage.auth then opts.headers = {'AUTHENTICATION': sessionStorage.auth}
+
     Metrics.modal.show()
     # may need to set header here for auth token
     if $.isFunction(@url)
@@ -70,6 +80,10 @@ App.ApiModel = Backbone.Model.extend
       
     console.log "apiCall -> url"
     console.log url
+
+
+    console.log "options"
+    console.log opts
 
     $.ajax
       type: type
@@ -97,12 +111,18 @@ App.ApiModel = Backbone.Model.extend
         Metrics.showAlert 'Something went wrong!'
 
   apiGet: (path, data, returnTo, opts) ->
+    if sessionStorage.auth then opts.headers = {'AUTHENTICATION': sessionStorage.auth}
+
     @apiCall(path, data, returnTo, 'GET', opts)
 
   apiPut: (path, data, returnTo, opts) ->
+    if sessionStorage.auth then opts.headers = {'AUTHENTICATION': sessionStorage.auth}
+
     @apiCall(path, data, returnTo, 'PUT', opts)
 
   apiPost: (path, data, returnTo, opts) ->
+    if sessionStorage.auth then opts.headers = {'AUTHENTICATION': sessionStorage.auth}
+
     @apiCall(path, data, returnTo, 'POST', opts)
 
 ,

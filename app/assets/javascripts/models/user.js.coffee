@@ -9,7 +9,6 @@ Metrics.Models.User = App.ApiModel.extend
   set_data: (h) =>
   	console.log h
     # console.log h
-
 ,
   apiPath: '/users'
   hash: ''

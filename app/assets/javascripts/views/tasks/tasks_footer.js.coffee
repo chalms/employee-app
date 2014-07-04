@@ -3,6 +3,8 @@ class Metrics.Views.TasksFooter extends Marionette.ItemView
     
     # UI bindings create cached attributes that
     # point to jQuery selected objects
+  activeCount: 1
+
   ui:
     filters: "#filters a"
     completed: ".completed a"
@@ -21,18 +23,23 @@ class Metrics.Views.TasksFooter extends Marionette.ItemView
       ((if @activeCount is 1 then "item" else "items")) + " left"
 
   initialize: ->
-    @listenTo App.vent, "taskList:filter", @updateFilterSelection, this
-    return
+    # @listenTo App.vent, "taskList:filter", @updateFilterSelection, this
+    # return
+    console.log "task footer @colleciton"
+    console.log @collection
+
+    return 
 
   serializeData: ->
-    active = @collection.getActive().length
-    total = @collection.length
-    activeCount: active
-    totalCount: total
-    completedCount: total - active
+    # active = @collection.getActive().length
+    # total = @collection.length
+    activeCount: 1
+    totalCount: 2
+    completedCount: 1
 
   onRender: ->
-    @$el.parent().toggle @collection.length > 0
+    # console.log "calling onRender"
+    @$el.parent().toggle @.collection.length > 0
     @updateFilterSelection()
     return
 
@@ -41,9 +48,9 @@ class Metrics.Views.TasksFooter extends Marionette.ItemView
     return
 
   onClearClick: ->
-    completed = @collection.getCompleted()
+    completed = @collection.completedCount()
     completed.forEach (task) ->
       task.destroy()
       return
 
-      return
+    return

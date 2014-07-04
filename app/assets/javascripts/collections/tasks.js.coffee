@@ -1,12 +1,10 @@
 Metrics.Collections.Tasks = App.ApiCollection.extend
   model: Metrics.Models.Task
+
   getCompleted: ->
-    @filter @_isCompleted
+    return @filter @_isCompleted
 
   getActive: ->
-    @reject @_isCompleted
+    return @reject @_isCompleted
 
   comparator: "created"
-  
-  _isCompleted: (task) ->
-    task.isCompleted()
