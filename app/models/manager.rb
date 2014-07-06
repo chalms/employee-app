@@ -1,4 +1,6 @@
 class Manager < User
+
+  
 	def is_manager? 
 		return true 
 	end 

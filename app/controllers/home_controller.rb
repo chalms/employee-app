@@ -13,13 +13,23 @@ class HomeController < ApplicationController
 
 	def authenticate 
 		puts params
-		if (params[:user].present?) 
-			if (params[:user][:email].present?)
+
+		sym = params[:worker] ; 
+		if (sym.present?) 
+			role = 'worker'
+		else 
+			sym = params[:manager] ;
+			role = 'manager' if sym 
+		end 
+
+		if (sym) 
+			if (sym[:email].present?)
 				hash = {  
-					:email => params[:user][:email], 
-					:name => params[:user][:name], 
-					:company_name => params[:user][:company_name],
-					:password => params[:user][:password]
+					:email => sym[:email], 
+					:name => sym[:name], 
+					:company_name => sym[:company_name],
+					:password => sym[:password], 
+					:role => role
 				}
 				user = User.create!(hash)
 				token = current_api_session_token
@@ -27,6 +37,7 @@ class HomeController < ApplicationController
 				@token = token.token
 			end 
 		end 
+		
 		@user = UserSerializer.new(user).to_json
 		raise Exceptions::StdError, "Invalid Params" unless (@user && @token)
 		render :home

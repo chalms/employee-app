@@ -14,6 +14,7 @@ gem 'micro_token'
 gem 'redis'
 gem 'hiredis'
 gem 'em-synchrony'
+gem 'cancan'
 
 # Assets
 gem 'sass-rails', '~> 4.0.0'
