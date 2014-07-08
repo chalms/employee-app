@@ -1,7 +1,7 @@
  class Client < AcctiveRecord::Base
   include JsonSerializingModel
 
-  attr_accessible :name, :manager 
+  attr_accessible :name, :manager, :complete, :assigned_parts, :assigned_tasks, :complete_parts, :complete_tasks, :company, :complete?, :hours, :days_worked
   belongs_to :company
   has_many :locations 
   has_many :projects

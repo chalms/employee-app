@@ -1,11 +1,10 @@
 class Contact < ActiveRecord::Base
   include JsonSerializingModel
-  attr_accessible :phone, :email, :name 
+  attr_accessible :phone, :email, :name, :owner
   belongs_to :company 
   belongs_to :user 
 
   validate :validator 
-  attr_accessible :owner 
 
   def validator
     if (company || user)

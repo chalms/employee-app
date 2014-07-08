@@ -1,4 +1,6 @@
 class MessageSerializer < ApplicationSerializer
-  attributes :id, :content, :read, :recipient, :delivered, :delivered_at
-  has_one  :chat
+  has_one :photo
+  has_one :user, as: :sender 
+  has_many :users, as: :group 
+  attr_accessible :data, :recipients, :sender, :created_at, :read_by_all
 end

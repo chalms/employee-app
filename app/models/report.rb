@@ -1,8 +1,8 @@
 class Report < ActiveRecord::Base
   include JsonSerializingModel
   attr_accessible :summary, :date, :complete, :assigned_parts,
-    :assigned_tasks, :unused_parts, :used_parts, :incomplete_tasks,
-    :complete_tasks, :company, :complete?
+    :assigned_tasks, :unused_parts, :complete_parts, :incomplete_tasks,
+    :complete_tasks, :company, :complete?, :hours, :days_worked
 
   belongs_to :user, :as => :manager 
   has_many :users, :as => :employees

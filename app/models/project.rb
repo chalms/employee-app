@@ -1,5 +1,5 @@
  class Project < ActiveRecord::Base 
-  attr_accessible :name, :start_date, :end_date, :budget, :client
+  attr_accessible  :name, :start_date, :end_date, :budget, :complete, :assigned_parts, :assigned_tasks, :complete_parts, :complete_tasks, :company, :complete?, :hours, :days_worked
   belongs_to :company 
   has_many :reports
   has_many :parts

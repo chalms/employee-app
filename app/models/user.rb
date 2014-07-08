@@ -1,6 +1,5 @@
 class User < ActiveRecord::Base
   include JsonSerializingModel
-  
   attr_accessible :email, :name, :password_digest, :employee_number, :hours, :days_worked, :id, :role_ids 
   after_initialize :_set_defaults, :valid_employee_id?
   validates_presence_of :password, :length => {:minimum  => 6},  on: :create!
