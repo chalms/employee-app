@@ -14,11 +14,11 @@ class HomeController < ApplicationController
 	def authenticate 
 		puts params
 
-		sym = params[:worker] ; 
+		sym = params[:worker] 
 		if (sym.present?) 
 			role = 'worker'
 		else 
-			sym = params[:manager] ;
+			sym = params[:manager]
 			role = 'manager' if sym 
 		end 
 
@@ -51,7 +51,6 @@ rescue Exceptions::StdError => e
 		@user = current_user 
 		puts "home params: #{params}"
 	end 
-
 
 private 
 	def _provided_valid_password?

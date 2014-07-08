@@ -1,8 +1,8 @@
 class Message  < ActiveRecord::Base
   include JsonSerializingModel
   has_one :photo
-  has_one :user, as: :sender 
-  has_many :users, as: :group 
+  belongs_to :user, as: :sender 
+  has_many :user_messages, as: :group 
   attr_accessible :data, :recipients, :sender, :created_at, :read_by_all
   before_save :set_recipients 
 

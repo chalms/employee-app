@@ -8,7 +8,7 @@
   has_many :reports, :through => { :projects }
   has_many :tasks
   has_many :parts 
-  has_one :manager 
+  belongs_to :user, as: :manager 
   has_many :contacts 
 
   def manager(manager_id)
