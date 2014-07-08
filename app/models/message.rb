@@ -1,19 +1,24 @@
-class Message < ActiveRecord::Base
+class Message  < ActiveRecord::Base
   include JsonSerializingModel
-  belongs_to :chat
-  has_one :sender
+  has_one :photo
+  has_one :user, as: :sender 
+  has_many :users, as: :group 
+  attr_accessible :data, :recipients, :sender, :created_at, :read_by_all
+  before_save :set_recipients 
 
-  def self.published
-    where('published_at <= ?', Time.now)
-  end
+  def set_recipients
+    unless @recipients 
+      UserMessage.create!(:user => sender, :message => self, :read => true)
+      @recipients = group.where('id != ?', sender.id)
+      @recipients.each { |r| UserMessage.create!(:user => r, :message => self)} 
+    end 
+  end 
 
-  def self.in_reverse_chronological_order
-    order(:published_at).reverse_order
-  end
-
-  def self.paginate(page_number=0, per_page=20)
-    page_number = 0  unless page_number
-    per_page    = 20 unless per_page
-    offset(page_number * per_page).limit(per_page)
-  end
-end
+  def read_by_all 
+    unless @read_by_all 
+      lock = true 
+      @recipients.each { |r| lock = false unless (UserMessage.where(:user => r, :message => self).first_or_create.read) } 
+      @read_by_all = lock 
+    end 
+  end 
+end 

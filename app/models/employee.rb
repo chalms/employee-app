@@ -1,15 +1,13 @@
 class Employee < User
-
-  
   def is_manager? 
-    return true 
+    return false
   end 
 
   def is_admin? 
     return false 
   end 
 
-  def is_worker? 
-    return false 
+  def is_employee? 
+    return true
   end 
 end

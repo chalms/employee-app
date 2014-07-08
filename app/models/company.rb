@@ -1,21 +1,44 @@
- class Client < AcctiveRecord::Base
+class Company < ActiveRecord::Base
   include JsonSerializingModel
 
-  attr_accessible :name, :manager 
-  belongs_to :company
-  has_many :locations 
-  has_many :projects
-  has_many :reports, :through => { :projects }
-  has_many :tasks
+  attr_accessible :name, :admin, :reports 
+  has_many :users, :as => :managers 
+  has_many :users, :as => :employees 
+  has_one :contact 
+  has_many :projects 
   has_many :parts 
-  has_one :manager 
-  has_many :contacts 
+  has_many :tasks 
+  has_many :clients
+
+
+  def admin=(admin_id)
+    a = User.where(id: admin_id).andand.first 
+    raise Exceptions::StdError, "User is not an administrator" unless (a.role == 'company_admin')
+    self.update_attributes(:company_admin => admin_id)
+    @admin = a
+  end 
+
+  def admin
+    @admin ||= self.company_admin
+  end 
 
   def manager(manager_id)
     manager = User.where(id: manager_id).andand.first 
     raise Exceptions::StdError, "User is not a manager" unless (manager.role == 'manager')
     managers.where(id: manager.id).first_or_create 
   end 
+
+  def employee(employee_id)
+    employee = User.where(id: employee_id).andand.first 
+    raise Exceptions::StdError, "User is not an employee" unless (employee.role == 'employee')
+    employees.where(id: employee.id).first_or_create
+  end 
+
+  def client(client_id) 
+    c = Client.where(id: client_id).andand.first 
+    raise Exceptions::StdError, "Client does not exist" unless (c.present?)
+    self.update_attributes(:client => c)
+  end
 
   def task(task_id)
     t = Task.where(id: task_id).andand.first
@@ -29,22 +52,8 @@
     parts.where(:part => p).first_or_create 
   end 
 
-  def report(report_id)
-    r = Report.where(id: report_id).andand.first 
-    raise Exceptions::StdError, "Report does not exist" unless r 
-    reports.where(:report => r).first_or_create
-  end 
-
-  def project(project_id)
-    p = Project.where(id: project_id).andand.first 
-    raise Exceptions::StdError, "Project does not exist" unless p 
-    projects.where(:project => p).first_or_create
-  end 
-
-  def contact(contact_id)
-    c = Contact.where(id: contact_id).andand.first 
-    raise Exceptions::StdError, "Contact does not exist" unless c 
-    contacts.where(:company => c).first_or_create
+  def reports 
+    Reports.where('company = ?', self)
   end 
 
   def assigned_tasks(options = {})
@@ -97,21 +106,19 @@
     @hours = 0 
     get_reports(options).each { |r| @hours += r.hours } 
     @hours  
-  end
+  end 
 
   def employee_days_worked(options = {})
-    @employee_days_worked = 0
-    h = {} 
-    get_reports(options).user_reports.each { |u_r| h[[u_r.employee.id, u_r.date]] = true }
-    h.each { |k, v| @employee_days_worked += 1 } 
-    @employee_days_worked
+    @days = 0
+    get_reports(options).each { |r| @days += r.employee_days_worked }
+    @days 
   end 
 
   def get_reports(options = {})
     if (options["manager"])
       rep = manager(options["manager"]).reports
     elsif (options["employee"])
-      rep = reports.get_reports(options["employee"])
+      rep = employee(options["employee"]).reports
     else 
       rep = reports 
     end 
@@ -126,4 +133,5 @@
       return rep
     end 
   end
-end 
+end  
+

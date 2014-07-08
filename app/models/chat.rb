@@ -1,19 +1,30 @@
 class Chat < ActiveRecord::Base
   include JsonSerializingModel
-  has_and_belongs_to_many :user_chats
-  has_many :messages
+  belongs_to :company 
+  has_and_belongs_to_many :users 
+  has_many :messages 
 
-  def self.published
-    where('published_at <= ?', Time.now)
+  validate :multi_user_unique 
+
+  def multi_user_unique 
+    raise Exceptions::StdError, "Something went wrong, hold on [for developers -> chat: no company id]" unless Company.find_by_id(company.id).present?
+    raise Exceptions::StdError, "Something went wrong, hold on [for developers -> chat: duplicate chat with same users]" if (Chat.where(:company => company).count > 1) 
+    raise Exceptions::StdError, "Chat needs at least two users" if (users.count < 2)
+    return true 
   end
 
-  def self.in_reverse_chronological_order
-    order(:published_at).reverse_order
+  def get_messages
+    messages.order_by(:created_at, "DESC")
   end
 
-  def self.paginate(page_number=0, per_page=20)
-    page_number = 0  unless page_number
-    per_page    = 20 unless per_page
-    offset(page_number * per_page).limit(per_page)
+  def send_message(message_text, message_photo, user_id)
+    message_hash = {}
+    message_hash[:text] = message_text 
+
+    message = Message.new(sender: user, group: users)
+    message.data = message_text 
+    message.photo = Photo.create!(:data => message_photo, :message => message) if (message_photo.andand.present?)
+
+    raise Exceptions::StdError, "Message could not be saved!" unless message.save
   end
-end
+end 

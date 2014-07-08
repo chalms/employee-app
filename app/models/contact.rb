@@ -1,20 +1,19 @@
-class Location < ActiveRecord::Base
+class Contact < ActiveRecord::Base
   include JsonSerializingModel
-  belongs_to :task
-  belongs_to :report 
-  belongs_to :part
-  belongs_to :client 
+  attr_accessible :phone, :email, :name 
+  belongs_to :company 
+  belongs_to :user 
 
-  validate :validator
+  validate :validator 
   attr_accessible :owner 
 
   def validator
-    if (company || user || task || part)
+    if (company || user)
       return true 
     else 
-      raise Exceptions::StdError, "Location has no owner"
+      raise Exceptions::StdError, "Contact has no owner"
       return false 
-    end  
+    end 
   end 
 
   def owner=(own)
@@ -25,5 +24,5 @@ class Location < ActiveRecord::Base
 
   def owner 
     @owner ||= (company || user)
-  end
+  end 
 end 

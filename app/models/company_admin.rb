@@ -1,4 +1,4 @@
-class Admin < User
+class CompanyAdmin < User
 	def is_manager? 
 		return false
 	end 

@@ -1,5 +1,11 @@
 
 Metrics::Application.routes.draw do
+  resources :report_tasks, except: [:new, :edit]
+  resources :report_parts, except: [:new, :edit]
+  resources :contacts, except: [:new, :edit]
+  resources :clients, except: [:new, :edit]
+  resources :projects, except: [:new, :edit]
+  resources :companies, except: [:new, :edit]
   namespace :api do
 
     resource  :sessions, only: [:create, :show, :destroy]

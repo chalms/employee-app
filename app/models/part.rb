@@ -1,3 +1,10 @@
 class Part < ActiveRecord::Base
-	has_and_belongs_to_many :tasks
+  include JsonSerializingModel
+  belongs_to :company
+  belongs_to :manager
+  has_and_belongs_to_many :projects
+  has_and_belongs_to_many :reports
+  has_and_belongs_to_many :user_reports 
+
+  attr_accessible :barcode, :name
 end 
