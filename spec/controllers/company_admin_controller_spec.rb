@@ -6,6 +6,10 @@ describe CompanyAdminController, type: :controller do
         :email => "a@chalme.com", 
         :password => "password"
     }}
+    let(:bad_user_params) {{
+        :email => "a@chalme.com", 
+        :password => "passord"
+    }}
     let(:params) {{
         :email => "a@chalme.com", 
         :password => "password", 
@@ -23,11 +27,19 @@ describe CompanyAdminController, type: :controller do
       company.users.create!(params)   
     end 
 
-    it "should render admin_onboarding template" do
+    before(:each) do 
       go!
+    end 
+
+    it "should render admin_onboarding template" do
       post :authentication, user_params
       expect(response).to render_template("admin_onboarding")
     end
+
+    it "should not render bad user params" do
+      post :authentication, bad_user_params
+      expect(response).to render_template("admin_home")
+    end 
 
     # it "renders the index template" do
     #   get :index

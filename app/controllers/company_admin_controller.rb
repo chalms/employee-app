@@ -1,4 +1,5 @@
 class CompanyAdminController < ApplicationController
+
   def authentication 
     puts params
     user = User.find_by_email(params[:email])
@@ -23,7 +24,12 @@ rescue Exceptions::StdError => e
       render :action => :admin_home 
     else 
       render :action => :admin_onboarding
-    end 
+    end
+    return 
+rescue UserAuthenticationService::NotAuthorized => a 
+    puts "error message #{e}"
+    flash[:error] = e
+    render :action => :admin_home 
   end 
 
   def admin_onboarding
@@ -40,8 +46,8 @@ rescue Exceptions::StdError => e
     @user.company.import_employee_logs(params[:file])
   end
 
-
   private 
+
   def validate_user! 
     raise Exceptions::StdError, "Token is not valid!" unless (@token)
     raise Exceptions::StdError, "Password is not valid!" unless(_provided_valid_password?)
