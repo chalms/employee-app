@@ -1,5 +1,4 @@
 class CompanyAdminController < ApplicationController
-
   def authentication 
     puts params
     user = User.find_by_email(params[:email])
@@ -29,7 +28,7 @@ rescue Exceptions::StdError => e
 rescue UserAuthenticationService::NotAuthorized => a 
     puts "error message #{e}"
     flash[:error] = e
-    render :action => :admin_home 
+    render :action => :sign_up
   end 
 
   def admin_onboarding
