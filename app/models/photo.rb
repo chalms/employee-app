@@ -1,10 +1,10 @@
 class Photo < ActiveRecord::Base 
   include JsonSerializingModel
-  attr_accessible :data, :owner 
-
+  attr_accessible :data, :owner
+  belongs_to :message
+  
   belongs_to :report_part 
   belongs_to :report_task 
-  belongs_to :message 
 
   validate :has_one_owner?
 

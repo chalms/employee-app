@@ -1,15 +1,18 @@
 class Location < ActiveRecord::Base
   include JsonSerializingModel
-  belongs_to :task
-  belongs_to :report 
-  belongs_to :part
+
   belongs_to :client 
+  has_and_belongs_to_many :report_parts
+  has_and_belongs_to_many :report_tasks
+  has_and_belongs_to_many :user_reports
+  has_and_belongs_to_many :reports
+
 
   validate :validator
-  attr_accessible :owner 
+  attr_accessible :owner, :address, :city, :country, :type, :name
 
   def validator
-    if (company || user || task || part)
+    if (company || user || task || part || report_part || report_task || user_report || client)
       return true 
     else 
       raise Exceptions::StdError, "Location has no owner"
@@ -17,13 +20,7 @@ class Location < ActiveRecord::Base
     end  
   end 
 
-  def owner=(own)
-    if ((own.is_a? Company) || (own.is_a? User))
-      @owner = own
-    end 
-  end 
-
   def owner 
-    @owner ||= (company || user)
+    @owner ||= (company || user || task || part || report_part || report_task || user_report || client)
   end
 end 

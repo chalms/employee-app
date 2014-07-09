@@ -6,6 +6,7 @@ class UserReport < ActiveRecord::Base
   belongs_to :user, as: :manager, :foreign_key => 'user_id'
   has_many :report_parts 
   has_many :report_tasks 
+  has_and_belongs_to_many :locations
 
   def hours
     @hours = 0 

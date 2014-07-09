@@ -1,15 +1,15 @@
  class Client < AcctiveRecord::Base
   include JsonSerializingModel
-
-  attr_accessible :name, :manager, :complete, :assigned_parts, :assigned_tasks, :complete_parts, :complete_tasks, :company, :complete?, :hours, :days_worked
-  belongs_to :company
-  has_many :locations 
   has_many :projects
-  has_many :reports, :through => { :projects }
+  has_and_belongs_to_many :locations 
   has_many :tasks
   has_many :parts 
-  belongs_to :user, as: :manager 
+  belongs_to :company
   has_many :contacts 
+  belongs_to :user, as: :manager 
+  has_many :reports, :through => { :projects }
+  
+  attr_accessible :name, :manager, :complete, :assigned_parts, :assigned_tasks, :complete_parts, :complete_tasks, :company, :complete?, :hours, :days_worked
 
   def manager(manager_id)
     manager = User.where(id: manager_id).andand.first 

@@ -5,10 +5,10 @@
   has_many :parts
   has_many :locations, :through => { :reports, :tasks, :parts, :clients }
   has_many :tasks, 
-  has_many :users, as: :employees 
-  has_many :users, as: :managers
+  has_and_belongs_to_many :users
+  belongs_to :client 
+
   has_many :contacts, :through => { :users }
-  has_one :client 
 
   def manager(manager_id)
     manager = User.where(id: manager_id).andand.first 
@@ -44,6 +44,14 @@
     r = Report.where(id: report_id).andand.first 
     raise Exceptions::StdError, "Report does not exist" unless r 
     reports.where(:report => r).first_or_create
+  end 
+
+  def employees 
+    @employees ||= users.where(role: 'employee')
+  end 
+
+  def managers 
+    @managers ||= users.where(role: 'manager')
   end 
 
   def assigned_tasks(options = {})

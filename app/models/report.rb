@@ -5,8 +5,7 @@ class Report < ActiveRecord::Base
     :complete_tasks, :company, :complete?, :hours, :days_worked
 
   belongs_to :user, :as => :manager 
-  has_many :users, :as => :employees
-
+  has_and_belongs_to_many :locations
   has_many :user_reports
 
   has_and_belongs_to_many :tasks
@@ -35,6 +34,12 @@ class Report < ActiveRecord::Base
     else 
       raise Exceptions::StdError, "Employee does not exist"
     end  
+  end 
+
+  def employees
+    @employees = []
+    user_reports.each { |u_r| @employees << u_r.user }
+    @employees 
   end 
 
   def assigned_parts(options = {})

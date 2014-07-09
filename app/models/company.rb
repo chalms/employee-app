@@ -1,15 +1,26 @@
 class Company < ActiveRecord::Base
   include JsonSerializingModel
 
-  attr_accessible :name, :admin, :reports, :complete, :assigned_parts, :assigned_tasks, :complete_parts, :complete_tasks, :company, :complete?, :hours, :days_worked
-  has_many :users, :as => :managers 
-  has_many :users, :as => :employees 
+  attr_accessible :name, :admin, :reports, :complete, :assigned_parts, :assigned_tasks, :complete_parts, :complete_tasks, :complete?, :hours, :days_worked
   has_one :contact 
   has_many :projects 
+  has_many :users
   has_many :parts 
   has_many :tasks 
   has_many :clients
+  has_many :employee_logs
 
+  def load_employee_logs(csv)
+    # 
+  end 
+
+  def managers 
+    users.where(role: 'manager')
+  end
+
+  def employees 
+    users.where(role: 'employee')
+  end 
 
   def admin=(admin_id)
     a = User.where(id: admin_id).andand.first 
@@ -19,7 +30,7 @@ class Company < ActiveRecord::Base
   end 
 
   def admin
-    @admin ||= self.company_admin
+    @admin ||= User.where(id: self.company_admin)
   end 
 
   def manager(manager_id)

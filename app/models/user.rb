@@ -6,12 +6,13 @@ class User < ActiveRecord::Base
   validate :email, :format => {:with => /\A[^@]+@[^@]+\.[^@]+\Z/}
   before_save :setup_role
   validate :valid_employee_id?
-  belongs_to :company 
   has_one :contact 
   has_many :user_reports
+  belongs_to :company 
   has_and_belongs_to_many :chats
   has_and_belongs_to_many :roles 
-  has_many :messages, :through => :chats
+  has_and_belongs_to_many :messages
+  
 
   def role?(role)
       return !!self.roles.find_by_name(role.to_s.camelize)
