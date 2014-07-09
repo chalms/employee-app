@@ -18,7 +18,7 @@ class Company < ActiveRecord::Base
     (2..spreadsheet.last_row).each do |i|
       row = Hash[[header, spreadsheet.row(i)].transpose]
       h = row.to_hash.slice(*accessible_attributes)
-      EmployeeLog.create!(h.merge({:company_id => @user.company.id}))
+      self.employee_logs.create!(h.merge({:company_id => @user.company.id}))
     end
   end 
 

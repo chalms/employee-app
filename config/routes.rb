@@ -57,14 +57,13 @@ Metrics::Application.routes.draw do
 
     root :to => 'users#new', :as => :new
   end
-    get '/signout' => 'home#signout'
-    get '/login' => 'home#login', :as => :login
-    root :to => 'home#sign_up', :as => :sign_up
+    get '/signout' => 'login#signout'
+    get '/login' => 'login#login', :as => :login
+    root :to => 'login#sign_up', :as => :sign_up
+    post '/valid_login' => 'login#valid_login', :as => :valid_login
+    post '/valid_signup' => 'login#valid_signup', :as => :valid_signup
     get '/home' => 'home#home', :as => :home
-    post '/authenticate' => 'home#authenticate', :as => :authenticate
-
-    post '/authentication' => 'company_admin#authentication', :as => :authentication
-
+    get '/admin' => 'home#admin', :as => :admin
 end
 
 #   namespace :api do resources :parts, except: [:new, :edit] end

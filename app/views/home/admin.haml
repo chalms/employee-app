@@ -1,0 +1,37 @@
+#cssmenu.ui-header.ui-bar-f{"data-role" => "header", "data-theme" => "f", role: "banner"}  
+  %h1.ui-title{"aria-level" => "1", role: "heading"} @user.company.name
+  .navbar.nav
+    %li.active
+      %a{:href=>"#clients", "data-toggle"=>"tab"} Clients
+    %li
+      %a{:href=>"#projects", "data-toggle"=>"tab"} Projects
+    %li 
+      %a{:href=>"#employees", "data-toggle"=>"tab"} Employees
+    %li
+      %a{href: "/signout"} Logout
+- if @load 
+  %br 
+  %h4 Add Employees
+  %table 
+    %tbody
+      %tr 
+        %th Name 
+        %th Role 
+        %th Employee Number 
+        %th 
+      %tr 
+        %td
+          %input#employee-name{autofocus: "", placeholder: "Employee Name"}
+        %td
+          %select#employee-role{placeholder: "Role"}
+            %option{:value => 'employee'} 
+            %option{:value => 'manager'}
+        %td 
+          %input#employee-number{placeholder: "Employee Name"}
+        %td 
+          %button.btn-success SUBMIT
+    %tfooter
+      %h4 Or Import them 
+      = form_tag import_path, multipart: true do
+        = file_field_tag :file
+        = submit_tag "Import"
