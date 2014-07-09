@@ -15,6 +15,7 @@ gem 'redis'
 gem 'hiredis'
 gem 'em-synchrony'
 gem 'cancan'
+gem 'roo'
 
 # Assets
 gem 'sass-rails', '~> 4.0.0'
@@ -40,6 +41,7 @@ gem 'protected_attributes'
 
 # Test
 gem 'rspec-rails'
+gem 'rspec-its'
 gem 'cucumber-rails', require: false
 gem 'mail_safe'
 gem 'fabrication'

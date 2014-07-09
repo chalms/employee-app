@@ -1,7 +1,7 @@
 
 Metrics::Application.routes.draw do
-  resources :report_tasks, except: [:new, :edit]
-  resources :report_parts, except: [:new, :edit]
+  resources :reports_tasks, except: [:new, :edit]
+  resources :reports_parts, except: [:new, :edit]
   resources :contacts, except: [:new, :edit]
   resources :clients, except: [:new, :edit]
   resources :projects, except: [:new, :edit]
@@ -62,6 +62,9 @@ Metrics::Application.routes.draw do
     root :to => 'home#sign_up', :as => :sign_up
     get '/home' => 'home#home', :as => :home
     post '/authenticate' => 'home#authenticate', :as => :authenticate
+
+    post '/authentication' => 'company_admin#authentication', :as => :authentication
+
 end
 
 #   namespace :api do resources :parts, except: [:new, :edit] end

@@ -2,17 +2,21 @@ class Report < ActiveRecord::Base
   include JsonSerializingModel
   attr_accessible :summary, :date, :complete, :assigned_parts,
     :assigned_tasks, :unused_parts, :complete_parts, :incomplete_tasks,
-    :complete_tasks, :company, :complete?, :hours, :days_worked
+    :complete_tasks, :company, :complete?, :hours, :days_worked, :manager
 
-  belongs_to :user, :as => :manager 
+  belongs_to :user
   has_and_belongs_to_many :locations
-  has_many :user_reports
+  has_many :users_reports
 
   has_and_belongs_to_many :tasks
   has_and_belongs_to_many :parts
 
+  def manager 
+    @manager ||= self.user 
+  end 
+
   def employee_reports(employee)
-    user_reports.where(:report_id => self.id, :user_id => employee.id)
+    users_reports.where(:report_id => self.id, :user_id => employee.id)
   end 
 
   def report_for_user(employee)
@@ -38,7 +42,7 @@ class Report < ActiveRecord::Base
 
   def employees
     @employees = []
-    user_reports.each { |u_r| @employees << u_r.user }
+    users_reports.each { |u_r| @employees << u_r.user }
     @employees 
   end 
 
@@ -80,14 +84,14 @@ class Report < ActiveRecord::Base
 
   def hours 
     @hours = 0
-    user_reports.each { |u_r| @hours += u_r.hours } 
+    users_reports.each { |u_r| @hours += u_r.hours } 
     @hours 
   end
 
   def employee_days_worked 
     @employee_days_worked = 0
     h = {} 
-    user_reports.each { |u_r| h[[u_r.employee.id, u_r.date]] = true }
+    users_reports.each { |u_r| h[[u_r.employee.id, u_r.date]] = true }
     h.each { |k, v| @employee_days_worked += 1 } 
     @employee_days_worked
   end 
@@ -96,7 +100,7 @@ class Report < ActiveRecord::Base
     if options["employee"].present? 
       rep = employee_reports(get_employee(options["employee"]))
     else 
-      rep = user_reports
+      rep = users_reports
     end 
     rep 
   end 
@@ -108,7 +112,7 @@ class Report < ActiveRecord::Base
   def complete? 
     @complete ||= if self.complete 
       true
-    elsif (self.user_reports.where(:complete => true))
+    elsif (self.users_reports.where(:complete => true))
       self.update_attributes(:complete => true)
       true 
     else 

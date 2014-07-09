@@ -1,4 +1,4 @@
- class Client < AcctiveRecord::Base
+ class Client < ActiveRecord::Base
   include JsonSerializingModel
   has_many :projects
   has_and_belongs_to_many :locations 
@@ -6,10 +6,15 @@
   has_many :parts 
   belongs_to :company
   has_many :contacts 
-  belongs_to :user, as: :manager 
-  has_many :reports, :through => { :projects }
+  belongs_to :user
+  has_many :reports, :through => :projects 
   
   attr_accessible :name, :manager, :complete, :assigned_parts, :assigned_tasks, :complete_parts, :complete_tasks, :company, :complete?, :hours, :days_worked
+
+  def manager 
+    @manager ||= self.user 
+  end 
+
 
   def manager(manager_id)
     manager = User.where(id: manager_id).andand.first 
@@ -102,7 +107,7 @@
   def employee_days_worked(options = {})
     @employee_days_worked = 0
     h = {} 
-    get_reports(options).user_reports.each { |u_r| h[[u_r.employee.id, u_r.date]] = true }
+    get_reports(options).users_reports.each { |u_r| h[[u_r.employee.id, u_r.date]] = true }
     h.each { |k, v| @employee_days_worked += 1 } 
     @employee_days_worked
   end 

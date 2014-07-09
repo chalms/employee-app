@@ -4,9 +4,7 @@ describe Api::ApiController do
   describe '#index' do
     let(:query) { get :index, format: :json }
     let(:json) { JSON.parse(response.body) }
-    subject { query; response }
-
-    its(:status) { should eq 200 }
+    subject { query; json }
 
     describe 'JSON' do
       subject { query; json }

@@ -6,7 +6,7 @@ class ReportSerializer < ApplicationSerializer
   belongs_to :user, :as => :manager 
   has_many :users, :as => :employees
 
-  has_many :user_reports
+  has_many :users_reports
 
   has_and_belongs_to_many :tasks
   has_and_belongs_to_many :parts

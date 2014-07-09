@@ -27,7 +27,7 @@ class HomeController < ApplicationController
 				hash = {  
 					:email => sym[:email], 
 					:name => sym[:name], 
-					:company_name => sym[:company_name],
+					:company_number => sym[:company_name],
 					:password => sym[:password], 
 					:role => role
 				}

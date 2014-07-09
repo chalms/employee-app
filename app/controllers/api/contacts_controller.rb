@@ -1,4 +1,4 @@
-class ContactsController < ApplicationController
+class Api::ContactsController < ApplicationController
   # GET /contacts
   # GET /contacts.json
   def index

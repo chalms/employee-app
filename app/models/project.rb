@@ -3,12 +3,12 @@
   belongs_to :company 
   has_many :reports
   has_many :parts
-  has_many :locations, :through => { :reports, :tasks, :parts, :clients }
-  has_many :tasks, 
+  has_many :locations, :through => [:reports, :tasks, :parts, :clients ]
+  has_many :tasks
   has_and_belongs_to_many :users
   belongs_to :client 
 
-  has_many :contacts, :through => { :users }
+  has_many :contacts, :through => :users
 
   def manager(manager_id)
     manager = User.where(id: manager_id).andand.first 
@@ -109,7 +109,7 @@
   def employee_days_worked(options = {})
     @employee_days_worked = 0
     h = {} 
-    get_reports(options).user_reports.each { |u_r| h[[u_r.employee.id, u_r.date]] = true }
+    get_reports(options).users_reports.each { |u_r| h[[u_r.employee.id, u_r.date]] = true }
     h.each { |k, v| @employee_days_worked += 1 } 
     @employee_days_worked
   end 

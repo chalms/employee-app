@@ -26,15 +26,17 @@ class CreateTasks < ActiveRecord::Migration
       t.string :type 
       t.binary :password 
       t.string :auth_token
+      t.string :role
       t.timestamps
     end 
 
-    create_table :user_chats do |t|
+    create_table :users_chats do |t|
       t.belongs_to :user 
       t.belongs_to :chat
     end
 
-    add_index :user_chats, [:user_id, :chat_id]
+    add_index :users_chats, [:user_id, :chat_id]
+    
     add_column :clients, :user_id, :integer
 
     create_table :locations do |t|
@@ -66,7 +68,7 @@ class CreateTasks < ActiveRecord::Migration
       t.integer  :user_id 
     end
 
-    create_table :user_reports do |t| 
+    create_table :users_reports do |t| 
       t.belongs_to :user
       t.belongs_to :report
       t.datetime :checkin 
@@ -75,7 +77,7 @@ class CreateTasks < ActiveRecord::Migration
       t.integer :location_id
     end 
 
-    add_index :user_reports, [:user_id, :report_id]
+    add_index :users_reports, [:user_id, :report_id]
 
     create_table :parts do |t|
       t.string  :name
@@ -84,16 +86,16 @@ class CreateTasks < ActiveRecord::Migration
       t.references :client
     end
 
-    create_table :report_parts do |t|
+    create_table :reports_parts do |t|
       t.boolean :complete, false
       t.string :note 
       t.datetime :completion_time
       t.belongs_to :part
-      t.belongs_to :user_report
+      t.belongs_to :users_report
       t.timestamps
     end
 
-    add_column :photos, :report_part_id, :integer 
+    add_column :photos, :reports_part_id, :integer 
 
     create_table :tasks do |t|
       t.string   :description
@@ -101,16 +103,16 @@ class CreateTasks < ActiveRecord::Migration
       t.belongs_to :user 
     end
 
-    create_table :report_tasks do |t|
+    create_table :reports_tasks do |t|
       t.boolean :complete, :false
       t.string :note
       t.datetime :completion_time
       t.belongs_to :tasks
-      t.belongs_to :user_reports
+      t.belongs_to :users_reports
       t.timestamps
     end
 
-    add_column :photos, :report_task_id, :integer 
+    add_column :photos, :reports_task_id, :integer 
 
     create_table :companies do |t|
       t.string :name
@@ -153,62 +155,47 @@ class CreateTasks < ActiveRecord::Migration
     add_column :parts, :project_id, :integer
     add_column :tasks, :project_id, :integer
 
-    create_table :project_users do |t|
+    create_table :projects_users do |t|
       t.references :user, :project
     end 
 
-    create_table :task_projects do |t|
+    create_table :tasks_projects do |t|
       t.references :project, :task 
     end 
 
-    add_index :task_projects, [:task_id, :project_id]
+    add_index :tasks_projects, [:task_id, :project_id]
 
-    create_table :user_messages do |t|
+    create_table :users_messages do |t|
       t.belongs_to :user
       t.belongs_to :message
       t.boolean :read, :default => false 
     end 
 
-    add_index :user_messages, [:user_id, :message_id]
+    add_index :users_messages, [:user_id, :message_id]
 
-    create_table :roles do |t|
-      t.string :name
-      t.timestamps
-    end
-
-    create_table :roles_users do |t|
-      t.references :role, :user
-    end
-
-    create_table :location_report_parts do |t|
-      t.references :location, :report_part 
+    create_table :locations_reports_parts do |t|
+      t.references :location, :reports_part 
     end 
 
-    add_index :location_report_parts, [:location_id, :report_part_id]
-
-    create_table :location_report_tasks do |t|
-      t.references :location, :report_task
+    create_table :locations_reports_tasks do |t|
+      t.references :location, :reports_task
     end 
 
-    add_index :location_report_tasks, [:location_id, :report_task_id]
 
-    create_table :location_user_reports do |t|
-      t.references :location, :user_report
+    create_table :locations_users_reports do |t|
+      t.references :location, :users_report
     end 
 
-    add_index :location_user_reports, [:location_id, :user_report_id]
     
-    create_table :location_reports do |t|
+    create_table :locations_reports do |t|
       t.references :location, :report
     end 
 
-    add_index :location_reports, [:location_id, :report_id]
 
-    create_table :location_clients do |t|
+    create_table :locations_clients do |t|
       t.references :location, :client 
     end 
 
-    add_index :location_clients, [:location_id, :client_id]
 
     create_table :employee_logs do |t|
       t.belongs_to :company 

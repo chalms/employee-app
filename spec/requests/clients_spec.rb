@@ -1,6 +1,6 @@
-require 'rails_helper'
+require 'spec_helper'
 
-RSpec.describe "Clients", :type => :request do
+describe "Clients", :type => :request do
   describe "GET /clients" do
     it "works! (now write some real specs)" do
       get clients_path

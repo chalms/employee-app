@@ -1,54 +1,28 @@
 class User < ActiveRecord::Base
   include JsonSerializingModel
-  attr_accessible :email, :name, :password_digest, :employee_number, :hours, :days_worked, :id, :role_ids 
-  after_initialize :_set_defaults, :valid_employee_id?
+  attr_accessible :email, :name, :password, :employee_number, :hours, :days_worked, :id, :role
+  after_initialize :_set_defaults
   validates_presence_of :password, :length => {:minimum  => 6},  on: :create!
   validate :email, :format => {:with => /\A[^@]+@[^@]+\.[^@]+\Z/}
-  before_save :setup_role
-  validate :valid_employee_id?
+  after_create :valid_employee_id?
   has_one :contact 
-  has_many :user_reports
+  has_many :users_reports
   belongs_to :company 
-  has_and_belongs_to_many :chats
-  has_and_belongs_to_many :roles 
+  has_many :users_chats
+  has_many :chats, :through => :users_chats
+  has_many :reports, :through => :users_reports
   has_and_belongs_to_many :messages
   
-
-  def role?(role)
-      return !!self.roles.find_by_name(role.to_s.camelize)
-  end
-
-  # Default role is "Registered"
-  def setup_role 
-    if self.role_ids.empty?     
-      self.role_ids = [2] 
-    end
-  end
-
   def clients 
     return nil
   end 
 
-  def chats 
-    return self.user_chats.map{ |ur| ur.chat }
-  end 
-
-  def reports 
-    return self.user_reports.map{ |ur| ur.report }
-  end 
-
-  def role(r)
-    if (r.blank?)
-      @role = 'user'
-    end 
-  end 
-
   def is_admin? 
-    return (@role == 'admin') 
+    return (self.role == 'admin') 
   end 
 
   def is_manager? 
-    return (@role == 'manager')
+    return (self.role == 'manager')
   end 
 
   def password=(password)
@@ -64,14 +38,16 @@ class User < ActiveRecord::Base
   def valid_employee_id?
     emp = company.employee_logs.find_by_employee_number(employee_number)
     raise Exceptions::StdError, "Not a valid employee id for that company!" unless (emp.andand.present?)
-    raise Exceptions::StdError, "Invalid employee permissions to use this feature!" if (emp.role != role) 
+    puts "Emp role: #{emp.role}"
+    self.update_attributes(role: emp.role)
+    @role = self.role
     true 
   end 
 
   def hours(options = {})
     @hours = 0 
     return @hours unless (self.role == 'employee')
-    get_user_report(options).each { |u_r| @hours += u_r.hours }
+    get_users_report(options).each { |u_r| @hours += u_r.hours }
     @hours 
   end 
 
@@ -79,32 +55,32 @@ class User < ActiveRecord::Base
     @days_worked = 0 
     h = {} 
     return @days_worked unless (self.role == 'employee')
-    get_user_report(options).each { |u_r| h[u_r.date] = true }
+    get_users_report(options).each { |u_r| h[u_r.date] = true }
     h.each { |k, v| @days_worked += 1 }
     @days_worked
   end
 
   def assigned_tasks(options = {})
     @assigned_tasks = []
-    get_user_reports(options).each {|u_r| @assigned_tasks += u_r.assigned_tasks}
+    get_users_reports(options).each {|u_r| @assigned_tasks += u_r.assigned_tasks}
     @assigned_tasks
   end 
 
   def completed_tasks(options = {})
     @completed_tasks = []
-    get_user_reports(options).each {|u_r| @completed_tasks += u_r.completed_tasks}
+    get_users_reports(options).each {|u_r| @completed_tasks += u_r.completed_tasks}
     @completed_tasks
   end 
 
   def assigned_parts(options = {})
     @assigned_parts = []
-    get_user_reports(options).each {|u_r| @assigned_parts += u_r.assigned_parts}
+    get_users_reports(options).each {|u_r| @assigned_parts += u_r.assigned_parts}
     @assigned_parts
   end 
 
   def completed_parts(options = {})
     @completed_parts = []
-    get_user_reports(options).each {|u_r| @completed_parts += u_r.completed_parts}
+    get_users_reports(options).each {|u_r| @completed_parts += u_r.completed_parts}
     @completed_parts
   end 
 
@@ -122,15 +98,15 @@ class User < ActiveRecord::Base
 
   private
 
-  def get_user_reports(options = {})
+  def get_users_reports(options = {})
     if (options["before"])
-      user_reports.where('date < ?', Date.new)
+      users_reports.where('date < ?', Date.new)
     elsif (options["today"])
-      user_reports.where('date = ?', Date.new)
+      users_reports.where('date = ?', Date.new)
     elsif (options["future"])
-      user_reports.where('date > ?', Date.new)
+      users_reports.where('date > ?', Date.new)
     else 
-      user_reports 
+      users_reports 
     end 
   end 
 

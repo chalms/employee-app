@@ -1,6 +1,6 @@
-require "rails_helper"
+require 'spec_helper'
 
-RSpec.describe Api::ReportsController, :type => :routing do
+describe Api::ReportsController, :type => :routing do
   describe "routing" do
 
     it "routes to #index" do

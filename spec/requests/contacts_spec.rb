@@ -1,6 +1,6 @@
-require 'rails_helper'
+require 'spec_helper'
 
-RSpec.describe "Contacts", :type => :request do
+describe "Contacts", :type => :request do
   describe "GET /contacts" do
     it "works! (now write some real specs)" do
       get contacts_path

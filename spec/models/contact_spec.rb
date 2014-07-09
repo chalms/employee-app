@@ -1,5 +1,5 @@
-require 'rails_helper'
+require 'spec_helper'
 
-RSpec.describe Contact, :type => :model do
+describe Contact, :type => :model do
   
 end

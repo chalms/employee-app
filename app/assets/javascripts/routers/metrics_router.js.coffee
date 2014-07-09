@@ -85,7 +85,7 @@ Metrics.Routers.AppRouter = Backbone.Router.extend
   setReport: (r) -> 
     @report = new Metrics.Models.Report(r)
 
-  getUserReports: -> 
+  getUsersReports: -> 
     if @reports is null then @reports = new Metrics.Collections.Reports(@getUser().reports)
     return @reports
 
@@ -95,7 +95,7 @@ Metrics.Routers.AppRouter = Backbone.Router.extend
     return @newReportLayout
 
   getReportsView: -> 
-    if @reportsView is null then @reportsView = new Metrics.Views.Reports(collection: @getUserReports()) 
+    if @reportsView is null then @reportsView = new Metrics.Views.Reports(collection: @getUsersReports()) 
     return @reportsView 
 
 
