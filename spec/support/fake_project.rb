@@ -5,6 +5,7 @@ class FakeProject
     @admin = fake_manager.fake_admin
     @manager = fake_manager.fake_manager
     @company = @admin.fake_company
+    @client = fake_manager.fake_client
 
     @project = @company.projects.create!({
       "company_id" => @company.id,
@@ -12,9 +13,13 @@ class FakeProject
       "end_date"   => (Date.today+100),
       "manager_number" => @manager.id,
       "budget" => 100000.0,
-      "clients" => [fake_manager.fake_client],
+      "clients" => [@client.id],
       "name" => "Project X"
     })
+  end
+
+  def fake_client
+    @client
   end
 
   def fake_project
