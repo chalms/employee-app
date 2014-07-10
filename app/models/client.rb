@@ -1,15 +1,17 @@
  class Client < ActiveRecord::Base
   include JsonSerializingModel
-  has_many :projects
+  has_many :clients_projects
+  has_many :projects, :through => :clients_projects
   has_many :locations
   has_many :tasks
   has_many :parts
   belongs_to :company
   has_many :contacts
   belongs_to :user
+
   has_many :reports, :through => :projects
 
-  attr_accessible :name, :manager, :complete, :assigned_parts, :assigned_tasks, :completed_parts, :completed_tasks, :company, :complete?, :hours, :days_worked
+  attr_accessible :name, :manager, :complete, :assigned_parts, :assigned_tasks, :completed_parts, :completed_tasks, :company, :complete?, :hours, :employee_days_worked
 
   def manager
     @manager ||= user

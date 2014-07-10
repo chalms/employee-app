@@ -31,8 +31,13 @@ class ProjectsController < ApplicationController
   # POST /projects.json
   def create
     @user = current_user
+    @clients = params[:project][:clients]
+    params[:project].delete(:clients)
     @project = @user.company.projects.create!(params[:project])
+    @clients.each { |c| ClientsProject.create!({:client_id => c.to_i, :project_id => @project.id})}
+
     validate_permissions!
+    puts @project.inspect
     respond_to do |format|
       format.json { render json: @project};
       format.html { render haml: @project };
@@ -52,7 +57,7 @@ class ProjectsController < ApplicationController
     puts "new project... #{@project.inspect}"
     puts "responding..."
     respond_to do |format|
-      format.json { render json: @project.to_json };
+      format.json { render json: @project };
       format.html { render haml: @project };
     end
     return

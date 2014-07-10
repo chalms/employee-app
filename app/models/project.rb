@@ -1,5 +1,5 @@
  class Project < ActiveRecord::Base
-  attr_accessible  :name, :start_date, :end_date, :budget, :complete, :assigned_parts, :assigned_tasks, :completed_parts, :completed_tasks, :company_id, :client_id, :complete?, :hours, :days_worked, :manager_id
+  attr_accessible  :name, :start_date, :end_date, :budget, :complete, :assigned_parts, :assigned_tasks, :completed_parts, :completed_tasks, :company_id, :complete?, :hours, :employee_days_worked, :manager_number, :clients
 
   belongs_to :company
   has_many :reports
@@ -8,7 +8,8 @@
   has_many :users, :through => :reports
   has_many :contacts, :through => :users
   has_many :tasks
-  belongs_to :client
+  has_many :clients_projects
+  has_many :clients, :through => :clients_projects
 
   def set_manager(manager_id)
     manager = User.where(id: manager_id).andand.first
