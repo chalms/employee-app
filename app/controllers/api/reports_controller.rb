@@ -16,10 +16,10 @@ class Api::ReportsController < ApiController
     respond_with json: @api_report, status: :success
   end
 
-  def new 
+  def new
     @api_report = Report.new
     respond_with json: @api_report
-  end 
+  end
 
   # POST /api/reports
   # POST /api/reports.json
@@ -28,25 +28,25 @@ class Api::ReportsController < ApiController
     params.each{ |k,v|  v = params[:report][k] unless (v.present? && (k.to_s == "report")) }
 
     p = params
-    if p[:report_date].is_a? String 
+    if p[:report_date].is_a? String
       date = Date.strptime(p[:report_date], '%m/%d/%Y')
-      p[:report_date] = date 
-    end 
+      p[:report_date] = date
+    end
 
-    attr_hash = {:report_date => p[:report_date],  :name => p[:name],  :description => p[:description]}
+    attr_hash = {:date => p[:report_date],  :name => p[:name],  :description => p[:description]}
 
     r = Report.find_by_id(p[:id])
 
     if (r.present?)
       @api_report = r.update_attributes!(attr_hash)
-    else 
+    else
       @api_report = Report.create!(attr_hash)
-    end 
-    
+    end
+
     if @api_report
-      respond_to do |format| 
+      respond_to do |format|
         format.json { render json: @api_report};
-      end 
+      end
     end
   end
 
@@ -70,7 +70,7 @@ class Api::ReportsController < ApiController
     head :no_content
   end
 
-  private 
+  private
 
   def report_params
     params.require(:report).permit(:description, :report_date, :name, :report, :id);

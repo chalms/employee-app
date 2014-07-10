@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe "ReportsTasks", :type => :request do
+RSpec.describe "ReportsTasks", :type => :request do
   describe "GET /reports_tasks" do
     it "works! (now write some real specs)" do
       get reports_tasks_path

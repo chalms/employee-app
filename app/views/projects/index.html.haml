@@ -1,1 +1,12 @@
-%h2 Index
+%h1 Listing projects
+
+%ul.grid
+  - @projects.each do |project|
+    .gridrow
+      %li= link_to 'Show', project
+      %li= link_to 'Edit', edit_project_path(project)
+      %li= link_to 'Destroy', project, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Project', new_project_path

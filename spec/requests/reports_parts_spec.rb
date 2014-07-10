@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe "ReportsParts", :type => :request do
+RSpec.describe "ReportsParts", :type => :request do
   describe "GET /reports_parts" do
     it "works! (now write some real specs)" do
       get reports_parts_path

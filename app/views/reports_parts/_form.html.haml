@@ -1,0 +1,10 @@
+= form_for @reports_part do |f|
+  - if @reports_part.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@reports_part.errors.count, "error")} prohibited this reports_part from being saved:"
+      %ul
+        - @reports_part.errors.full_messages.each do |msg|
+          %li= msg
+
+  .actions
+    = f.submit 'Save'

@@ -1,0 +1,17 @@
+%h1 Listing users_reports
+
+%table
+  %tr
+    %th
+    %th
+    %th
+
+  - @users_reports.each do |users_report|
+    %tr
+      %td= link_to 'Show', users_report
+      %td= link_to 'Edit', edit_users_report_path(users_report)
+      %td= link_to 'Destroy', users_report, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Users report', new_users_report_path

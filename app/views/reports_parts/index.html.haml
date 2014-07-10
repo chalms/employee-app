@@ -1,0 +1,17 @@
+%h1 Listing reports_parts
+
+%table
+  %tr
+    %th
+    %th
+    %th
+
+  - @reports_parts.each do |reports_part|
+    %tr
+      %td= link_to 'Show', reports_part
+      %td= link_to 'Edit', edit_reports_part_path(reports_part)
+      %td= link_to 'Destroy', reports_part, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Reports part', new_reports_part_path

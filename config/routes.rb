@@ -1,12 +1,20 @@
 
 Metrics::Application.routes.draw do
-  resources :reports_tasks, except: [:new, :edit]
   resources :reports_parts, except: [:new, :edit]
-  resources :contacts, except: [:new, :edit]
-  resources :companies, except: [:new, :edit]
+  resource :contacts
+  resource :companies
+  resource :reports_tasks
+  resource :reports_parts
+  resource :tasks
+  resource :parts
+  resource :users_reports
+  resource :reports
   resource :employee_logs
   resource :clients
   resource :projects
+  resource :locations
+
+
   namespace :api, defaults: {:format => 'json'} do
 
     resource  :sessions, only: [:create, :show, :destroy]
