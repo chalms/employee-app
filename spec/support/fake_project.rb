@@ -1,12 +1,10 @@
 class FakeProject
   def initialize
     fake_manager = FakeManager.new
-
     @admin = fake_manager.fake_admin
     @manager = fake_manager.fake_manager
     @company = @admin.fake_company
     @client = fake_manager.fake_client
-
     @project = @company.projects.create!({
       "company_id" => @company.id,
       "start_date" => Date.today,

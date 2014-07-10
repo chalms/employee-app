@@ -12,7 +12,8 @@ class User < ActiveRecord::Base
   has_many :users_chats
   has_many :chats, :through => :users_chats
   has_many :reports
-  has_and_belongs_to_many :messages
+  has_many :users_messages
+  has_many :messages, :through => :users_messages
 
   def clients
     return nil

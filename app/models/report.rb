@@ -11,8 +11,8 @@ class Report < ActiveRecord::Base
   has_many :users, :through => :user_reports
   has_many :report_tasks, :through => :users_reports
   has_many :report_parts, :through => :users_reports
-  has_many :tasks, :through => :reports_tasks
-  has_many :parts, :through => :reports_tasks
+  has_many :tasks
+  has_many :parts
 
   def manager
     @manager ||= self.user
