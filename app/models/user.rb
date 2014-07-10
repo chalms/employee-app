@@ -4,56 +4,76 @@ class User < ActiveRecord::Base
   after_initialize :_set_defaults
   validates_presence_of :password, :length => {:minimum  => 6},  on: :create!
   validate :email, :format => {:with => /\A[^@]+@[^@]+\.[^@]+\Z/}
+  validates :employee_number, :uniqueness => true
   after_create :valid_employee_id?
-  has_one :contact 
+  has_one :contact
   has_many :users_reports
-  belongs_to :company 
+  belongs_to :company
   has_many :users_chats
   has_many :chats, :through => :users_chats
   has_many :reports, :through => :users_reports
   has_and_belongs_to_many :messages
-  
-  def clients 
+
+  def clients
     return nil
-  end 
+  end
 
-  def is_admin? 
-    return (self.role == 'admin') 
-  end 
+  def is_admin?
+    return (self.role == 'admin')
+  end
 
-  def is_manager? 
+  def is_manager?
     return (self.role == 'manager')
-  end 
+  end
 
   def password=(password)
     write_attribute(:password, BCrypt::Password.create(password))
   end
 
   def company=(comp)
-    @company = Company.find(id: comp) unless comp.is_a? Company 
-    raise Exceptions::StdError, "Invalid Company!" unless @company.andand.present? 
+    @company = Company.find(id: comp)
+    raise Exceptions::StdError, "Invalid Company!" unless @company.andand.present?
     @company
-  end 
+  end
 
   def valid_employee_id?
+    puts "[valid_employee_id] ---->"
+    unless (company)
+      puts "company is nil"
+      unless (self.company)
+        puts "self.company is nil"
+        if (company_id)
+          puts "company_id is not nil"
+        else
+          puts "company_id is nil"
+          if (self.company_id)
+            puts "self.company_id is not nil"
+          else
+             puts "self.company_id is nil"
+          end
+        end
+      end
+    end
+    puts "company ---> #{company.to_s}"
     emp = company.employee_logs.find_by_employee_number(employee_number)
+
     raise Exceptions::StdError, "Not a valid employee id for that company!" unless (emp.andand.present?)
     puts "Emp role: #{emp.role}"
     self.update_attributes(role: emp.role)
     @role = self.role
-    true 
-  end 
+    true
+  end
 
   def hours(options = {})
-    @hours = 0 
+    @hours = 0
     return @hours unless (self.role == 'employee')
     get_users_report(options).each { |u_r| @hours += u_r.hours }
-    @hours 
-  end 
+    @hours
+  end
 
   def days_worked(options = {})
-    @days_worked = 0 
-    h = {} 
+    @days_worked = 0
+    h = {}
     return @days_worked unless (self.role == 'employee')
     get_users_report(options).each { |u_r| h[u_r.date] = true }
     h.each { |k, v| @days_worked += 1 }
@@ -64,33 +84,33 @@ class User < ActiveRecord::Base
     @assigned_tasks = []
     get_users_reports(options).each {|u_r| @assigned_tasks += u_r.assigned_tasks}
     @assigned_tasks
-  end 
+  end
 
   def completed_tasks(options = {})
     @completed_tasks = []
     get_users_reports(options).each {|u_r| @completed_tasks += u_r.completed_tasks}
     @completed_tasks
-  end 
+  end
 
   def assigned_parts(options = {})
     @assigned_parts = []
     get_users_reports(options).each {|u_r| @assigned_parts += u_r.assigned_parts}
     @assigned_parts
-  end 
+  end
 
   def completed_parts(options = {})
     @completed_parts = []
     get_users_reports(options).each {|u_r| @completed_parts += u_r.completed_parts}
     @completed_parts
-  end 
+  end
 
   def tasks_completion_percent(options = {})
     @tasks_completion_percent = ((assigned_tasks(options).count.to_f / completed_tasks(options).count.to_f) * 100).round(2)
-  end 
+  end
 
   def parts_completion_percent(options = {})
     @parts_completeion_percent = ((assigned_parts(options).count.to_f / completed_parts(options).count.to_f) * 100).round(2)
-  end 
+  end
 
   def reports_completion_percent(options = {})
     @reports_completion_percent = ((assigned_reports(options).count.to_f / completed_reports(options).count.to_f) * 100).round(2)
@@ -105,10 +125,10 @@ class User < ActiveRecord::Base
       users_reports.where('date = ?', Date.new)
     elsif (options["future"])
       users_reports.where('date > ?', Date.new)
-    else 
-      users_reports 
-    end 
-  end 
+    else
+      users_reports
+    end
+  end
 
   def _set_defaults
     self.api_secret ||= MicroToken.generate(128)

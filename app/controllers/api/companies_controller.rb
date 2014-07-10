@@ -7,6 +7,12 @@ class Api::CompaniesController < ApplicationController
     render json: @companies
   end
 
+  def add_employee_log
+    @company = Company.find(params[:id])
+    employee_log = @company.employee_logs.create!(params[:employee_log])
+    render json: employee_log
+  end
+
   # GET /companies/1
   # GET /companies/1.json
   def show

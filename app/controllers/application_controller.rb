@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
 
   private
-  
+
   def signed_in?
     !!current_api_session_token.user
   end
@@ -35,4 +35,4 @@ class ApplicationController < ActionController::Base
   def _error message, status
     render json: { error: message }, status: status
   end
-end 
+end

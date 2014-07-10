@@ -1,19 +1,25 @@
-%form.form-inline{"action" => "authenticate", "method"=> "post"}
+%form.form-inline{"action" => "valid_signup", "method"=> "post"}
   %p= link_to "Already a member?", '/login'
   .input-prepend.first
     %span.add-on
       %i.icon-envelope
-    %input.span2{:type => "text", :name => "[manager]email", :placeholder => "Email"}
+    %input.span2{:type => "text", :name => "email", :placeholder => "Email"}
   .input-prepend
     %span.add-on
       %i.icon-key
-    %input.span2{:type => "text", :name => "[manager]name", :placeholder => "Name"}
+    %input.span2{:type => "text", :name => "name", :placeholder => "Name"}
   .input-prepend
     %span.add-on
       %i.icon-key
-    %input.span2{:type => "text", :name => "[manager]company_name", :placeholder => "Company Id"}
+    %input.span2{:type => "text", :name => "employee_number", :placeholder => "Employee Number"}
+  .input-prepend 
+    %span.add-on
+      %i.icon-key 
+    %select
+      - @companies.each do |c|
+        %option{:value => c}=c
   .input-prepend
     %span.add-on
       %i.icon-key
-    %input.span2{:type => "password", :name => "[manager]password", :placeholder => "Password"}
+    %input.span2{:type => "password", :name => "password", :placeholder => "Password"}
   %input{:style => "visibility: hidden;", :type => "submit"}

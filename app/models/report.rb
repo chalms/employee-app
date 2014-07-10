@@ -7,120 +7,120 @@ class Report < ActiveRecord::Base
   belongs_to :user
   has_and_belongs_to_many :locations
   has_many :users_reports
-
+  has_many :users, :through => :user_reports
   has_and_belongs_to_many :tasks
   has_and_belongs_to_many :parts
 
-  def manager 
-    @manager ||= self.user 
-  end 
+  def manager
+    @manager ||= self.user
+  end
 
   def employee_reports(employee)
     users_reports.where(:report_id => self.id, :user_id => employee.id)
-  end 
+  end
 
   def report_for_user(employee)
     employee_reports(employee).find_or_create
-  end 
+  end
 
-  def assign_task(employee_id, task_id) 
+  def assign_task(employee_id, task_id)
     report_for_user(get_employee(employee_id)).add_task(task_id)
-  end 
+  end
 
   def assign_part(employee_id, part_id)
     report_for_user(get_employee(employee_id)).add_part(part_id)
-  end 
+  end
 
   def get_employee(employee_id)
     employee = User.find(id: employee_id, company: company)
     if (employee.present?)
       return employee
-    else 
+    else
       raise Exceptions::StdError, "Employee does not exist"
-    end  
-  end 
+    end
+  end
 
   def employees
     @employees = []
     users_reports.each { |u_r| @employees << u_r.user }
-    @employees 
-  end 
+    @employees
+  end
 
   def assigned_parts(options = {})
     @assigned_parts = []
     get_reports(options).each { |u_r| @assigned_parts += u_r.parts }
-    @assigned_parts 
-  end 
+    @assigned_parts
+  end
 
   def assigned_tasks(options = {})
     @assigned_tasks = []
     get_reports(options).each { |u_r| @assigned_tasks += u_r.tasks }
-    @assigned_tasks 
-  end 
+    @assigned_tasks
+  end
 
   def incomplete_parts(option = {})
     @unused_parts = []
     get_reports(options).each { |u_p| @unused_parts += u_p.parts.where(used: false)}
     @unused_parts
-  end 
+  end
 
   def complete_parts(options = {})
     @used_parts = []
     get_reports(options).each { |u_r| @used_parts += u_r.parts.where(used: true) }
-    @used_parts 
+    @used_parts
   end
 
   def incomplete_tasks(options = {})
     @incomplete_tasks = []
     get_reports(options).each { |u_r| @incomplete_tasks += u_r.tasks.where(complete: false) }
-    @incomplete_tasks 
-  end 
+    @incomplete_tasks
+  end
 
   def complete_tasks(options = {})
     @completed_tasks = []
     get_reports(options).each { |u_r| @completed_tasks += u_r.tasks.where(completed: true) }
-    @completed_tasks 
+    @completed_tasks
   end
 
-  def hours 
+  def hours
     @hours = 0
-    users_reports.each { |u_r| @hours += u_r.hours } 
-    @hours 
+    users_reports.each { |u_r| @hours += u_r.hours }
+    @hours
   end
 
-  def employee_days_worked 
+  def employee_days_worked
     @employee_days_worked = 0
-    h = {} 
+    h = {}
     users_reports.each { |u_r| h[[u_r.employee.id, u_r.date]] = true }
-    h.each { |k, v| @employee_days_worked += 1 } 
+    h.each { |k, v| @employee_days_worked += 1 }
     @employee_days_worked
-  end 
+  end
 
   def get_reports(options = {})
-    if options["employee"].present? 
+    if options["employee"].present?
       rep = employee_reports(get_employee(options["employee"]))
-    else 
+    else
       rep = users_reports
-    end 
-    rep 
-  end 
+    end
+    rep
+  end
 
-  def completed_reports 
+  def completed_reports
     get_reports(options).where(:completed => true) || []
-  end 
+  end
 
-  def complete? 
-    @complete ||= if self.complete 
+  def complete?
+    @complete ||= if self.complete
       true
     elsif (self.users_reports.where(:complete => true))
       self.update_attributes(:complete => true)
-      true 
-    else 
-      false 
+      true
+    else
+      false
     end
-  end 
+  end
 
   def company
-    @company ||= manager.company 
-  end 
-end 
+    @company ||= manager.company
+  end
+end

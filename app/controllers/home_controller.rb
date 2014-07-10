@@ -1,13 +1,24 @@
 class HomeController < ApplicationController
-	def home 
-		@user = current_user 
-	end 
-
-	def admin
-		@user = current_user 
+	def home
+		@user = current_user
 	end
 
-private 
+	def admin
+		@user = current_user
+    validate_admin!
+	end
+
+  def upload
+    @user = current_user
+    validate_admin!
+    @user.company.import_employee_logs(params[:file])
+  end
+
+private
+
+  def validate_admin!
+    raise Exceptions::StdError, "Must be a company administrator to use this functionality" unless (@user.role == 'companyAdmin')
+  end
 
 	def _provided_valid_password?
     params[:password] && UserAuthenticationService.authenticate_with_password!(@user, params[:password])
@@ -20,4 +31,4 @@ private
   def api_session_token_url(token)
     api_sessions_path(token)
   end
-end 
+end

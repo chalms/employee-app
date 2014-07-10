@@ -6,6 +6,7 @@ class ApiSessionToken
   TTL = 20.minutes
 
   def initialize(existing_token=nil, redis=_redis_connection)
+
     @token = existing_token
     @redis = redis
 
@@ -43,7 +44,13 @@ class ApiSessionToken
   def user=(user)
     puts "setting token with user who has id #{user.id}"
     _set_with_expire(_user_id_key, user.id)
+    puts "set with expire finished"
+    puts "user---> "
+    puts user.inspect
     @user = user
+    puts "@user---> "
+    puts @user.inspect
+    @user
   end
 
   def expired?
@@ -66,8 +73,10 @@ class ApiSessionToken
   private
 
   def _set_with_expire(key,val)
+    puts "setting with expire!"
     @redis[key] = val
     @redis.expire(key, TTL)
+    puts "set with expire!"
   end
 
   def _retrieve_last_seen
@@ -89,6 +98,7 @@ class ApiSessionToken
   end
 
   def _redis_connection
+    puts "establishing redis connection"
     opts = {}
     opts[:driver] = :hiredis
     Redis.new opts
