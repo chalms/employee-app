@@ -5,17 +5,23 @@ class ModelSimulation
     @tasks = FakeTasks.new(f_report).fake_tasks
     @parts = FakeParts.new(f_report).fake_parts
     @employees = FakeEmployees.new(f_report.fake_manager.company).fake_employees
-    @report = f_report.report
+    @report = f_report.fake_report
     @user_reports = []
     @employees.each do |employee|
-      @user_reports << employee.user_reports.create!({:report_id => @report.id})
+      @user_reports << employee.users_reports.create!({:report_id => @report.id})
     end
     FakeReportsTasks.new(@tasks, @user_reports)
-    @reports_tasks = @user_reports.tasks
+    @reports_tasks = []
+    @user_reports.each do |u_r|
+      @reports_tasks << u_r.tasks
+    end
     FakeReportsParts.new(@parts, @user_reports)
-    @reports_parts = @user_reports.parts
+    @reports_parts = []
+    @user_reports.each do |u_r|
+      @reports_parts << u_r.parts
+    end
 
-    f_chat = FakeChats.new(@user_reports)
+    f_chat = FakeChats.new([@report])
     @chats = f_chat.fake_chats
     @conversation = f_chat.fake_conversions
   end

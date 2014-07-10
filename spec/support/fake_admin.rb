@@ -1,7 +1,7 @@
 class FakeAdmin
   def initialize
-    @fake_company = FakeEmployeeLogs.new.fake_company
-    @admin = @fake_company.users.create!({
+    @company = FakeEmployeeLogs.new.fake_company
+    @admin = @company.users.create!({
       :name => "Andrew Chalmers",
       :email => "achalme8@uwo.com",
       :password => "password",
@@ -16,6 +16,6 @@ class FakeAdmin
   end
 
   def fake_company
-    return @fake_company
+    return @company
   end
 end

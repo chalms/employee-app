@@ -5,7 +5,7 @@ class FakeReportsParts
       users_reports.each do |u_r|
         part = @parts.pop
         unless (part.assignment)
-          users_reports.reports_parts.create!({
+          u_r.reports_parts.create!({
             :part_id => part
           })
         end

@@ -56,7 +56,7 @@ class User < ActiveRecord::Base
       end
     end
     puts "company ---> #{company.to_s}"
-    emp = company.employee_logs.find_by_employee_number(employee_number)
+    emp = company.employee_logs.find_by_employee_number(self.employee_number)
 
     raise Exceptions::StdError, "Not a valid employee id for that company!" unless (emp.andand.present?)
     puts "Emp role: #{emp.role}"

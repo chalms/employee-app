@@ -1,5 +1,5 @@
 class FakeConversation
-  initialize(chat)
+  def initialize(chat)
     @chat = chat
     @chat.users_chats.each do |u_c|
       if (u_c.user.role == 'manager')
@@ -7,6 +7,7 @@ class FakeConversation
       end
     end
   end
+
   def fake_conversation
     @chat
   end

@@ -1,16 +1,16 @@
 class FakeManager
   def initialize
     f_client = FakeClient.new
-    @admin = f_client.fake_user
+    @admin = f_client.fake_admin
     @client = f_client.fake_client
-    @admin.fake_company.employee_logs.create!({
+    @admin.company.employee_logs.create!({
       :name => "Andrew Chalmers",
       :role => 'manager',
-      :employe_number => '250569554'
+      :employee_number => '250569554'
     })
-    @manager = @admin.fake_company.users.create!({
+    @manager = @admin.company.users.create!({
       :name => "Andrew Chalmers",
-      :employee_number => "250569554",
+      :employee_number => '250569554',
       :email => "andrew.chalmers@gmail.com",
       :password => "password"
     })

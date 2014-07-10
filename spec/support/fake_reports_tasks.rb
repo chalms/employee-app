@@ -5,8 +5,9 @@ class FakeReportsTasks
       users_reports.each do |u_r|
         task = @tasks.pop
         unless (task.assignment)
-          users_reports.reports_tasks.create!({
-            :task_id => task
+          puts u_r.inspect
+          u_r.reports_tasks.create!({
+            :task_id => task.id
           })
         end
       end

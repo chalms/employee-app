@@ -2,7 +2,7 @@ class FakeClient
   def initialize
     @admin = FakeAdmin.new.fake_admin
     @client = @admin.company.clients.create!({
-      :user_id => user.id,
+      :user_id => @admin.id,
       :name => "New Client"
     })
   end

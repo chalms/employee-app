@@ -1,5 +1,9 @@
-require 'rails_helper'
+require 'spec_helper'
 
-RSpec.describe ChatsController, :type => :controller do
-
+describe ChatsController, :type => :controller do
+  before do
+    ModelSimulation.new
+  end
+  it "should not have error" do
+  end
 end

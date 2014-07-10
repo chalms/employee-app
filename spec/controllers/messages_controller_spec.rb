@@ -1,5 +1,5 @@
-require 'rails_helper'
+require 'spec_helper'
 
-RSpec.describe MessagesController, :type => :controller do
+describe MessagesController, :type => :controller do
 
 end
