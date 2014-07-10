@@ -1,14 +1,14 @@
 class Chat < ActiveRecord::Base
   include JsonSerializingModel
   belongs_to :company
-  has_and_belongs_to_many :users
+  has_many :users_chats
+  has_many :users, :through => :users_chats
   has_many :messages
-
-  validate :multi_user_unique
+  attr_accessible :company_id, :id
+  after_create :multi_user_unique
 
   def multi_user_unique
-    raise Exceptions::StdError, "Something went wrong, hold on [for developers -> chat: no company id]" unless Company.find_by_id(company.id).present?
-    raise Exceptions::StdError, "Chat needs at least two users" if (users.count < 2)
+    raise Exceptions::StdError, "Something went wrong, hold on [for developers -> chat: no company id]" unless Company.find_by_id(company_id).present?
     return true
   end
 
@@ -20,9 +20,9 @@ class Chat < ActiveRecord::Base
     message_hash = {}
     message_hash[:text] = message_text
 
-    message = Message.new(sender: user, group: users)
+    message = Message.create!(user_id: user_id, chat_id: id, group: users)
     message.data = message_text
-    message.photo = Photo.create!(:data => message_photo, :message => message) if (message_photo.andand.present?)
+    # message.photo = Photo.create!(:data => message_photo, :message => message) if (message_photo.andand.present?)
 
     raise Exceptions::StdError, "Message could not be saved!" unless message.save
   end

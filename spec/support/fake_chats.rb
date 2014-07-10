@@ -43,7 +43,7 @@ class FakeChats
         end
       end
 
-      the_chat = Chat.create! unless (the_chat)
+      the_chat = Chat.create!(:company_id => u_r.company.id) unless (the_chat)
 
       users.each do |u|
         the_chat.users_chats.create!(:user_id => u.id)
@@ -61,7 +61,7 @@ class FakeChats
     @chats
   end
 
-  def fake_conversations
+  def fake_conversation
     @conversations
   end
 

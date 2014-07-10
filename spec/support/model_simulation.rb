@@ -23,7 +23,7 @@ class ModelSimulation
 
     f_chat = FakeChats.new([@report])
     @chats = f_chat.fake_chats
-    @conversation = f_chat.fake_conversions
+    @conversation = f_chat.fake_conversation
   end
 
   def print
