@@ -18,7 +18,9 @@ class ReportsController < ApplicationController
   # POST /reports
   # POST /reports.json
   def create
-    @report = Report.new(params[:report])
+    @user = current_user
+    validate_user_role!
+    @report = @user.reports.new(params[:report])
 
     if @report.save
       render json: @report, status: :created, location: @report
@@ -47,4 +49,11 @@ class ReportsController < ApplicationController
 
     head :no_content
   end
+
+  private
+
+  def validate_user_role!
+    raise Exceptions::StdError, unless (@user.role == 'manager' || @user.role == 'companyAdmin')
+  end
+
 end

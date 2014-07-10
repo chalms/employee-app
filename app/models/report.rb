@@ -1,15 +1,16 @@
 class Report < ActiveRecord::Base
   include JsonSerializingModel
-  attr_accessible :summary, :date, :complete, :assigned_parts,
-    :assigned_tasks, :unused_parts, :complete_parts, :incomplete_tasks,
-    :complete_tasks, :company, :complete?, :hours, :days_worked, :manager
+  attr_accessible :summary, :date, :complete, :assigned_parts, :assigned_tasks, :unused_parts, :completed_parts, :incomplete_tasks, :completed_tasks, :company, :complete?, :hours, :days_worked, :manager
 
   belongs_to :user
-  has_and_belongs_to_many :locations
+  has_many :locations_reports
+  has_many :locations, :through => :locations_reports
   has_many :users_reports
   has_many :users, :through => :user_reports
-  has_and_belongs_to_many :tasks
-  has_and_belongs_to_many :parts
+  has_many :report_tasks, :through => :users_reports
+  has_many :report_parts, :through => :users_reports
+  has_many :tasks, :through => :reports_tasks
+  has_many :parts, :through => :reports_tasks
 
   def manager
     @manager ||= self.user
@@ -43,7 +44,6 @@ class Report < ActiveRecord::Base
   def employees
     @employees = []
     users_reports.each { |u_r| @employees << u_r.user }
-    @employees
   end
 
   def assigned_parts(options = {})

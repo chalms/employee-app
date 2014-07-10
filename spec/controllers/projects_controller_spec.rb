@@ -51,7 +51,6 @@ describe ProjectsController, type: :controller do
   end
 
   describe "PUT update" do
-
     context 'with valid params' do
       before(:each) do
         admin = CreateAdmin.new
@@ -118,5 +117,23 @@ describe ProjectsController, type: :controller do
       end
     end
   end
+
+  describe "GET delete" do
+    before(:each) do
+      admin = CreateAdmin.new
+      @user = admin.create_user
+      controller.stub(:current_user).and_return(@user)
+      @client = CreateClient.new(@user).client
+      @project = @user.company.projects.create!({
+        "company_id" => @user.company.id,
+        "start_date" => Date.today,
+        "end_date" => (Date.today + 100),
+        "manager_number" => @user.id,
+        "budget" => 300000,
+        "name" => "Project X",
+        "complete" => false
+      })
+    end
+
 end
 

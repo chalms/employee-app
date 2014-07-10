@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
   belongs_to :company
   has_many :users_chats
   has_many :chats, :through => :users_chats
-  has_many :reports, :through => :users_reports
+  has_many :reports
   has_and_belongs_to_many :messages
 
   def clients

@@ -1,13 +1,12 @@
 class ReportSerializer < ApplicationSerializer
-  attrributes :summary, :date, :complete, :assigned_parts,
-    :assigned_tasks, :unused_parts, :complete_parts, :incomplete_tasks,
-    :complete_tasks, :company, :complete?, :hours, :days_worked
+  attributes :summary, :date, :complete, :assigned_parts, :assigned_tasks, :unused_parts, :completed_parts, :incomplete_tasks, :completed_tasks, :company, :complete?, :hours, :employee_days_worked, :manager
 
-  belongs_to :user, :as => :manager 
-  has_many :users, :as => :employees
-
+  belongs_to :user
   has_many :users_reports
-
-  has_and_belongs_to_many :tasks
-  has_and_belongs_to_many :parts
+  has_many :users, :through => :user_reports
+  has_many :locations_reports
+  has_many :report_tasks, :through => :users_reports
+  has_many :report_parts, :through => :users_reports
+  has_many :tasks, :through => :reports_tasks
+  has_many :parts, :through => :reports_tasks
 end
