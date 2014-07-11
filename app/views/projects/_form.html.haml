@@ -15,14 +15,6 @@
   = f.text_field :budget, :class => 'text_field'
   %span.description Ex: a simple text
 .group
-  = f.label :complete, t("activerecord.attributes.project.complete", :default => "Complete"), :class => :label
-  = f.check_box :complete, :class => 'check_box'
-  %span.description Ex: a simple text
-.group
-  = f.label :company_id, t("activerecord.attributes.project.company_id", :default => "Company"), :class => :label
-  = f.number_field :company_id, :class => 'number_field'
-  %span.description Ex: a simple text
-.group
   = f.label :client_id, t("activerecord.attributes.project.client_id", :default => "Client"), :class => :label
   = f.number_field :client_id, :class => 'number_field'
   %span.description Ex: a simple text

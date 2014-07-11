@@ -1,10 +1,13 @@
 class ManagersController < ApplicationController
 
+  include ActionController::MimeResponds
+
   def index
     user = current_user
     validate_index_role!
     @users = Manager.all.where(company_id: user.id, role: 'manager')
     @users.each { |u| u = ManagerSerializer.new(u) }
+
     respond_to do |format|
       format.html{ render haml: @users }
       format.json{ render json: @users }
@@ -40,7 +43,6 @@ class ManagersController < ApplicationController
     validate_delete!(user_to_delete)
     @user.self_destruct
   end
-
 
   private
 

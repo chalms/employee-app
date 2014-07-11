@@ -1,4 +1,5 @@
 class LoginController < ApplicationController
+
   include ApplicationController::MimeResponds
 
   def new
@@ -26,7 +27,8 @@ class LoginController < ApplicationController
         format.json { render json: @route }
       end
     rescue Exceptions::StdError => e
-      :new
+      @login = nil
+      render :new
     end
   end
 

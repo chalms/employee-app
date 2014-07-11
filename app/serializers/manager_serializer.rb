@@ -12,6 +12,6 @@ class ManagerSerializer < ActiveModel::Serializer
   has_many :users, :through => :user_reports
   has_many :report_tasks, :through => :users_reports
   has_many :report_parts, :through => :users_reports
-  has_many :projects_users,
+  has_many :projects_users
   has_many :projects, :through => :projects_users
 end
