@@ -1,0 +1,46 @@
+.group
+  = f.label :name, t("activerecord.attributes.admin.name", :default => "Name"), :class => :label
+  = f.text_field :name, :class => 'text_field'
+  %span.description Ex: a simple text
+.group
+  = f.label :email, t("activerecord.attributes.admin.email", :default => "Email"), :class => :label
+  = f.text_field :email, :class => 'text_field'
+  %span.description Ex: a simple text
+.group
+  = f.label :employee_number, t("activerecord.attributes.admin.employee_number", :default => "Employee number"), :class => :label
+  = f.text_field :employee_number, :class => 'text_field'
+  %span.description Ex: a simple text
+.group
+  = f.label :password, t("activerecord.attributes.admin.password", :default => "Password"), :class => :label
+  = f.text_field :password, :class => 'text_field'
+  %span.description Ex: a simple text
+.group
+  = f.label :api_secret, t("activerecord.attributes.admin.api_secret", :default => "Api secret"), :class => :label
+  = f.text_field :api_secret, :class => 'text_field'
+  %span.description Ex: a simple text
+.group
+  = f.label :type, t("activerecord.attributes.admin.type", :default => "Type"), :class => :label
+  = f.text_field :type, :class => 'text_field'
+  %span.description Ex: a simple text
+.group
+  = f.label :auth_token, t("activerecord.attributes.admin.auth_token", :default => "Auth token"), :class => :label
+  = f.text_field :auth_token, :class => 'text_field'
+  %span.description Ex: a simple text
+.group
+  = f.label :role, t("activerecord.attributes.admin.role", :default => "Role"), :class => :label
+  = f.text_field :role, :class => 'text_field'
+  %span.description Ex: a simple text
+.group
+  = f.label :company_id, t("activerecord.attributes.admin.company_id", :default => "Company"), :class => :label
+  = f.number_field :company_id, :class => 'number_field'
+  %span.description Ex: a simple text
+.group
+  = f.label :contact_id, t("activerecord.attributes.admin.contact_id", :default => "Contact"), :class => :label
+  = f.number_field :contact_id, :class => 'number_field'
+  %span.description Ex: a simple text
+.group.navform.wat-cf
+  %button.button{:type => "submit"}
+    = image_tag("web-app-theme/icons/tick.png", :alt => "#{t("web-app-theme.save", :default => "Save")}")
+    = t("web-app-theme.save", :default => "Save")
+  %span.text_button_padding= t("web-app-theme.or", :default => "or")
+  = link_to t("web-app-theme.cancel", :default => "Cancel"), admin_path, :class => "text_button_padding link_button"

@@ -1,11 +1,11 @@
 class User < ActiveRecord::Base
   include JsonSerializingModel
-  attr_accessible :email, :name, :password, :employee_number, :hours, :days_worked, :id, :role
+  attr_accessible :email, :name, :employee_number, :hours, :days_worked, :role, :type
   after_initialize :_set_defaults
   validates_presence_of :password, :length => {:minimum  => 6},  on: :create!
   validate :email, :format => {:with => /\A[^@]+@[^@]+\.[^@]+\Z/}
   validates :employee_number, :uniqueness => true
-  after_create :valid_employee_id?
+  after_create :valid_employee_id?, :set_type
   has_one :contact
   has_many :users_reports
   belongs_to :company
@@ -15,16 +15,40 @@ class User < ActiveRecord::Base
   has_many :users_messages
   has_many :messages, :through => :users_messages
 
+  def update(params)
+    params = (params[type.to_sym] || params)
+  end
+
+  def set_type
+    if (role == 'companyAdmin')
+      @type = :admin
+    elsif (role == 'manager')
+      @type = :manager
+    else
+      @type = :employee
+    end
+    self.update_attributes!({:type => @type}) if (self.type != @type)
+  end
+
+  def type
+    self.update_attributes!({:type => :employee}) unless (self.type)
+    @type ||= self.type
+  end
+
   def clients
     return nil
   end
 
+  def role?
+    return self.role
+  end
+
   def is_admin?
-    return (self.role == 'admin')
+    return (self.role == 'companyAdmin')
   end
 
   def is_manager?
-    return (self.role == 'manager')
+    self.update_attributes!({:type => 'manager'}) if (self.role == 'manager' && self.type == nil)
   end
 
   def password=(password)
@@ -38,28 +62,8 @@ class User < ActiveRecord::Base
   end
 
   def valid_employee_id?
-    puts "[valid_employee_id] ---->"
-    unless (company)
-      puts "company is nil"
-      unless (self.company)
-        puts "self.company is nil"
-        if (company_id)
-          puts "company_id is not nil"
-        else
-          puts "company_id is nil"
-          if (self.company_id)
-            puts "self.company_id is not nil"
-          else
-             puts "self.company_id is nil"
-          end
-        end
-      end
-    end
-    puts "company ---> #{company.to_s}"
     emp = company.employee_logs.find_by_employee_number(self.employee_number)
-
     raise Exceptions::StdError, "Not a valid employee id for that company!" unless (emp.andand.present?)
-    puts "Emp role: #{emp.role}"
     self.update_attributes(role: emp.role)
     @role = self.role
     true
@@ -117,15 +121,19 @@ class User < ActiveRecord::Base
     @reports_completion_percent = ((assigned_reports(options).count.to_f / completed_reports(options).count.to_f) * 100).round(2)
   end
 
+  def todays_activity
+    @todays_activity = get_user_reports({"today" => true})
+  end
+
   private
 
   def get_users_reports(options = {})
     if (options["before"])
-      users_reports.where('date < ?', Date.new)
+      users_reports.where('date < ?', Date.today)
     elsif (options["today"])
-      users_reports.where('date = ?', Date.new)
+      users_reports.where('date = ?', Date.today)
     elsif (options["future"])
-      users_reports.where('date > ?', Date.new)
+      users_reports.where('date > ?', Date.today)
     else
       users_reports
     end

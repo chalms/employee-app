@@ -52,10 +52,7 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
     params = clean!
     validate_permissions!
-    puts "updating..."
     @project.update_attributes!(params)
-    puts "new project... #{@project.inspect}"
-    puts "responding..."
     respond_to do |format|
       format.json { render json: @project };
       format.html { render haml: @project };

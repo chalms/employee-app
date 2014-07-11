@@ -13,6 +13,8 @@ Metrics::Application.routes.draw do
   resource :clients
   resource :projects
   resource :locations
+  resource :login
+  resource :signup
 
 
   namespace :api, defaults: {:format => 'json'} do
@@ -64,13 +66,13 @@ Metrics::Application.routes.draw do
 
     root :to => 'users#new', :as => :new
   end
-    get '/signout' => 'login#signout'
-    get '/login' => 'login#login', :as => :login
-    root :to => 'login#sign_up', :as => :sign_up
-    post '/valid_login' => 'login#valid_login', :as => :valid_login
-    post '/valid_signup' => 'login#valid_signup', :as => :valid_signup
-    get '/home' => 'home#home', :as => :home
-    get '/admin' => 'home#admin', :as => :admin
+  #   get '/signout' => 'login#signout'
+  #   get '/login' => 'login#login', :as => :login
+    # root :to => 'login#sign_up', :as => :sign_up
+    # post '/valid_login' => 'login#valid_login', :as => :valid_login
+    # post '/valid_signup' => 'login#valid_signup', :as => :valid_signup
+    # get '/home' => 'home#home', :as => :home
+    # get '/admin' => 'home#admin', :as => :admin
 
 end
 

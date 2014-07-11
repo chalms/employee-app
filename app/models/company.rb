@@ -2,6 +2,7 @@ class Company < ActiveRecord::Base
   include JsonSerializingModel
 
   attr_accessible :name, :admin, :reports, :complete, :assigned_parts, :assigned_tasks, :completed_parts, :completed_tasks, :complete?, :hours, :employee_days_worked
+
   has_one :contact
   has_many :projects
   has_many :users

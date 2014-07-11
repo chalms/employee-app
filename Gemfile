@@ -17,6 +17,8 @@ gem 'em-synchrony'
 gem 'cancan'
 gem 'roo'
 
+
+
 # Assets
 gem 'sass-rails', '~> 4.0.0'
 gem 'uglifier', '>= 1.3.0'
@@ -27,6 +29,8 @@ gem 'asset_sync', github: 'jamesotron/asset_sync'
 gem 'ejs'
 gem 'haml'
 gem 'haml-rails'
+gem 'html2haml'
+gem 'web-app-theme'
 gem 'coffee-rails'
 gem 'underscore-rails'
 gem 'andand'

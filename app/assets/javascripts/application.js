@@ -1,5 +1,5 @@
-//=require html5.js 
-//= require jquery.mobile.custom.js 
+//=require html5.js
+//= require jquery.mobile.custom.js
 //= require jquery
 //= require jquery_ujs
 //= require jquery.json-2.4.js
@@ -27,7 +27,7 @@
 $.beforeSend = function(xhr) {
   xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
   if (sessionStorage.auth && sessionStorage.auth !== "undefined") {
-  	xhr.setRequestHeader('AUTHENTICATION', sessionStorage.auth); 
+  	xhr.setRequestHeader('AUTHENTICATION', sessionStorage.auth);
   }
 }
 

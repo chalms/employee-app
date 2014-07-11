@@ -15,7 +15,7 @@
  *= require clearfix.css
  *= require_tree .
  *= require_self
- 
+
  */
 /*
  * This is a manifest file that'll be compiled into application.css, which will include all the files
@@ -88,7 +88,7 @@
     margin-top: 3%;
 }
 
-.ui-widget .ui-widget-header h2 {  
+.ui-widget .ui-widget-header h2 {
   padding: 0;
   /* border: 0; */
   font-size: 20px;
