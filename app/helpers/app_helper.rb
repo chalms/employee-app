@@ -1,8 +1,8 @@
 module AppHelper
   def error!(e, origin)
-    origin ||= :sign_up
+    origin ||= :signup
     flash[:error] = e
-    render :action => origin
+    render :controller => origin, :action => :new
   end
 
   def route!
@@ -19,17 +19,17 @@ module AppHelper
     @load = true
     @load = false if (@user.company.employee_logs.count > 1)
     @user = UserSerializer.new(@user)
-    @route = 'admins/' + @user.id
+    @route = 'admins/show'
   end
 
   def manager!
     @user = UserSerializer.new(@user)
-    @route = 'managers/' + @user.id
+    @route = 'managers/' + @user.id.to_s
   end
 
   def employee!
     @user = UserSerializer.new(@user).to_json
-    @route = 'users/' + @user.id
+    @route = 'users/' + @user.id.to_s
   end
 
 end

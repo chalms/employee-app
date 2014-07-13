@@ -1,0 +1,17 @@
+.inner
+  %p.edit-user{"user-id" => "#{user.id}"}
+    %b
+      Name:
+    = user.name
+  %p
+    %b
+      Email:
+    = user.email
+  %p
+    %b
+      Employee Number:
+    = user.employee_number
+  %p
+    %b
+      Company:
+    = user.company.name

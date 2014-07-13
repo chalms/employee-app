@@ -15,6 +15,7 @@ Metrics::Application.routes.draw do
   resource :locations
   resource :logins, only: [:new, :create]
   resource :signups, only: [:new, :create]
+  resource :admins, only: [:show, :update]
 
 
   namespace :api, defaults: {:format => 'json'} do
@@ -68,7 +69,9 @@ Metrics::Application.routes.draw do
     root :to => 'users#new', :as => :new
   end
 
-  root :to => 'signup#new', :as => :new
+  get '/login' => 'logins#new'
+  root :to => 'signups#new'
+
 
   #   get '/signout' => 'login#signout'
   #   get '/login' => 'login#login', :as => :login

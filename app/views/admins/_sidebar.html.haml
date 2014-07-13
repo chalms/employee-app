@@ -1,0 +1,14 @@
+.block.notice
+  %h3="Welcome #{@user.name}"
+  .content
+    %p Use TimeCard.com to manage your employees and monitor productivity.
+.block
+  %h3
+  %ul.navigation
+    %li
+      %a{:href => "/employees/new"} Add Employees
+    %li
+      %a{:href => "/projects/new"} Add a Project
+    %li
+      %a{:href => "/reports/new"} Add a Report
+

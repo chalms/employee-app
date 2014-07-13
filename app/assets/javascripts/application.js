@@ -3,6 +3,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery.json-2.4.js
+//= require jquery.jeditable
 //= require hamlcoffee
 //= require json2
 //= require underscore
@@ -23,6 +24,21 @@
 //= require_tree ./collections
 //= require_tree ./routers
 //= require_tree ./views
+
+$.editUser = function() {
+   var userData = $.data($('.edit-user'), "user-id");
+   console.log(userData);
+   var link = 'http://localhost:3000/users/' + userData;
+   $('.edit-user').name.editable();
+}
+
+$(document).ready(function() {
+  try {
+    $.editUser();
+  } catch (err) {
+    console.log(err);
+  }
+});
 
 $.beforeSend = function(xhr) {
   xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))

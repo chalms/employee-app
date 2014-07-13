@@ -24,9 +24,9 @@ class LoginsController < ApplicationController
       @user = @login.save!
       set_token!
       @route = route!
-      puts "route"
+      puts @route
       respond_to do |format|
-        format.html { render haml: @route }
+        format.html { render @route }
         format.json { render json: @route }
       end
     rescue Exceptions::StdError => e

@@ -1,6 +1,7 @@
 class Api::UsersController < ApiController
 
   skip_before_filter :api_session_token_authenticate!, only: [:create, :new]
+
   def index
     return _not_authorized unless current_user.is_admin?
   end
