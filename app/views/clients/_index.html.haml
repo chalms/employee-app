@@ -1,0 +1,5 @@
+%ul.grid
+  %h4 Clients:
+  - clients.each do |c|
+    %li.gridrow
+      = link_to c.name, clients_path(c)

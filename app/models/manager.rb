@@ -7,7 +7,7 @@ class Manager < User
   has_many :user_messages
   has_many :messages, :through => :user_messages
   has_many :reports
-  has_many :users_reports
+  has_many :users_reports, :through => :reports
   has_many :users, :through => :user_reports
   has_many :report_tasks, :through => :users_reports
   has_many :report_parts, :through => :users_reports
@@ -17,6 +17,20 @@ class Manager < User
   def update(params)
   	params = clean_params(params)
   	update!
+  end
+
+  def hours(options = {})
+    @hours = 0
+    get_users_report(options).each { |u_r| @hours += u_r.hours }
+    @hours
+  end
+
+  def days_worked(options = {})
+    @days_worked = 0
+    h = {}
+    get_users_report(options).each { |u_r| h[u_r.date] = true }
+    h.each { |k, v| @days_worked += 1 }
+    @days_worked
   end
 
   def self_destruct

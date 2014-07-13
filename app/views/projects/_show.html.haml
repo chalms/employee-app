@@ -1,0 +1,37 @@
+.block
+  %h1 project.name
+  .secondary-navigation
+    %ul.wat-cf
+      %li.first.active{:onlick => "displayProject('#project-clients')"}="Project Summary"
+      %li{:onclick => "displayProject('#project-clients')"}="Clients"
+      %li{:onlick => "displayProject('#project-employees')" }="Employees"
+      %li{:onclick => "displayProject('#project-reports')"}="Reports"
+  .content
+    %h2.title
+      = "#{project.name}"
+    #project-summary
+      = render partial: 'projects/summary' :locals => {:project => project}
+    #project-reports
+      = render partial: 'reports/table', :locals => {:reports => project.reports.order(:date, :name), :options => {:project_id => project.id, :name => project.name}}
+    #project-clients
+      = render partial: 'clients/table', :locals => {:clients => project.clients.order(:name), :options => {:project_id => project.id, :name => project.name}}
+    #project-employees
+      = render partial: 'employees/table', :locals => {:employees => project.employees.order(:name), :name => project.name, :options => {:project_id => project.id, :name => project.name}}
+      %br
+      = render partial: 'managers/table', :locals => {:managers => project.managers.order(:name), :options => {:project_id => project.id, :name => project.name}}
+- content_for :sidebar, render(:partial => 'sidebar')
+
+:javascript
+  $(document).ready(function(){
+    function displayProject(str) {
+      var options = { '#project-summary' => $('#project-summary'), '#project-reports' => $('#project-reports'), '#project-clients' => $('#project-clients'), '#project-employees' => $('#project-employees) };
+
+      for (var key in options) {
+        if (key === str) {
+          options(str).show();
+        } else {
+          options(key).hide();
+        }
+      }
+    }
+  });

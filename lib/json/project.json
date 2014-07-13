@@ -1,0 +1,60 @@
+{
+    "project": {
+        "assigned_parts": [],
+        "assigned_tasks": [],
+        "budget": 100000.0,
+        "clients": [],
+        "company_id": 1,
+        "complete": false,
+        "completed_parts": [],
+        "completed_tasks": [],
+        "contacts": [],
+        "employee_days_worked": 0,
+        "employees": [],
+        "end_date": "2014-10-20",
+        "hours": 0,
+        "manager_number": 2,
+        "managers": [],
+        "name": "Project X",
+        "parts": [
+            {
+                "assignment": false,
+                "barcode": "XYZAWY9",
+                "manager_id": null,
+                "name": null,
+                "owners": {
+                    "company": null,
+                    "project": 1
+                },
+                "project_ids": [],
+                "report_ids": [],
+                "reports_part_ids": [],
+                "users_report_ids": []
+            }
+        ],
+        "reports": [],
+        "start_date": "2014-07-12",
+        "tasks": [
+            {
+                "assignment": true,
+                "description": "Nail bleachers",
+                "manager_id": null,
+                "name": null,
+                "owners": {
+                    "company": null,
+                    "project": 1
+                },
+                "project_ids": [],
+                "report_ids": [
+                    1
+                ],
+                "reports_task_ids": [
+                    1
+                ],
+                "users_report_ids": [
+                    1
+                ]
+            }
+        ]
+    }
+}

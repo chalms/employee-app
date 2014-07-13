@@ -1,0 +1,20 @@
+%a{onclick: "display(#{div})"}
+#employee-hours{:hidden => ""}
+  %table
+    %thead
+      %h3= "#{name}: #{hours} hours"
+      - if (options[:name])
+        %br= " on #{options[:name]}"
+    %tbody
+      %tr.headers
+        %th Report
+        %th Checkin
+        %th Checkout
+        %th Hours
+      - user_reports.each do |report|
+        %td=link_to report.report.name, reports(report)
+        %td=report.checkin
+        %td=report.checkout
+        %td=report.hours
+    %tfooter
+      %small=link_to name, employees(id)

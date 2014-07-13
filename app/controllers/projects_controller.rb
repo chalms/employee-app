@@ -24,6 +24,7 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       format.json { render json: @project};
       format.html { render haml: @project };
+      format.js
     end
   rescue Exceptions::StdError => e
     head 500, :content_type => 'text/html'

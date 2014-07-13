@@ -14,6 +14,7 @@
         = render(:partial => 'admins/admin_data', locals: {user: @user})
       #project-data
         = render(:partial => 'projects/projects', locals: {user: @user})
+    #hidden{:hidden => ""}
 - content_for :sidebar, render(partial: 'admins/sidebar')
 
 :javascript

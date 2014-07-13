@@ -1,0 +1,23 @@
+%a{onclick: "display(#{div})"}
+#employee-days{:hidden => ""}
+  %table
+  %thead
+    %h3= "#{name}: #{days} days"
+    - if (options[:name])
+      %br= " on #{options[:name]}"
+  %tbody
+    %tr.headers
+      %th Report
+      %th Date
+      %th Assigned Tasks
+      %th Completed Tasks
+    - user_reports.each do |report|
+      %td=link_to report.report.name, reports(report)
+      %td=report.date
+      %td=report.assigned_tasks.count
+      %td=report.completed_tasks.count
+  %tfooter
+    %small=link_to name, employees(id)
+
+
+
