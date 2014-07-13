@@ -1,36 +1,38 @@
 .block
   .secondary-navigation
-    %ul.wat-cf
-      %li.first.active{:onlick => "displayProject('#project-clients')"}="Project Summary"
-      %li{:onclick => "displayProject('#project-clients')"}="Clients"
-      %li{:onlick => "displayProject('#project-employees')" }="Employees"
-      %li{:onclick => "displayProject('#project-reports')"}="Reports"
+    %ul.wat-cf.project-items
+      %li.first.active{:name => "project-summary"}
+        %a Project Summary
+      %li{:name => "project-clients"}
+        %a Clients
+      %li{:name => "project-employees"}
+        %a Employees
+      %li{:name => "project-reports"}
+        %a Reports
   .content
     .inner
       %h2.title
         = "#{project.name}"
-    #project-summary
-      = render partial: 'projects/summary', :locals => {:project => project}
-    #project-reports
-      = render partial: 'reports/table', :locals => {:reports => project.reports.order(:date), :options => {:project_id => project.id, :name => project.name}}
-    #project-clients
-      = render partial: 'clients/table', :locals => {:clients => project.clients.order(:name), :options => {:project_id => project.id, :name => project.name}}
-    #project-employees
-      = render partial: 'employees/table', :locals => {:employees => project.employees.order(:name), :name => project.name, :options => {:project_id => project.id, :name => project.name}}
-      -# %br
-      -# = render partial: 'managers/table', :locals => {:managers => project.managers.order(:name), :options => {:project_id => project.id, :name => project.name}}
+      .project-templates
+        #project-summary
+          = render partial: 'projects/summary', :locals => {:project => project}
+        #project-reports{hidden: ""}
+          = render partial: 'reports/table', :locals => {:reports => project.reports.order(:date), :options => {:project_id => project.id, :name => project.name}}
+        #project-clients{hidden: ""}
+          = render partial: 'clients/table', :locals => {:clients => project.clients.order(:name), :options => {:project_id => project.id, :name => project.name}}
+        #project-employees{hidden: ""}
+          = render partial: 'employees/table', :locals => {:employees => project.employees.order(:name), :name => project.name, :options => {:project_id => project.id, :name => project.name}}
+          %br
+          = render partial: 'managers/table', :locals => {:managers => project.managers.order(:name), :options => {:project_id => project.id, :name => project.name}}
 - content_for :sidebar, render(:partial => 'sidebar')
-
 :javascript
-  $(document).ready(function(){
-    function displayProject(str) {
-      var options = { '#project-summary' => $('#project-summary'), '#project-reports' => $('#project-reports'), '#project-clients' => $('#project-clients'), '#project-employees' => $('#project-employees) };
-      for (var key in options) {
-        if (key === str) {
-          options(str).show();
-        } else {
-          options(key).hide();
-        }
-      }
-    }
+  $('.project-items').on('click','li', function(){
+    console.log("here")
+   $(this).addClass('active').siblings().removeClass('active');
+   var name = $(this).attr('name');
+   console.log(name);
+   var idStr = "#" + name;
+   var id = $(idStr);
+   console.log(id);
+   id.show().siblings().hide();
   });

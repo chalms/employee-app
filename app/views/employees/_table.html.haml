@@ -11,27 +11,17 @@
     - employees.each do |employee|
       %tr.row
         %td= link_to employee.name, users(employee)
+        .reports-table.first
+          %td
+            %a=link_to 'reports/index', :data => { :reports => employee.user_reports.where(options).order(:date), :name => employee.name, :id => employee.id, :funct => 'count', :options => options, :table_name => 'assigned', :div => '.reports-table.first' }, :remote => true
+        .reports-table.second
+          %td
+            %a=link_to 'reports/index', :data => { :reports =>employee.user_reports.where(options.merge!({completed: true})).order(:date), :funct => 'count', :name => employee.name, :table_name => 'completed', :id => employee.id, :options => options, :div => "div[class='reports-table', name='completed']" }, :remote => true
         %td
-          = render partial: 'reports/table', :locals => { :reports => employee.user_reports.where(options).order(:date), :name => employee.name, :id => employee.id, :funct => 'count', :options => options, :table_name => 'assigned', :div => "div[class='reports-table', name='assigned']" }
+          = render partial: 'tasks/table', :locals => { :tasks => employee.assigned_tasks(options), :funct => 'completionPercent', :completion_percent => employee.tasks_completion_percent, :name => employee.name, :id => employee.id, :options => options, :div => '#tasks-table'}, :remote => true
         %td
-          = render partial: 'reports/table', :locals => { :reports =>employee.user_reports.where(options.merge!({completed: true})).order(:date), :funct => 'count', :name => employee.name, :table_name => 'completed', :id => employee.id, :options => options, :div => "div[class='reports-table', name='completed']" }
+          %a= link_to employee.hours(options), 'employees/hours_timesheet', :data => { :users_reports => employee.user_reports.where(options).order(:date), :name => employee.name, :id => employee.id, :options => options }, :remote => true
+          #employee-hours
         %td
-          = render partial: 'tasks/table', :locals => { :tasks => employee.assigned_tasks(options), :funct => 'completionPercent', :completion_percent => employee.tasks_completion_percent, :name => employee.name, :id => employee.id, :options => options, :div => '#tasks-table'}
-        %td
-          = render partial: 'employee/hours_timesheet', :locals => { :users_reports => employee.user_reports.where(options).order(:date), :name => employee.name, :id => employee.id, :options => options, :hours => employee.hours(options),  :div => '#employee-hours'}
-        %td
-          = render partial: 'employee/days_timesheet', :locals => { :users_reports => employee.user_reports.where(options).order(:date), :name => employee.name, :id => employee.id, :options => options, :days => employee.days_worked(options), :div => '#employee-days' }
-:javascript
-  $(document).ready(function(){
-    var displayed = {};
-    function display(str) {
-      for (var key in displayed) {
-        if (displayed[key]) {
-          $(key).hide();
-          displayed[key] = false;
-        }
-      }
-      displayed[str] = true;
-      $(str).show();
-    }
-  }
+          %a= link_to employee.days_worked(options), 'employee/days_timesheet', :data => { :users_reports => employee.user_reports.where(options).order(:date), :name => employee.name, :id => employee.id, :options => options }
+          #employee-days

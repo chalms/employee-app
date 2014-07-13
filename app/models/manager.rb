@@ -11,8 +11,7 @@ class Manager < User
   has_many :users, :through => :user_reports
   has_many :report_tasks, :through => :users_reports
   has_many :report_parts, :through => :users_reports
-  has_many :projects_users
-  has_many :projects, :through => :projects_users
+  has_many :projects, :through => :reports
 
   def update(params)
   	params = clean_params(params)

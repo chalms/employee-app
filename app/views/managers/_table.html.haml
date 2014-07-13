@@ -1,5 +1,5 @@
 %table
-  %thead= "#{name} Managers"
+  %thead= "#{@name} Managers"
   %tbody
     %tr.headers
       %th Name
@@ -7,14 +7,14 @@
       %th Completed Reports
       %th Task Completion %
       %th Hours
-      %th Days Spent on #{name}'s Reports'
+      %th Days Spent on #{@name}'s Reports'
     - managers.each do |manager|
       %tr.row
         %td= link_to manager.name, managers(manager)
         %td
           = render partial: 'reports/table', :locals => { :reports => manager.reports.where(options).order(:date), :name => manager.name, :id => manager.id, :funct => 'count', :options => options, :table_name => 'assigned-manager', :div => "div[class='reports-table', name='assigned-manager']" }
         %td
-          = render partial: 'reports/table', :locals => { :reports => manager.reports.where(options.merge!({completed: true})).order(:date), :funct => 'count', :name => manager.name, :table_name => 'completed-manager' :id => employee.id, :options => options, :div => "div[class='reports-table', name='completed-manager']" }
+          = render partial: 'reports/table', :locals => { :reports => manager.reports.where(options.merge!({completed: true})).order(:date), :funct => 'count', :name => manager.name, :table_name => 'completed-manager', :id => employee.id, :options => options, :div => "div[class='reports-table', name='completed-manager']" }
         %td
           = render partial: 'tasks/table', :locals => { :tasks => manager.assigned_tasks(options), :funct => 'completionPercent', :completion_percent => manager.tasks_completion_percent, :name => manager.name, :id => manager.id, :options => options, :div => '#tasks-table'}
         %td
@@ -34,4 +34,4 @@
       displayed[str] = true;
       $(str).show();
     }
-  }
+  });

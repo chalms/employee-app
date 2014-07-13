@@ -2,12 +2,12 @@ class FakeEmployees
   def initialize(company)
     @company = company
     @company.employee_logs.create!({
-      'name' => "John Wilson",
+      'email' => "John@Wilson.com",
       'role' => "employee",
       'employee_number' => "26654"
     })
     @company.employee_logs.create!({
-      'name' => "Nancy Bottlinger",
+      'email' => "Chalmee@Smalls.com",
       'role' => "employee",
       'employee_number' => "23354"
     })
@@ -15,13 +15,13 @@ class FakeEmployees
     @employees << @company.users.create!({
       'name' => "John Wilson",
       'employee_number' => "26654",
-      'email' => "go-leafs-go@gmail.com",
+      'email' => "John@Wilson.com",
       'password' => 'goKessel'
     })
     @employees << @company.users.create!({
       'name' => "Nancy Bottlinger",
       'employee_number' => "23354",
-      'email' => "greenpeace@exxon.com",
+      'email' => "Chalmee@Smalls.com",
       'password' => 'lexingtonSteele'
     })
   end

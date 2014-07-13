@@ -1,6 +1,7 @@
 class UsersReport < ActiveRecord::Base
   include JsonSerializingModel
   attr_accessible :complete, :checkin, :checkout, :parts, :tasks, :location, :date, :hours, :employee, :manager, :report_id, :user_id
+
   belongs_to :report
   belongs_to :user
   has_many :reports_parts
@@ -12,7 +13,7 @@ class UsersReport < ActiveRecord::Base
   end
 
   def manager
-    @manager ||= User.where(id: self.manager_id)
+    @manager ||= User.where(id: report.manager_id)
     if (@manager.present?)
       raise Exceptions::StdError, "Not a manager!" if (@manager.role == 'employee')
     end
@@ -29,11 +30,11 @@ class UsersReport < ActiveRecord::Base
   end
 
   def parts
-    reports_parts
+    reports_parts.map { |q| q.part }
   end
 
   def tasks
-    reports_tasks
+    reports_tasks.map { |q| q.part }
   end
 
   def add_reports_task(reports_task)

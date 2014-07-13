@@ -1,13 +1,12 @@
  class Project < ActiveRecord::Base
-  attr_accessible  :name, :start_date, :end_date, :budget, :complete, :assigned_parts, :assigned_tasks, :completed_parts, :completed_tasks, :company_id, :complete?, :hours, :employee_days_worked, :manager_number, :clients
+  attr_accessible  :name, :start_date, :end_date, :budget, :complete, :assigned_parts, :assigned_tasks, :completed_parts, :completed_tasks, :company_id, :complete?, :hours, :employee_days_worked, :manager_number, :clients, :managers, :employees, :manager
 
   belongs_to :company
   has_many :reports
+  has_many :tasks
   has_many :parts
-  # has_many :locations
   has_many :users, :through => :reports
   has_many :contacts, :through => :users
-  has_many :tasks
   has_many :clients_projects
   has_many :clients, :through => :clients_projects
 
@@ -22,6 +21,25 @@
     end
     @manager
   end
+
+  # def managers
+  #   @managers = []
+  #   Report.where(project_id: self.id).each do |r|
+  #     m = Manager.find(r.user_id)
+  #     @managers << m if (m)
+  #   end
+  #   @managers
+  # end
+
+  # def employees
+  #   # puts "in employees"
+  #   # puts reports.count
+  #   # puts users_reports.count
+  #   # puts users.count
+  #   @employees = users.where(type: 'Manager')
+  #   @employees
+  # end
+
 
   def set_manager(manager_id)
     manager = User.where(id: manager_id).andand.first
@@ -60,7 +78,6 @@
   end
 
   def employees
-    @employees =
     @employees ||= users.where(role: 'employee')
   end
 
@@ -136,9 +153,9 @@
 
   def get_reports(options = {})
     if (options["manager"])
-      rep = manager(options["manager"]).reports.where(:project => self)
+      rep = manager(options["manager"]).reports.where(:project_id => self.id)
     elsif (options["employee"])
-      rep = employee(options["employee"]).reports.where(:project => self)
+      rep = employee(options["employee"]).reports.where(:project_id => self.id)
     else
       rep = reports
     end

@@ -1,0 +1,8 @@
+.block
+  = render partial: 'employees/nav', locals: { inactive: => [["Employees", 'employees/list']], :active => ["Update Employees" , 'employees/new'] }
+.content
+  .inner
+    %h2.title
+      = "Update #{company.name} Employees"
+    #employees-dash
+      = render partial: 'employees/form', :locals => { :employee_logs => @employee_logs }

@@ -59,7 +59,6 @@ class ManagersController < ApplicationController
     raise Exceptions::StdError, "Must be an admin to delete manager" unless @user.is_admin?
   end
 
-
   def validate_index_role!
     raise Exceptions::StdError, "invalid permissions to access!" unless ((user.role == 'companyAdmin') || (user.role == 'manager'))
   end

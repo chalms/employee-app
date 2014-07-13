@@ -13,10 +13,13 @@ Metrics::Application.routes.draw do
   resources :clients
   resources :projects
   resources :locations
+  resources :employees
   resources :logins, only: [:new, :create]
   resources :signups, only: [:new, :create]
   resources :admins, only: [:show, :update]
 
+  get '/employees/days_timesheet' => 'employees#days_timesheet'
+  get '/employees/hours_timesheet' => 'employees#hours_timesheet'
 
   namespace :api, defaults: {:format => 'json'} do
 
@@ -64,7 +67,6 @@ Metrics::Application.routes.draw do
         #manager -> chats [ show, index, update, create, destroy ]
         resources :chats,  only: [:create, :index]
     end
-
 
     root :to => 'users#new', :as => :new
   end

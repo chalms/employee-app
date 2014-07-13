@@ -6,12 +6,14 @@ class User < ActiveRecord::Base
   validate :email, :format => {:with => /\A[^@]+@[^@]+\.[^@]+\Z/}
   validates :employee_number, :uniqueness => true
   after_create :valid_employee_id?, :set_type
+
   has_one :contact
   has_many :users_reports
   belongs_to :company
   has_many :users_chats
   has_many :chats, :through => :users_chats
   has_many :reports
+  has_many :projects, :through => :reports
   has_many :users_messages
   has_many :messages, :through => :users_messages
 
@@ -48,7 +50,7 @@ class User < ActiveRecord::Base
   end
 
   def is_manager?
-    self.update_attribute(:type, 'manager') if (self.role == 'manager' && self.type == nil)
+    self.update_attribute(:type, 'Manager') if (self.role == 'manager' && self.type == nil)
   end
 
   def password=(password)

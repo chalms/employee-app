@@ -36,6 +36,14 @@ class ApplicationController < ActionController::Base
     head 500, :content_type => 'text/html'
   end
 
+  def is_manager!
+    raise Exceptions::StdError, "User must be a manager" unless (@user.role == 'manager')
+  end
+
+
+  def is_admin!
+    raise Exceptions::StdError, "Must be an admin to perform this" unless (@user.role == 'companyAdmin' || @user.role == 'admin')
+  end
 
   def deny_access
     raise Exceptions::StdError, "Invalid login information"

@@ -6,7 +6,7 @@
     %label Date:
     %input#report-date{ :type => "date", :name => "date" }
   .group
-    = render 'employees/index', :locals => { :user => @user }
+    = render 'employees/list', :locals => { :user => @user }
   .group
     = render 'tasks/index', :locals => { :user => @user }
   .actions

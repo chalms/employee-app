@@ -1,8 +1,9 @@
 class EmployeeLog < ActiveRecord::Base
-  attr_accessible :name, :employee_number, :role, :company_id
+  attr_accessible :email, :employee_number, :role, :company_id
   belongs_to :company
   validates :employee_number, :uniqueness => true
   validate :role_exists
+  validate :email, :format => {:with => /\A[^@]+@[^@]+\.[^@]+\Z/}
 
   ROLES = ['companyAdmin', 'manager', 'employee']
 

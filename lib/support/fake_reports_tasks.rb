@@ -7,7 +7,8 @@ class FakeReportsTasks
         unless (task.assignment)
           puts u_r.inspect
           u_r.reports_tasks.create!({
-            :task_id => task.id
+            :task_id => task.id,
+            :users_report_id => u_r.id
           })
         end
       end

@@ -19,8 +19,10 @@ class ProjectsController < ApplicationController
   # GET /projects/1.json
   def show
     @user = current_user
-    @project = @user.company.projects.find_by_id(params[:id])
+    @project = Project.find(params[:id])
     validate_permissions!
+    puts @project.inspect
+
     respond_to do |format|
       format.json { render json: @project};
       format.html { render haml: @project };
