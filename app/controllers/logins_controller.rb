@@ -1,6 +1,7 @@
-class LoginController < ApplicationController
+class LoginsController < ApplicationController
 
-  include ApplicationController::MimeResponds
+  include ActionController::MimeResponds
+  include AppHelper
 
   def new
     begin
@@ -21,18 +22,28 @@ class LoginController < ApplicationController
       flash[:notice] = ""
       @login.update(params)
       @user = @login.save!
-      route!
+      set_token!
+      @route = route!
+      puts "route"
       respond_to do |format|
         format.html { render haml: @route }
         format.json { render json: @route }
       end
     rescue Exceptions::StdError => e
+      puts e
+      flash[:error] = e
       @login = nil
       render :new
     end
   end
 
-private
+  private
+  def set_token!
+    token = current_api_session_token
+    token.user = @user
+    @token = token.token
+    raise Exceptions::StdError, "Authorization is not accepted!" unless (@token)
+  end
 
   def _provided_valid_api_session_token?
     params[:api_key] && UserAuthenticationService.authenticate_with_api_key!(@user, params[:api_key], current_api_session_token.token)

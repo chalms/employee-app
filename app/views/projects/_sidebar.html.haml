@@ -1,11 +1,11 @@
 .block.notice
-  %h3 Simple Block
+  %h3 Projects
   .content
-    %p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    %p="Add a new project for #{@user.company.name} or view past projects"
 .block
   %h3 Links
   %ul.navigation
     %li
-      %a{:href => "#"} Link 1
+      %a{:href => "projects/new"} New Project
     %li
-      %a{:href => "#"} Link 2
+      %a{:href => "projects/old"} Past Projects

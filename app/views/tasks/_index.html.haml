@@ -1,0 +1,29 @@
+%h1
+  %em
+    Tasks:
+%br
+.grid
+  - @user.tasks.each do |task|
+    .grid-row
+      .well
+        .description= task.description
+        - if task.barcode
+          .barcode="Barcode: #{task}"
+        %button.btn.btn-primary{:href => "/tasks/edit/#{task.id}"} Edit
+        %button.btn.btn-warning{:href => "/tasks/delete/#{task.id}"} Destroy
+        %button.btn.btn-primary= link_to 'Edit', edit_task_path(task)
+        %button.btn.btn-warning= link_to 'Destroy', task, :method => :delete, :data => { :confirm => 'Are you sure?' }
+        %input.toggle{:type => 'checkbox'}
+          - if (task.checked)
+            %input{ :type => 'hidden', :name => 'tasks', :value => task.id}
+  %br
+  .grid-row
+    .button.btn-primary{onclick: 'showDiv()'}
+#new-user
+  = render 'tasks/new', locals => { :user => @user }
+
+:javascript
+  function showDiv() {
+    var elem = document.elements.findById('#new-user');
+    elem.show();
+  }

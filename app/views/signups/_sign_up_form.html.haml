@@ -1,4 +1,4 @@
-%form.form-inline{"action" => "valid_signup", "method"=> "post"}
+%form.form-inline{"action" => "signups/create", "method"=> "post"}
   %p= link_to "Already a member?", '/login'
   .input-prepend.first
     %span.add-on
@@ -12,11 +12,11 @@
     %span.add-on
       %i.icon-key
     %input.span2{:type => "text", :name => "employee_number", :placeholder => "Employee Number"}
-  .input-prepend 
+  .input-prepend
     %span.add-on
-      %i.icon-key 
+      %i.icon-key
     %select
-      - @companies.each do |c|
+      - companies.each do |c|
         %option{:value => c}=c
   .input-prepend
     %span.add-on

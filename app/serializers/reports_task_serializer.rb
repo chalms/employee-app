@@ -1,9 +1,8 @@
 class ReportsTaskSerializer < ActiveModel::Serializer
-  belongs_to :task 
-  belongs_to :users_report
-  has_many :photos 
-  has_one :location, as: :owner
-  has_many :parts 
+  has_one :part
+  has_many :photos
+  has_many :locations_reports_parts
+  has_many :locations, :through => :locations_reports_parts
 
-  attributes :complete, :note, :completion_time, :manager
+  attributes :complete, :note, :completion_time, :manager_id, :users_report_id, :report_id, :task_id
 end

@@ -53,7 +53,7 @@ class ReportsController < ApplicationController
   private
 
   def validate_user_role!
-    raise Exceptions::StdError, unless (@user.role == 'manager' || @user.role == 'companyAdmin')
+    raise Exceptions::StdError, "Invalid permission to access" unless (@user.role == 'manager' || @user.role == 'companyAdmin')
   end
 
 end

@@ -1,5 +1,6 @@
 class FakeCompany
   def initialize
+    puts "fake company"
     @company = Company.create!({
       :name => "GWPH"
     })

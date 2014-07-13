@@ -1,6 +1,5 @@
 class MessageSerializer < ApplicationSerializer
   has_one :photo
-  has_one :user, as: :sender 
-  has_many :users, as: :group 
-  attr_accessible :data, :recipients, :sender, :created_at, :read_by_all
+  has_many :users_messages, as: :group
+  attributes :data, :recipients, :sender, :created_at, :read_by_all, :chat_id, :user_id
 end

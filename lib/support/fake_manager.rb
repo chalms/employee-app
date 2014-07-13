@@ -1,6 +1,7 @@
 class FakeManager
   def initialize
     f_client = FakeClient.new
+    puts "fake client"
     @admin = f_client.fake_admin
     @client = f_client.fake_client
     @admin.company.employee_logs.create!({

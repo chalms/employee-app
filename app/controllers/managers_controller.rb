@@ -7,7 +7,6 @@ class ManagersController < ApplicationController
     validate_index_role!
     @users = Manager.all.where(company_id: user.id, role: 'manager')
     @users.each { |u| u = ManagerSerializer.new(u) }
-
     respond_to do |format|
       format.html{ render haml: @users }
       format.json{ render json: @users }

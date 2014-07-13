@@ -21,9 +21,9 @@ class ModelSimulation
       @reports_parts << u_r.parts
     end
 
-    f_chat = FakeChats.new([@report])
-    @chats = f_chat.fake_chats
-    @conversation = f_chat.fake_conversation
+    # f_chat = FakeChats.new([@report])
+    # @chats = f_chat.fake_chats
+    # @conversation = f_chat.fake_conversation
   end
 
   def print
@@ -34,8 +34,8 @@ class ModelSimulation
     puts employees.inspect
     puts reports_tasks.inspect
     puts reports_parts.inspect
-    puts chats.inspect
-    puts conversation.inspect
+    # puts chats.inspect
+    # puts conversation.inspect
   end
 
 
@@ -67,11 +67,11 @@ class ModelSimulation
     @reports_parts
   end
 
-  def chats
-    @chats
-  end
+  # def chats
+  #   @chats
+  # end
 
-  def conversation
-    @conversation
-  end
+  # def conversation
+  #   @conversation
+  # end
 end

@@ -1,5 +1,5 @@
-class SignupController
-  include ApplicationController::MimeResponds
+class SignupsController < ApplicationController
+  include ActionController::MimeResponds
 
   def new
     begin

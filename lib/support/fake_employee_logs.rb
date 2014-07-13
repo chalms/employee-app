@@ -1,6 +1,7 @@
 class FakeEmployeeLogs
   def initialize
     @company = FakeCompany.new.fake_company
+    puts "fake employee logs"
     @employee_logs = @company.employee_logs.create!({
       :name => "Andrew",
       :role => "companyAdmin",

@@ -1,27 +1,23 @@
 .group
   = f.label :name, t("activerecord.attributes.project.name", :default => "Name"), :class => :label
   = f.text_field :name, :class => 'text_field'
-  %span.description Ex: a simple text
+  %span.description Your project name
 .group
-  = f.label :start_date, t("activerecord.attributes.project.start_date", :default => "Start date"), :class => :label
+  = f.label :start_date, t("activerecord.attributes.project.start_date", :class => :label
   = f.date_select :start_date, :class => 'date_select'
-  %span.description Ex: a simple text
+  %span.description Start Date
 .group
-  = f.label :end_date, t("activerecord.attributes.project.end_date", :default => "End date"), :class => :label
+  = f.label :end_date, t("activerecord.attributes.project.end_date", :class => :label
   = f.date_select :end_date, :class => 'date_select'
-  %span.description Ex: a simple text
+  %span.description End Date
 .group
   = f.label :budget, t("activerecord.attributes.project.budget", :default => "Budget"), :class => :label
   = f.text_field :budget, :class => 'text_field'
-  %span.description Ex: a simple text
+  %span.description Budget
 .group
-  = f.label :client_id, t("activerecord.attributes.project.client_id", :default => "Client"), :class => :label
-  = f.number_field :client_id, :class => 'number_field'
-  %span.description Ex: a simple text
-.group
-  = f.label :manager_number, t("activerecord.attributes.project.manager_number", :default => "Manager number"), :class => :label
-  = f.number_field :manager_number, :class => 'number_field'
-  %span.description Ex: a simple text
+  = select_tag(:client_id, @user.company.clients.map{ |c| [c.name, c.id]})
+  %button.span{:onclick => 'createClient()'} Or Pick New Client
+  %span.description Client
 .group.navform.wat-cf
   %button.button{:type => "submit"}
     = image_tag("web-app-theme/icons/tick.png", :alt => "#{t("web-app-theme.save", :default => "Save")}")

@@ -1,6 +1,6 @@
 class UsersReport < ActiveRecord::Base
   include JsonSerializingModel
-  attr_accessible :complete, :checkin, :checkout, :parts, :tasks, :location, :date, :hours, :employee, :manager
+  attr_accessible :complete, :checkin, :checkout, :parts, :tasks, :location, :date, :hours, :employee, :manager, :report_id, :user_id
   belongs_to :report
   belongs_to :user
   has_many :reports_parts

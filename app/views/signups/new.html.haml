@@ -3,11 +3,11 @@
     %h1
       Metrics
       %small Give your business a 'start-up' edge
-  - if (flash[:error]) 
-    .error-message 
+  - if (flash[:error])
+    .error-message
       %h3=flash[:error]
   %div.explanation
-
+    %p="#{@signup.inspect}"
     %h4
       Metrics is a deluxe suite of management tools that gives your business an edge agaisnt its competition. Metrics requires no specialty hardware, it is 'bank-vault' secure, and can be easily integrated with your businesses workflow. If you want to:
       %ul
@@ -20,4 +20,4 @@
 
       Then Metrics is the solution for you.
   %div.signup
-    = render partial: 'sign_up_form', :locales => {:companies => @companies}
+    = render partial: 'sign_up_form', :locals => {:companies => @signup.companies}

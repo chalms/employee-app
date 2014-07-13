@@ -73,8 +73,6 @@ class Api::ReportsController < ApiController
   private
 
   def report_params
-    params.require(:report).permit(:description, :report_date, :name, :report, :id);
+    params.require(:report).permit(:description, :report_date, :name, :report, :id)
   end
-
-
 end

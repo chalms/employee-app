@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   include JsonSerializingModel
-  attr_accessible :email, :name, :employee_number, :hours, :days_worked, :role, :type
+  attr_accessible :email, :name, :employee_number, :hours, :days_worked, :role, :password, :company_id
   after_initialize :_set_defaults
   validates_presence_of :password, :length => {:minimum  => 6},  on: :create!
   validate :email, :format => {:with => /\A[^@]+@[^@]+\.[^@]+\Z/}
@@ -19,28 +19,28 @@ class User < ActiveRecord::Base
     params = (params[type.to_sym] || params)
   end
 
-  def set_type
-    if (role == 'companyAdmin')
-      @type = :admin
-    elsif (role == 'manager')
-      @type = :manager
-    else
-      @type = :employee
-    end
-    self.update_attributes!({:type => @type}) if (self.type != @type)
+  def company
+    @company ||= Company.find(company_id)
   end
 
-  def type
-    self.update_attributes!({:type => :employee}) unless (self.type)
-    @type ||= self.type
+  def set_type
+    puts "set_type"
+    if (role == 'companyAdmin')
+      @type = 'Admin'
+    elsif (role == 'manager')
+      @type = 'Manager'
+    else
+      @type = 'Employee'
+    end
+    self.update_attribute(:type, @type) if (@type)
+  end
+
+  def role?(r)
+    (self.type == r)
   end
 
   def clients
     return nil
-  end
-
-  def role?
-    return self.role
   end
 
   def is_admin?
@@ -48,7 +48,7 @@ class User < ActiveRecord::Base
   end
 
   def is_manager?
-    self.update_attributes!({:type => 'manager'}) if (self.role == 'manager' && self.type == nil)
+    self.update_attribute(:type, 'manager') if (self.role == 'manager' && self.type == nil)
   end
 
   def password=(password)
@@ -62,11 +62,15 @@ class User < ActiveRecord::Base
   end
 
   def valid_employee_id?
+    puts "valid_employee_id"
+    puts "#{self.employee_number}"
+    puts "#{company.employee_logs.inspect}"
     emp = company.employee_logs.find_by_employee_number(self.employee_number)
+    puts "EMPLOYEE LOGS: #{emp.inspect}"
     raise Exceptions::StdError, "Not a valid employee id for that company!" unless (emp.andand.present?)
-    self.update_attributes(role: emp.role)
+    self.update_attributes({role: emp.role})
+    puts "#{self.role}"
     @role = self.role
-    true
   end
 
   def hours(options = {})

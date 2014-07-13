@@ -1,3 +1,13 @@
-.ui-header#cssmenu.ui-bar-f{"data-role" => "header", "data-theme" => "f", role: "banner"}
-	%ul 
-		%h1.ui-title{"aria-level" => "1", role: "heading"} TimeCard.com
+#header
+  %h1
+    %a{:href => "/"} TimeCard.com
+  #user-navigation
+    %ul.wat-cf
+      %li
+        %a{:href => "/reports/index"}= Reports
+      %li
+        %a{:href => "/data"}= Data
+      %li
+        %a{:href => "/chat"}= Chat
+      %li
+        %a.logout{:href => "/logout"}= t("web-app-theme.logout", :default => "Logout")

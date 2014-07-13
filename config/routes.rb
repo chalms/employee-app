@@ -13,8 +13,8 @@ Metrics::Application.routes.draw do
   resource :clients
   resource :projects
   resource :locations
-  resource :login
-  resource :signup
+  resource :logins, only: [:new, :create]
+  resource :signups, only: [:new, :create]
 
 
   namespace :api, defaults: {:format => 'json'} do
@@ -64,8 +64,12 @@ Metrics::Application.routes.draw do
         resources :chats,  only: [:create, :index]
     end
 
+
     root :to => 'users#new', :as => :new
   end
+
+  root :to => 'signup#new', :as => :new
+
   #   get '/signout' => 'login#signout'
   #   get '/login' => 'login#login', :as => :login
     # root :to => 'login#sign_up', :as => :sign_up
