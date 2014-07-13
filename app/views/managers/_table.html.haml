@@ -1,0 +1,37 @@
+%table
+  %thead= "#{name} Managers"
+  %tbody
+    %tr.headers
+      %th Name
+      %th Created Reports
+      %th Completed Reports
+      %th Task Completion %
+      %th Hours
+      %th Days Spent on #{name}'s Reports'
+    - managers.each do |manager|
+      %tr.row
+        %td= link_to manager.name, managers(manager)
+        %td
+          = render partial: 'reports/table', :locals => { :reports => manager.reports.where(options).order(:date), :name => manager.name, :id => manager.id, :funct => 'count', :options => options, :table_name => 'assigned-manager', :div => "div[class='reports-table', name='assigned-manager']" }
+        %td
+          = render partial: 'reports/table', :locals => { :reports => manager.reports.where(options.merge!({completed: true})).order(:date), :funct => 'count', :name => manager.name, :table_name => 'completed-manager' :id => employee.id, :options => options, :div => "div[class='reports-table', name='completed-manager']" }
+        %td
+          = render partial: 'tasks/table', :locals => { :tasks => manager.assigned_tasks(options), :funct => 'completionPercent', :completion_percent => manager.tasks_completion_percent, :name => manager.name, :id => manager.id, :options => options, :div => '#tasks-table'}
+        %td
+          = render partial: 'managers/hours_timesheet', :locals => { :reports => manager.reports.where(options).order(:date), :name => manager.name, :id => manager.id, :options => options, :hours => manager.hours(options),  :div => '#manager-hours'}
+        %td
+          = render partial: 'managers/days_timesheet', :locals => { :reports => manager.reports.where(options).order(:date), :name => manager.name, :id => manager.id, :options => options, :days => manager.days_worked(options), :div => '#manager-days' }
+:javascript
+  $(document).ready(function(){
+    var displayed = {};
+    function display(str) {
+      for (var key in displayed) {
+        if (displayed[key]) {
+          $(key).hide();
+          displayed[key] = false;
+        }
+      }
+      displayed[str] = true;
+      $(str).show();
+    }
+  }

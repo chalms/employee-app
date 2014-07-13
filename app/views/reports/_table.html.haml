@@ -1,26 +1,26 @@
-- if (link)
-  - if (link == 'count')
+- if (@funct)
+  - if (@funct == 'count')
     %a{onclick: "display(#{div})"} reports.count
-.reports-table{:name => table_name, :hidden => ""}
+.reports-table{:name => @table_name, :hidden => ""}
   %table
     %thead
       %h2
-        - if (name)
+        - if (@name)
           = "#{name} "
         = "Reports"
         - if (options[:name])
           %br=" for #{options[:name]}"
     %tbody
       %tr
-        %th Name
+        %th Summary
         %th Manager
         %th % Complete
         %th Hours
         %th Date
       - reports.each do |report|
         %tr
-          %td= link_to report.name, reports(report.id)
+          %td= link_to report.summary, reports(report.id)
           %td= link_to report.manager.name, managers(manager.id)
-          %td= report.tasks_percent_completion
+          %td= report.tasks_completion_percent
           %td= report.hours
-          %td= report.date}
+          %td= report.date

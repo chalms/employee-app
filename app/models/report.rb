@@ -88,6 +88,10 @@ class Report < ActiveRecord::Base
     @completed_tasks
   end
 
+  def tasks_completion_percent(options = {})
+    (complete_tasks.length.to_f / assigned_tasks(options).length.to_f).round(2)
+  end
+
   def hours
     @hours = 0
     users_reports.each { |u_r| @hours += u_r.hours }

@@ -103,7 +103,7 @@
   end
 
   def tasks_completion_percent(options = {})
-    @tasks_completion_percent = ((assigned_tasks(options).count.to_f / completed_tasks(options).count.to_f) * 100).round(2)
+    @tasks_completion_percent = ((assigned_tasks(options).length.to_f / completed_tasks(options).length.to_f) * 100).round(2)
   end
 
   def parts_completion_percent(options = {})

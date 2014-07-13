@@ -1,12 +1,8 @@
 .dates
   %h3="#{project.start_date} - #{project.end_date}"
-.inner
-  .hours
-    %h4= "Hours: "
-      %b= "#{project.hours}"
-  .completion
-    %h5= "Completion: "
-      %b= "#{project.completed_tasks_percent}"
-  .manager
-    %h5= "Manager: "
-      %em{:href => 'managers/#{project.manager.id}'}="Manager: #{project.manager.name}"
+.hours
+  %h3="Hours: #{project.hours}"
+.completion
+  %h3= "Completion: #{project.tasks_completion_percent}"
+.manager
+  %h3{:href => 'managers/#{project.manager.id}'}="Manager: #{project.manager.name}"
