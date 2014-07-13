@@ -11,6 +11,18 @@
   has_many :clients_projects
   has_many :clients, :through => :clients_projects
 
+  def manager
+    num = ((self.manager_number) || (self.manager_id))
+    if num
+      @manager = User.find(num)
+    elsif (users.where(role: 'manager').count > 0)
+      @manager = users.where(role: 'manager').first
+    else
+      @manager = nil
+    end
+    @manager
+  end
+
   def set_manager(manager_id)
     manager = User.where(id: manager_id).andand.first
     raise Exceptions::StdError, "User is not a manager" unless (manager.role == 'manager')

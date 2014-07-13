@@ -3,7 +3,7 @@
   %head
     %title TimeCard
     = stylesheet_link_tag "web-app-theme/base", "web-app-theme/themes/drastic-dark/style", "web-app-theme/override", :cache => true
-    = javascript_include_tag :application, :cache => true
+    = javascript_include_tag :application
     = csrf_meta_tag
   %body
     #container
@@ -24,6 +24,6 @@
           #footer
             .block
               %p
-                Copyright &copy; #{Time.now.year} Web App.
+                Copyright &copy; #{Time.now.year} TimeCard
         #sidebar
           = yield :sidebar

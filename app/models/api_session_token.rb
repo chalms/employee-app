@@ -6,7 +6,7 @@ class ApiSessionToken
   TTL = 20.minutes
 
   def initialize(existing_token=nil, redis=_redis_connection)
-
+    puts "existing token: #{existing_token}"
     @token = existing_token
     @redis = redis
 
@@ -37,7 +37,12 @@ class ApiSessionToken
   end
 
   def user
-    return if expired?
+    puts "getting user"
+    if expired?
+      puts "expired"
+      return
+    end
+
     @user ||= _retrieve_user
   end
 
@@ -58,6 +63,7 @@ class ApiSessionToken
   end
 
   def valid?
+    puts "valid?"
     !expired?
   end
 
@@ -66,6 +72,7 @@ class ApiSessionToken
   end
 
   def delete!
+    puts "delete!"
     @redis.del(_last_seen_key, _user_id_key)
     @deleted = true
   end
@@ -76,16 +83,18 @@ class ApiSessionToken
     puts "setting with expire!"
     @redis[key] = val
     @redis.expire(key, TTL)
-    puts "set with expire!"
   end
 
   def _retrieve_last_seen
+    puts "retreiving last seen"
     ls = @redis[_last_seen_key]
     ls && Time.parse(ls)
   end
 
   def _retrieve_user
+    puts "retreiving user"
     user_id = @redis[_user_id_key]
+    puts "redis user id #{user_id}"
     User.find(user_id) if user_id
   end
 

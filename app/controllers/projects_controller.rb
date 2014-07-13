@@ -4,6 +4,7 @@ class ProjectsController < ApplicationController
 
   def index
     @user = current_user
+    puts @user.inspect
     @projects = @user.company.projects
     respond_to do |format|
       format.json { render json: @projects};
@@ -23,7 +24,6 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       format.json { render json: @project};
       format.html { render haml: @project };
-      format.js
     end
   rescue Exceptions::StdError => e
     head 500, :content_type => 'text/html'

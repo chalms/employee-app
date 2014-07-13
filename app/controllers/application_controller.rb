@@ -21,7 +21,18 @@ class ApplicationController < ActionController::Base
       end
     end
   rescue Exceptions::StdError => e
-    flash[:error] = e
+
+    respond_to do |format|
+      format.html { flash[:error] = e }
+      format.json do
+        if (e == "Not Authorized")
+          render json: { error: e }, status: 401
+        elsif (e == "Not Found")
+          render json: { error: e }, status: 404
+        end
+      end
+    end
+
     head 500, :content_type => 'text/html'
   end
 
@@ -35,21 +46,23 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    current_api_session_token.user
+    raise Exceptions::StdError, "No current user" unless (_authorization_header && current_api_session_token.valid?)
+    return current_api_session_token.user
   end
 
   def api_session_token_authenticate!
-    return _not_authorized unless _authorization_header && current_api_session_token.valid?
+    return _not_authorized
   end
 
   def current_api_session_token
+    puts "token valid?"
     @current_api_session_token ||= ApiSessionToken.new(_authorization_header)
   end
 
   def _authorization_header
-    puts request.headers
-    puts request.headers.to_s
-    request.headers['HTTP_AUTHORIZATION']
+    puts "auth header"
+    puts request.headers['HTTP_AUTHORIZATION'].inspect
+    return request.headers['HTTP_AUTHORIZATION']
   end
 
   def _not_authorized message = "Not Authorized"

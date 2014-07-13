@@ -21,16 +21,18 @@ class Part < ActiveRecord::Base
   end
 
   def manager
-    @manager ||= self.user
+    @manager ||= user
+    @manager
   end
 
   def manager_id
-    manager.id
+    return manager.id if (!!manager)
+    return nil
   end
 
  def assignment
     unless (@assignment)
-      if ((reports_tasks.count > 0) || self.assigned)
+      if ((reports_parts.count > 0) || self.assigned)
         @assignment = true
         self.update_attribute(:assigned, true)
       else

@@ -1,21 +1,21 @@
 
 Metrics::Application.routes.draw do
   resources :reports_parts, except: [:new, :edit]
-  resource :contacts
-  resource :companies
-  resource :reports_tasks
-  resource :reports_parts
-  resource :tasks
-  resource :parts
-  resource :users_reports
-  resource :reports
-  resource :employee_logs
-  resource :clients
-  resource :projects
-  resource :locations
-  resource :logins, only: [:new, :create]
-  resource :signups, only: [:new, :create]
-  resource :admins, only: [:show, :update]
+  resources :contacts
+  resources :companies
+  resources :reports_tasks
+  resources :reports_parts
+  resources :tasks
+  resources :parts
+  resources :users_reports
+  resources :reports
+  resources :employee_logs
+  resources :clients
+  resources :projects
+  resources :locations
+  resources :logins, only: [:new, :create]
+  resources :signups, only: [:new, :create]
+  resources :admins, only: [:show, :update]
 
 
   namespace :api, defaults: {:format => 'json'} do

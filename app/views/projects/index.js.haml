@@ -1,2 +1,1 @@
-:plain
-  $("#display").prepend('<%= escape_javascript(render 'index') %>');
+$('#display').prepend('<%= escape_javascript(render partial: 'projects/projects', locals => {user: @user}) %>');

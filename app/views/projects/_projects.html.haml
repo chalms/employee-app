@@ -1,23 +1,17 @@
- %h2.title
-    = t("web-app-theme.all", :default => "All")
-    = "#{user.company.name} Projects"
-  .inner
-    %table.table
-      %tr
-        %th.first Name
-        %th Start Date
-        %th End Date
-        %th % Complete
-        %th Hours
-        %th.last &nbsp;
-      - user.company.projects.each do |project|
-        %tr{:class => cycle("odd", "even")}
-          %td= link_to project.name, project_path(project)
-          %td= project.start_date
-          %td= project.end_date
-          %td= project.tasks_completion_percent
-          %td= project.hours
-          %td.last
-            %button= link_to "#{t("web-app-theme.show", :default => "Show")}", project_path(project)
-            %button.span= link_to "#{t("web-app-theme.edit", :default => "Edit")}", edit_project_path(project)}
-            %button.span= link_to "#{t("web-app-theme.delete", :default => "Delete")}", project_path(project), :method => :delete, :confirm => "#{t("web-app-theme.confirm", :default => "Are you sure?")}"}
+%h2.title
+  = "#{user.company.name} Projects"
+.inner
+  %table.table
+    %tr
+      %th.first Name
+      %th Start Date
+      %th End Date
+      %th % Complete
+      %th.last Hours
+    - user.company.projects.each do |project|
+      %tr{:class => cycle("odd", "even")}
+        %td= link_to project.name, project_path(project), :remote => true
+        %td= project.start_date
+        %td= project.end_date
+        %td= project.tasks_completion_percent
+        %td= project.hours

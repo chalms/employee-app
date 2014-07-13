@@ -6,6 +6,8 @@ class Task < ActiveRecord::Base
   belongs_to :report
   has_many :reports_tasks
   has_many :users_reports, :through => :reports_tasks
+  has_many :reports, :through => :users_reports
+  has_many :projects, :through => :reports
 
   attr_accessible :description, :name, :manager, :manager_id, :assignment, :owners
 
@@ -23,10 +25,12 @@ class Task < ActiveRecord::Base
 
   def manager
     @manager ||= self.user
+    @manager
   end
 
   def manager_id
-    manager.id
+    return manager.id if (!!manager)
+    manager
   end
 
   def assignment

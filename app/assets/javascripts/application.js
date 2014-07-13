@@ -1,51 +1,41 @@
 //=require html5.js
-//= require jquery.mobile.custom.js
 //= require jquery
 //= require jquery_ujs
 //= require jquery.json-2.4.js
-//= require jquery.jeditable
 //= require hamlcoffee
 //= require json2
 //= require underscore
-//= require backbone
-//= require backbone.babysitter
-//= require backbone.wreqr
-//= require backbone.marionette
-//= require jquery.csv.js
-//= require bootstrap.js
-//= require bootstrap-datepicker.js
-//= require bootstrap-switch.js
-//= require bootstrap-editable.js
-//= require bootstrap_override
-//= require app
-//= require_tree ./helpers
-//= require_tree ./templates
-//= require_tree ./models
-//= require_tree ./collections
-//= require_tree ./routers
-//= require_tree ./views
-
-$.editUser = function() {
-   var userData = $.data($('.edit-user'), "user-id");
-   console.log(userData);
-   var link = 'http://localhost:3000/users/' + userData;
-   $('.edit-user').name.editable();
-}
 
 $(document).ready(function() {
-  try {
-    $.editUser();
-  } catch (err) {
-    console.log(err);
-  }
+  $( document ).ajaxSend(function(elem, xhr, options) {
+    console.log("before send");
+    xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
+    var lock = false
+    try {
+      var data = $('#tok').attr('data');
+      console.log(data);
+      console.log("that was the content");
+      if (data && data !== "undefined") {
+        sessionStorage.auth = data;
+        console.log("setting auth");
+        xhr.setRequestHeader('AUTHORIZATION', data);
+      }
+    } catch (err) {
+      lock = true
+      console.log("No auth token");
+    }
+    if (!lock) {
+      if (sessionStorage.auth && sessionStorage.auth !== "undefined") {
+        xhr.setRequestHeader('AUTHORIZATION', sessionStorage.auth);
+      } else {
+        console.log("session storage not found... looking");
+
+      }
+    }
+    return true;
+  });
 });
 
-$.beforeSend = function(xhr) {
-  xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
-  if (sessionStorage.auth && sessionStorage.auth !== "undefined") {
-  	xhr.setRequestHeader('AUTHENTICATION', sessionStorage.auth);
-  }
-}
 
 function log(text) {
   if(window && window.console) console.log(text);
