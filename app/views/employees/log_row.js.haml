@@ -1,1 +1,2 @@
-$('#employee-rows').append('<%= escape_javascript(render partial: 'employees/row', locals => {log: log}) %>');
+var mactruck = $('<%= escape_javascript(render partial: 'employees/row', locals => {log: log}) %>');
+$('#employee-rows').append(mactruck);

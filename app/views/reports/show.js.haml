@@ -1,0 +1,6 @@
+:plain
+  var appearance = $('#{escape_javascript(render :partial => 'reports/show', locals => { report: @report } ) }');
+  $("#sector").hide();
+  $("#hidden").innerHtml = $("#sector").html();
+  $("#sector").html(appearance);
+  $("#sector").show();

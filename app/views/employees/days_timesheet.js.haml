@@ -1,1 +1,1 @@
-$('#employee-days').innerHtml = ('<%= escape_javascript(render partial: 'employees/days_timesheet', locals => @data) %>');
+$('#employee-days').innerHtml = $('<%= escape_javascript(render partial: 'employees/days_timesheet', locals => @data) %>');

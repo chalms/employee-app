@@ -20,6 +20,7 @@ Metrics::Application.routes.draw do
 
   get '/employees/days_timesheet' => 'employees#days_timesheet'
   get '/employees/hours_timesheet' => 'employees#hours_timesheet'
+  put '/employees/save_logs' => 'employees#save_logs'
 
   namespace :api, defaults: {:format => 'json'} do
 

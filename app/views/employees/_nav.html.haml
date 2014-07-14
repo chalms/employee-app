@@ -2,7 +2,7 @@
   %ul.wat-cf.project-items
     #employees-nav
       %li.first.active
-        %a= link_to @active[0], @active[1], :remote => true
-      - @inactive.each do |arr|
+        %a= link_to active[0], active[1], :remote => true
+      - inactive.each do |arr|
         %li
           %a= link_to arr[0], arr[1], :remote => true

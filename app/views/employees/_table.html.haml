@@ -1,5 +1,7 @@
 %table
-  %thead= "#{name} Employees"
+  %thead
+    %h2.title
+      = "#{name} Employees"
   %tbody
     %tr.headers
       %th Name
@@ -9,19 +11,5 @@
       %th Hours
       %th Days Working on #{name}
     - employees.each do |employee|
-      %tr.row
-        %td= link_to employee.name, users(employee)
-        .reports-table.first
-          %td
-            %a=link_to 'reports/index', :data => { :reports => employee.user_reports.where(options).order(:date), :name => employee.name, :id => employee.id, :funct => 'count', :options => options, :table_name => 'assigned', :div => '.reports-table.first' }, :remote => true
-        .reports-table.second
-          %td
-            %a=link_to 'reports/index', :data => { :reports =>employee.user_reports.where(options.merge!({completed: true})).order(:date), :funct => 'count', :name => employee.name, :table_name => 'completed', :id => employee.id, :options => options, :div => "div[class='reports-table', name='completed']" }, :remote => true
-        %td
-          = render partial: 'tasks/table', :locals => { :tasks => employee.assigned_tasks(options), :funct => 'completionPercent', :completion_percent => employee.tasks_completion_percent, :name => employee.name, :id => employee.id, :options => options, :div => '#tasks-table'}, :remote => true
-        %td
-          %a= link_to employee.hours(options), 'employees/hours_timesheet', :data => { :users_reports => employee.user_reports.where(options).order(:date), :name => employee.name, :id => employee.id, :options => options }, :remote => true
-          #employee-hours
-        %td
-          %a= link_to employee.days_worked(options), 'employee/days_timesheet', :data => { :users_reports => employee.user_reports.where(options).order(:date), :name => employee.name, :id => employee.id, :options => options }
-          #employee-days
+      %tr.table-row
+        = render partial: 'employees/table_row', locals: { employee: employee }

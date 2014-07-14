@@ -4,9 +4,12 @@ class EmployeesController < ApplicationController
   before_action :user!
 
   def index
-    is_manager!
-    @users =
-    render json: @users
+    manager_or_admin!
+    @company = @user.company
+    @employee_logs = @user.company.employee_logs
+    respond_to do |format|
+      format.js
+    end
   end
 
   def days_timesheet
@@ -33,7 +36,12 @@ class EmployeesController < ApplicationController
   end
 
   def new
-
+    @user = current_user
+    is_admin!
+    @employee_logs = @user.company.employee_logs
+    respond_to do |format|
+      format.js
+    end
   end
 
   def upload
@@ -70,7 +78,7 @@ rescue Exceptions::StdError => e
     respond_to do |format|
       format.js
     end
-  rescue Exceptions::StdError => e,
+  rescue Exceptions::StdError => e
     @error_message = "Logs could not be saved due to error: #{e.message}"
     flash[:error] = @error_message
     render :text => @error_message
@@ -89,11 +97,18 @@ rescue Exceptions::StdError => e
 
   # DELETE /users/1
   # DELETE /users/1.json
+
   def destroy
     @user = User.find(params[:id])
     @user.destroy
 
     head :no_content
+  end
+
+  private
+
+  def manager_or_admin!
+    raise Exceptions::StdError, "User is an employee" if (@user.role.downcase != 'employee')
   end
 
   def user!

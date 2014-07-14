@@ -10,7 +10,8 @@
       %th Days Spent on #{@name}'s Reports'
     - managers.each do |manager|
       %tr.row
-        %td= link_to manager.name, managers(manager)
+        -# %td= link_to manager.name, managers(manager)
+        %td
         %td
           = render partial: 'reports/table', :locals => { :reports => manager.reports.where(options).order(:date), :name => manager.name, :id => manager.id, :funct => 'count', :options => options, :table_name => 'assigned-manager', :div => "div[class='reports-table', name='assigned-manager']" }
         %td

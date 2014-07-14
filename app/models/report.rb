@@ -71,7 +71,7 @@ class Report < ActiveRecord::Base
     @unused_parts
   end
 
-  def complete_parts(options = {})
+  def completed_parts(options = {})
     @used_parts = []
     get_reports(options).each { |u_r| @used_parts += u_r.parts.where(used: true) }
     @used_parts
@@ -83,14 +83,16 @@ class Report < ActiveRecord::Base
     @incomplete_tasks
   end
 
-  def complete_tasks(options = {})
+  def completed_tasks(options = {})
     @completed_tasks = []
-    get_reports(options).each { |u_r| @completed_tasks += u_r.tasks.where(completed: true) }
+    get_reports(options).each do |u_r|
+      @completed_tasks << u_r.reports_tasks.where(complete: true)
+    end
     @completed_tasks
   end
 
   def tasks_completion_percent(options = {})
-    (complete_tasks.length.to_f / assigned_tasks(options).length.to_f).round(2)
+    (completed_tasks.length.to_f / assigned_tasks(options).length.to_f).round(2)
   end
 
   def hours

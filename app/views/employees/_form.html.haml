@@ -1,10 +1,10 @@
-= form_tag, :method => :post, url: 'employees/new' do |f|
-  - if @employee_logs.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@employee_logs.errors.count, "error")} prohibited this company from being saved:"
-      %ul
-        - @employee_logs.errors.full_messages.each do |msg|
-          %li= msg
+%form{ :method => 'post', action: 'employees/save_data'}
+  -# - if @employee_logs.errors.any?
+  -#   #error_explanation
+  -#     %h2= "#{pluralize(@employee_logs.errors.count, "error")} prohibited this company from being saved:"
+  -#     %ul
+  -#       - @employee_logs.errors.full_messages.each do |msg|
+  -#         %li= msg
   %table
     %theader
       %h2 Add Employees To Your Account
@@ -18,13 +18,13 @@
       - if (@employee_logs)
         - @employee_logs.each do |log|
           %tr.row
-            = render partial: 'employees/form', locals: { log: log }
+            = render partial: 'employees/row', locals: { log: log }
         %tr.row.last
-          = render partial: 'employees/form'
+          = render partial: 'employees/row', locals: { log: false }
     %tfooter
       %input.submit{:type => "submit", :name => "submit"} Save!
   %br
   %h4 Came prepared? Upload a CSV instead
-    %form{:action=>"employees/upload",:method=>"post", :enctype=>"multipart/form-data"}
-      %input{:type=>"file",:name=>"file"}
-      %input{:type=>"submit",:value=>"Upload"}
+  %form{:action=>"employees/upload", :method=>"post", :enctype=>"multipart/form-data"}
+    %input{:type=>"file",:name=>"file"}
+    %input{:type=>"submit",:value=>"Upload"}

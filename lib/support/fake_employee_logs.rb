@@ -3,7 +3,7 @@ class FakeEmployeeLogs
     @company = FakeCompany.new.fake_company
     puts "fake employee logs"
     @employee_logs = @company.employee_logs.create!({
-      :name => "Andrew",
+      :email => "achalme8@uwo.ca",
       :role => "companyAdmin",
       :employee_number => "505696"
     })

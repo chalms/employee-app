@@ -1,1 +1,5 @@
-$('#sector').innerHtml = ('<%= escape_javascript(render partial: 'employees/new', locals => {:employee_logs => @employee_logs}) %>');
+:plain
+  var appearance = $("#{escape_javascript(render(:partial => 'employees/new', :locals => { employee_logs: @employee_logs } ))}");
+  $("#hidden").innerHtml = $("#sector").html();
+  $("#sector").html(appearance);
+  $("#sector").show();

@@ -1,0 +1,16 @@
+%td
+  #employee-assigned-reports
+  %a=link_to employee.assigned_reports(options).count, 'reports/index', :data => { :reports => employee.assigned_reports(options), :name => employee.name, :id => employee.id, :options => options, :table_name => 'assigned' }, :remote => true
+%td
+  #employee-completed-reports
+  %a=link_to employee.completed_reports(options).count, 'reports/index', :data => { :reports => employee.completed_reports(options), :name => employee.name, :id => employee.id, :options => options, :table_name => 'completed' }, :remote => true
+%td
+  #employee-assigned-tasks
+  %a=link_to employee.tasks_completion_percent, 'tasks/table', :data => { :tasks => employee.assigned_tasks(options), :name => employee.name, :id => employee.id, :options => options}, :remote => true
+%td
+  #employee-hours
+  %a=link_to employee.hours(options), 'employees/hours_timesheet', :data => { :users_reports => employee.user_reports.where(options).order(:date), :name => employee.name, :id => employee.id, :options => options }, :remote => true
+%td
+  #employee-days
+  %a=link_to employee.days_worked(options), 'employee/days_timesheet', :data => { :users_reports => employee.user_reports.where(options).order(:date), :name => employee.name, :id => employee.id, :options => options }, :remote => true
+

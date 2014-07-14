@@ -3,15 +3,17 @@ class FakeReportsTasks
     @tasks = tasks
     while(@tasks.length > 0)
       users_reports.each do |u_r|
+        break if @tasks.length == 0
         task = @tasks.pop
+        puts "checking if task assignment is true"
         unless (task.assignment)
-          puts u_r.inspect
           u_r.reports_tasks.create!({
-            :task_id => task.id,
-            :users_report_id => u_r.id
+            :task_id => task.id
           })
         end
       end
+      puts "next task"
     end
+    puts "done fake report tasks"
   end
 end

@@ -6,7 +6,7 @@
   %h3
   %ul.navigation
     %li
-      %a{:href => "/employees/new"} Add Employees
+      %a= link_to "Add Employees", 'employees/new', :remote => true
     %li
       %a{:href => "/projects/new"} Add a Project
     %li

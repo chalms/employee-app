@@ -34,7 +34,7 @@ class UsersReport < ActiveRecord::Base
   end
 
   def tasks
-    reports_tasks.map { |q| q.part }
+    reports_tasks.map { |q| q.task }
   end
 
   def add_reports_task(reports_task)

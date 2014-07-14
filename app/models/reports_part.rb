@@ -1,6 +1,6 @@
 class ReportsPart < ActiveRecord::Base
   include JsonSerializingModel
-  has_one :part
+  belongs_to :part
   belongs_to :users_report
   has_many :photos
   has_and_belongs_to_many :locations
@@ -16,11 +16,9 @@ class ReportsPart < ActiveRecord::Base
   end
 
   def users_report
-    @users_report ||= (self.users_report || UsersReport.find(users_report_id))
-  end
-
-  def users_report_id
-    @users_report_id ||= self.users_report_id
+    @users_report ||= (self.users_report)
+    @users_report ||= UsersReport.find(self.users_report_id)
+    @users_report
   end
 
   def report_id

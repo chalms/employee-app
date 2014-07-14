@@ -1,5 +1,5 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :email, :name, :password, :employee_number, :hours, :days_worked, :id, :company_id
+  attributes :email, :name, :password, :employee_number, :hours, :days_worked, :id, :company_id, :company
   has_one :contact
   has_many :users_reports
   has_many :users_chats

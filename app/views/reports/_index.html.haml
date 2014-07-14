@@ -1,9 +1,9 @@
-.reports-table{:name => @table_name, :hidden => ""}
+.reports{:name => @table_name, :hidden => ""}
   %table
     %thead
       %h2
         - if (@name)
-          = "#{name} "
+          = "#{@name} "
         = "Reports"
         - if (options[:name])
           %br=" for #{options[:name]}"
@@ -14,10 +14,10 @@
         %th % Complete
         %th Hours
         %th Date
-      - reports.each do |report|
+      - @reports.each do |report|
         %tr
-          %td= link_to report.summary, reports(report.id)
-          %td= link_to report.manager.name, managers(manager.id)
+          %td= link_to report.summary, reports_path(report.id)
+          %td= link_to report.manager.name, managers_path(report.manager.id)
           %td= report.tasks_completion_percent
           %td= report.hours
           %td= report.date

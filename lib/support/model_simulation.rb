@@ -15,7 +15,9 @@ class ModelSimulation
     @user_reports.each do |u_r|
       @reports_tasks << u_r.tasks
     end
+    puts "starting fake reprots parts"
     FakeReportsParts.new(@parts, @user_reports)
+    puts "done fake reports parts"
     @reports_parts = []
     @user_reports.each do |u_r|
       @reports_parts << u_r.parts
