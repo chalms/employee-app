@@ -1,5 +1,4 @@
-:plain
-  var appearance = $("#{escape_javascript(render(:partial => 'employees/show', :locals => { employee: employee } ))}");
-  $("#hidden").innerHtml = $("#sector").html();
-  $("#sector").html(appearance);
-  $("#sector").show();
+var appearance = $('<%= escape_javascript(render(:partial => 'employees/show', :locals => { employee: employee } ))%>');
+$("#hidden").innerHtml = $("#sector").html();
+$("#sector").html(appearance);
+$("#sector").show();

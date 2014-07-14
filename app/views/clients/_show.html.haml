@@ -1,0 +1,19 @@
+.client
+  %h2= "#{client.name}"
+  .summary
+    %ul
+      %li.group Assigned Tasks: #{client.assigned_tasks}
+      %li.group % Completion: #{client.tasks_percent_completion}
+      %li.group Hours: #{client.hours}
+  .projects
+    - if (client.projects)
+      = render partial: 'projects/index', locals: { projects: client.projects }, :remote => true
+  .locations
+    - if (client.locations)
+      = render partial: 'locations/map', locals: { locations: client.locations }
+    %button.button= link_to "Add a new location for client", :data => { :belongs_to => client }, :remote => true
+  .contacts
+    - if (client.contacts)
+      - client.contacts.each do |contact|
+        = render partial: 'contacts/show', locals: { contact: contact}
+    %button.button= link_to "Add a New Contact", 'contact/new', :data => { :belongs_to => client }, :remote => true

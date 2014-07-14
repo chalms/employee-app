@@ -1,10 +1,20 @@
-= form_for @client do |f|
+%form{:action => 'clients', :method => 'post'}
   - if @client.errors.any?
     #error_explanation
       %h2= "#{pluralize(@client.errors.count, "error")} prohibited this client from being saved:"
       %ul
         - @client.errors.full_messages.each do |msg|
           %li= msg
-
-  .actions
-    = f.submit 'Save'
+  .group
+    %h3 Name:
+    %input.text_field{:name => "name", :type => "text"}
+  .group
+    %ul#client-contact
+      %li
+        %a=link_to "Add a Contact For Client", '/contacts/new', :data => {:embedded => true}, :remote => true
+  .group
+    %ul#client-location
+      %li
+        %a=link_to "Add a Client Location", '/locations/new', :data => {:embedded => true}, :remote => true
+  .group
+    %input.submit{:name => "submit", :type => "submit"}

@@ -1,5 +1,19 @@
-%ul.grid
-  %h4 Clients:
-  - clients.each do |c|
-    %li.gridrow
-      = link_to c.name, clients_path(c)
+.clients-table
+  %table
+    %thead
+      %h2.title
+        = "#{name} Clients"
+    %tbody
+      %tr
+        %th Name
+        %th Assigned Tasks
+        %th % Complete
+        %th Hours
+        %th Contact
+      - clients.each do |client|
+        %tr
+          %td= link_to client.name, clients_path(client.id)
+          %td= client.assigned_tasks
+          %td= client.tasks_percent_completion
+          %td= client.hours
+          %td= client.contact.name

@@ -1,36 +1,19 @@
 .block
   .secondary-navigation
     %ul.wat-cf.project-items
-      %li.first.active{:name => "project-summary"}
-        %a Project Summary
-      %li{:name => "project-clients"}
-        %a Clients
-      %li{:name => "project-employees"}
-        %a Employees
-      %li{:name => "project-reports"}
-        %a Reports
+      %li.first.active
+        %a= link_to "Project Summary", "projects/summary", :data => {:project => @project}, :div => '#projects-template', :remote => :true
+      %li
+        %a= link_to "Project Reports", "reports/index", :data => {:reports => @project.reports.order(:date), :options => {:project_id => project.id}, :div => '#projects-template', :remote => :true
+      %li
+        %a= link_to "Project Clients", "clients/index", :data => {:clients => project.clients.order(:name), :options => {:project_id => project.id}, :div => '#projects-template', :remote => true
+      %li
+        %a= link_to "Project Employees", "employees/index", :data => {:employees => project.employees.order(:name), :name => project.name, :options => {:project_id => project.id}}, :div => '#projects-template', :remote => true
+      %li
+        %a= link_to "Project Managars", "managers/index", :data => {:managers => project.managers.order(:name), :options => {:project_id => project.id} :name => project.name}, :div => '#projects-template', :remote => true
+      = render partial: 'projects/jscript'
   .content
     .inner
-      .project-templates
-        #project-summary
-          = render partial: 'projects/summary', :locals => {:project => @project}
-        #project-reports{hidden: ""}
-          = render partial: 'reports/table', :locals => {:reports => @project.reports.order(:date), :options => {:project_id => project.id, :name => project.name}}
-        #project-clients{hidden: ""}
-          = render partial: 'clients/table', :locals => {:clients => project.clients.order(:name), :options => {:project_id => project.id, :name => project.name}}
-        #project-employees{hidden: ""}
-          = render partial: 'employees/table', :locals => {:employees => project.employees.order(:name), :name => project.name, :options => {:project_id => project.id, :name => project.name}}
-          -# %br
-          -# = render partial: 'managers/table', :locals => {:managers => project.managers.order(:name), :options => {:project_id => project.id, :name => project.name}}
+      #projects-template
+        = render partial: 'projects/summary', :locals => {:project => @project}
 - content_for :sidebar, render(:partial => 'sidebar')
-:javascript
-  $('.project-items').on('click','li', function(){
-    console.log("here")
-   $(this).addClass('active').siblings().removeClass('active');
-   var name = $(this).attr('name');
-   console.log(name);
-   var idStr = "#" + name;
-   var id = $(idStr);
-   console.log(id);
-   id.show().siblings().hide();
-  });

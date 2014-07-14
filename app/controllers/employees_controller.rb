@@ -27,16 +27,15 @@ class EmployeesController < ApplicationController
       format.js
     end
   end
-  # GET /users/1
-  # GET /users/1.json
-  def show
-    @user = User.find(params[:id])
 
-    render json: @user
+  def show
+    respond_to do |format|
+      format.json { render json: @user }
+      format.js
+    end
   end
 
   def new
-    @user = current_user
     is_admin!
     @employee_logs = @user.company.employee_logs
     respond_to do |format|
@@ -45,10 +44,8 @@ class EmployeesController < ApplicationController
   end
 
   def upload
-    @user = current_user
     is_admin!
     file_data = params[:upload]
-
     @employee_logs = EmployeeCsv.new(file_data).employee_logs
     @employee_logs.each do |log|
       render 'employees/log_row', :locals => {:log => log}
@@ -57,7 +54,7 @@ rescue Exceptions::StdError => e
     flash[:error] = e
   end
 
-  def save_logs
+  def save_data
     @user = current_user
     is_admin!
 
@@ -83,20 +80,6 @@ rescue Exceptions::StdError => e
     flash[:error] = @error_message
     render :text => @error_message
   end
-
-  def update
-    is_manager!
-    @employee = User.find(params[:id])
-
-    if @user.update(params[:user])
-      head :no_content
-    else
-      render json: @user.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /users/1
-  # DELETE /users/1.json
 
   def destroy
     @user = User.find(params[:id])

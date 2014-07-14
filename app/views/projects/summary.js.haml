@@ -1,0 +1,5 @@
+:plain
+  var appearance = $('<%= escape_javascript(render partial: 'projects/summary', locals => { :project => @project } ) %>');
+  $('#projects-template').hide();
+  $('#projects-template').html(appearance);
+  $('#projects-template').show();
