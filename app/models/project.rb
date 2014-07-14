@@ -22,61 +22,6 @@
     @manager
   end
 
-  # def managers
-  #   @managers = []
-  #   Report.where(project_id: self.id).each do |r|
-  #     m = Manager.find(r.user_id)
-  #     @managers << m if (m)
-  #   end
-  #   @managers
-  # end
-
-  # def employees
-  #   # puts "in employees"
-  #   # puts reports.count
-  #   # puts users_reports.count
-  #   # puts users.count
-  #   @employees = users.where(type: 'Manager')
-  #   @employees
-  # end
-
-
-  def set_manager(manager_id)
-    manager = User.where(id: manager_id).andand.first
-    raise Exceptions::StdError, "User is not a manager" unless (manager.role == 'manager')
-    managers.where(id: manager.id).first_or_create
-  end
-
-  def set_employee(employee_id)
-    employee = User.where(id: employee_id).andand.first
-    raise Exceptions::StdError, "User is not an employee" unless (employee.role == 'employee')
-    employees.where(id: employee.id).first_or_create
-  end
-
-  def set_client(client_id)
-    c = Client.where(id: client_id).andand.first
-    raise Exceptions::StdError, "Client does not exist" unless (c.present?)
-    self.update_attributes(:client => c)
-  end
-
-  def set_task(task_id)
-    t = Task.where(id: task_id).andand.first
-    raise Exceptions::StdError, "Task does not exist" unless t
-    tasks.where(:task => t).first_or_create
-  end
-
-  def set_part(part_id)
-    p = Part.where(id: part_id).andand.first
-    raise Exceptions::StdError, "Part does not exist" unless p
-    parts.where(:part => p).first_or_create
-  end
-
-  def set_report(report_id)
-    r = Report.where(id: report_id).andand.first
-    raise Exceptions::StdError, "Report does not exist" unless r
-    reports.where(:report => r).first_or_create
-  end
-
   def employees
     @employees ||= users.where(role: 'employee')
   end

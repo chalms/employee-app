@@ -1,8 +1,6 @@
 class Company < ActiveRecord::Base
   include JsonSerializingModel
-
   attr_accessible :name, :admin, :reports, :complete, :assigned_parts, :assigned_tasks, :completed_parts, :completed_tasks, :complete?, :hours, :employee_days_worked
-
   has_one :contact
   has_many :projects
   has_many :users
@@ -10,25 +8,6 @@ class Company < ActiveRecord::Base
   has_many :tasks
   has_many :clients
   has_many :employee_logs
-
-  # def import_employee_logs(file)
-  #   spreadsheet = open_spreadsheet(file)
-  #   header = spreadsheet.row(1)
-  #   (2..spreadsheet.last_row).each do |i|
-  #     row = Hash[[header, spreadsheet.row(i)].transpose]
-  #     h = row.to_hash.slice(*accessible_attributes)
-  #     self.employee_logs.create!(h.merge({:company_id => @user.company.id}))
-  #   end
-  # end
-
-  # def self.open_spreadsheet(file)
-  #   case File.extname(file.original_filename)
-  #   when ".csv" then Csv.new(file.path, nil, :ignore)
-  #   when ".xls" then Excel.new(file.path, nil, :ignore)
-  #   when ".xlsx" then Excelx.new(file.path, nil, :ignore)
-  #   else raise "Unknown file type: #{file.original_filename}"
-  #   end
-  # end
 
   def managers
     @managers ||= users.where(role: 'manager')
@@ -47,36 +26,6 @@ class Company < ActiveRecord::Base
 
   def admin
     @admin ||= users.where(:role => 'companyAdmin').andand.first
-  end
-
-  def manager(manager_id)
-    manager = User.where(id: manager_id).andand.first
-    raise Exceptions::StdError, "User is not a manager" unless (manager.role == 'manager')
-    managers.where(id: manager.id).first_or_create
-  end
-
-  def employee(employee_id)
-    employee = User.where(id: employee_id).andand.first
-    raise Exceptions::StdError, "User is not an employee" unless (employee.role == 'employee')
-    employees.where(id: employee.id).first_or_create
-  end
-
-  def client(client_id)
-    c = Client.where(id: client_id).andand.first
-    raise Exceptions::StdError, "Client does not exist" unless (c.present?)
-    self.update_attributes(:client => c)
-  end
-
-  def task(task_id)
-    t = Task.where(id: task_id).andand.first
-    raise Exceptions::StdError, "Task does not exist" unless t
-    tasks.where(:task => t).first_or_create
-  end
-
-  def part(part_id)
-    p = Part.where(id: part_id).andand.first
-    raise Exceptions::StdError, "Part does not exist" unless p
-    parts.where(:part => p).first_or_create
   end
 
   def reports

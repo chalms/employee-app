@@ -5,7 +5,6 @@ class Report < ActiveRecord::Base
   belongs_to :user
   belongs_to :project
   belongs_to :client
-
   has_many :locations_reports
   has_many :locations, :through => :locations_reports
   has_many :users_reports
@@ -37,15 +36,6 @@ class Report < ActiveRecord::Base
 
   def assign_part(employee_id, part_id)
     report_for_user(get_employee(employee_id)).add_part(part_id)
-  end
-
-  def get_employee(employee_id)
-    employee = User.find(id: employee_id, company: company)
-    if (employee.present?)
-      return employee
-    else
-      raise Exceptions::StdError, "Employee does not exist"
-    end
   end
 
   def employees

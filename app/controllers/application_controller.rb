@@ -1,4 +1,3 @@
-
 class ApplicationController < ActionController::Base
 
   include AppHelper
@@ -21,7 +20,6 @@ class ApplicationController < ActionController::Base
       end
     end
   rescue Exceptions::StdError => e
-
     respond_to do |format|
       format.html { flash[:error] = e }
       format.json do
@@ -31,15 +29,19 @@ class ApplicationController < ActionController::Base
           render json: { error: e }, status: 404
         end
       end
+      format.js
     end
-
     head 500, :content_type => 'text/html'
+  end
+
+  def current_user
+    raise Exceptions::StdError, "No current user" unless (_authorization_header && current_api_session_token.valid?)
+    return current_api_session_token.user
   end
 
   def is_manager!
     raise Exceptions::StdError, "User must be a manager" unless (@user.role == 'manager')
   end
-
 
   def is_admin!
     raise Exceptions::StdError, "Must be an admin to perform this" unless (@user.role == 'companyAdmin' || @user.role == 'admin')
@@ -53,23 +55,15 @@ class ApplicationController < ActionController::Base
     !!current_api_session_token.user
   end
 
-  def current_user
-    raise Exceptions::StdError, "No current user" unless (_authorization_header && current_api_session_token.valid?)
-    return current_api_session_token.user
-  end
-
   def api_session_token_authenticate!
     return _not_authorized
   end
 
   def current_api_session_token
-    puts "token valid?"
     @current_api_session_token ||= ApiSessionToken.new(_authorization_header)
   end
 
   def _authorization_header
-    puts "auth header"
-    puts request.headers['HTTP_AUTHORIZATION'].inspect
     return request.headers['HTTP_AUTHORIZATION']
   end
 

@@ -1,5 +1,4 @@
 class TasksController < ApplicationController
-
   def index
     user!
     admin_manager!
@@ -43,8 +42,6 @@ class TasksController < ApplicationController
     end
   end
 
-  # POST /tasks
-  # POST /tasks.json
   def create
     user!
     is_admin_manager!
@@ -103,5 +100,4 @@ class TasksController < ApplicationController
   def admin_manager!
     raise Exceptions::StdError, "Employee cannot create a task" unless (@user.role.downcase == 'companyadmin' || @user.role.downcase == 'manager')
   end
-
 end

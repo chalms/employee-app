@@ -3,7 +3,6 @@ class Contact < ActiveRecord::Base
   attr_accessible :phone, :email, :name, :owner
   belongs_to :company
   belongs_to :user
-
   validate :validator
 
   def validator

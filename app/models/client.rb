@@ -8,49 +8,11 @@
   belongs_to :company
   has_many :contacts
   belongs_to :user
-
   has_many :reports, :through => :projects
-
   attr_accessible :name, :manager, :complete, :assigned_parts, :assigned_tasks, :completed_parts, :completed_tasks, :company, :complete?, :hours, :employee_days_worked
 
   def manager
     @manager ||= user
-  end
-
-  def set_manager(manager_id)
-    manager = User.where(id: manager_id).andand.first
-    raise Exceptions::StdError, "User is not a manager" unless (manager.role == 'manager')
-    managers.where(id: manager.id).first_or_create
-  end
-
-  def set_task(task_id)
-    t = Task.where(id: task_id).andand.first
-    raise Exceptions::StdError, "Task does not exist" unless t
-    tasks.where(:task => t).first_or_create
-  end
-
-  def set_part(part_id)
-    p = Part.where(id: part_id).andand.first
-    raise Exceptions::StdError, "Part does not exist" unless p
-    parts.where(:part => p).first_or_create
-  end
-
-  def set_report(report_id)
-    r = Report.where(id: report_id).andand.first
-    raise Exceptions::StdError, "Report does not exist" unless r
-    reports.where(:report => r).first_or_create
-  end
-
-  def set_project(project_id)
-    p = Project.where(id: project_id).andand.first
-    raise Exceptions::StdError, "Project does not exist" unless p
-    projects.where(:project => p).first_or_create
-  end
-
-  def set_contact(contact_id)
-    c = Contact.where(id: contact_id).andand.first
-    raise Exceptions::StdError, "Contact does not exist" unless c
-    contacts.where(:company => c).first_or_create
   end
 
   def assigned_tasks(options = {})

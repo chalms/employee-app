@@ -6,7 +6,6 @@ class User < ActiveRecord::Base
   validate :email, :format => {:with => /\A[^@]+@[^@]+\.[^@]+\Z/}
   validates :employee_number, :uniqueness => true
   after_create :valid_employee_id?, :set_type
-
   has_one :contact
   has_many :users_reports
   belongs_to :company
@@ -64,14 +63,9 @@ class User < ActiveRecord::Base
   end
 
   def valid_employee_id?
-    puts "valid_employee_id"
-    puts "#{self.employee_number}"
-    puts "#{company.employee_logs.inspect}"
     emp = company.employee_logs.find_by_employee_number(self.employee_number)
-    puts "EMPLOYEE LOGS: #{emp.inspect}"
     raise Exceptions::StdError, "Not a valid employee id for that company!" unless (emp.andand.present?)
     self.update_attributes({role: emp.role})
-    puts "#{self.role}"
     @role = self.role
   end
 
