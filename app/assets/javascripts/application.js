@@ -5,6 +5,10 @@
 //= require hamlcoffee
 //= require json2
 //= require underscore
+//= require html5.js
+//= require jquery.jeditable
+//= require bootstrap
+//= require bootstrap-datepicker
 
 $(document).ready(function() {
   $( document ).ajaxSend(function(elem, xhr, options) {

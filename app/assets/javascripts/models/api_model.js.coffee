@@ -6,7 +6,7 @@ App.ApiModel = Backbone.Model.extend
 
   fetch : (options) ->
     options = options || {}
-    if sessionStorage.auth then options.headers = {'AUTHENTICATION': sessionStorage.auth}
+    if sessionStorage.auth then options.headers = {'AUTHORIZATION': sessionStorage.auth}
 
     if !options.force && @collectionName && Metrics.Data[@collectionName].get(@id)
       @attributes = Metrics.Data[@collectionName].get(@id).attributes
@@ -42,7 +42,7 @@ App.ApiModel = Backbone.Model.extend
       model.set options.extraProperties if options.extraProperties
       #custom error to look for 401 and log user out automatically
       originalError = if options.error then options.error else null
-     
+
       console.log "options"
       console.log options
       newError = (model, xhr, options) ->
@@ -69,7 +69,7 @@ App.ApiModel = Backbone.Model.extend
 
   apiCall: (path, data, returnTo, type, opts) ->
     opts || = {}
-    if sessionStorage.auth then opts.headers = {'AUTHENTICATION': sessionStorage.auth}
+    if sessionStorage.auth then opts.headers = {'AUTHORIZATION': sessionStorage.auth}
 
     Metrics.modal.show()
     # may need to set header here for auth token
@@ -77,7 +77,7 @@ App.ApiModel = Backbone.Model.extend
       url= @url()+path
     else
       url= @url+path
-      
+
     console.log "apiCall -> url"
     console.log url
 
@@ -91,10 +91,10 @@ App.ApiModel = Backbone.Model.extend
       data: JSON.stringify(data) #make sure we are sending good json
       dataType: 'json' #json response
       contentType: 'application/json' #sending json
-      
+
       success: (data, textStatus, jqXHR ) ->
         console.log "Api Call"
-        console.log data 
+        console.log data
 
         if opts['success']
           Metrics.modal.hide()
@@ -111,17 +111,17 @@ App.ApiModel = Backbone.Model.extend
         Metrics.showAlert 'Something went wrong!'
 
   apiGet: (path, data, returnTo, opts) ->
-    if sessionStorage.auth then opts.headers = {'AUTHENTICATION': sessionStorage.auth}
+    if sessionStorage.auth then opts.headers = {'AUTHORIZATION': sessionStorage.auth}
 
     @apiCall(path, data, returnTo, 'GET', opts)
 
   apiPut: (path, data, returnTo, opts) ->
-    if sessionStorage.auth then opts.headers = {'AUTHENTICATION': sessionStorage.auth}
+    if sessionStorage.auth then opts.headers = {'AUTHORIZATION': sessionStorage.auth}
 
     @apiCall(path, data, returnTo, 'PUT', opts)
 
   apiPost: (path, data, returnTo, opts) ->
-    if sessionStorage.auth then opts.headers = {'AUTHENTICATION': sessionStorage.auth}
+    if sessionStorage.auth then opts.headers = {'AUTHORIZATION': sessionStorage.auth}
 
     @apiCall(path, data, returnTo, 'POST', opts)
 

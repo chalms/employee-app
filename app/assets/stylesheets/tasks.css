@@ -51,10 +51,6 @@ body {
 	font-style: italic;
 }
 
-#main {
-	display: none;
-}
-
 #task-list {
 	margin: 10px 0;
 	padding: 0;
@@ -193,9 +189,9 @@ body {
 	color: #336699;
 }
 
-#new { 
-	width: 50%; 
+#new {
+	width: 50%;
 	height: 40%;
-	margin: auto; 
+	margin: auto;
 	margin-top: 20%;
 }

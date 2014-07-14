@@ -1,7 +1,6 @@
 class Manager < User
   include JsonSerializingModel
   attr_accessible :hours, :days_worked, :assigned_tasks,:completed_tasks, :assigned_parts, :completed_parts, :tasks_completion_percent, :parts_completion_percent, :reports_completion_percent, :todays_activity, :email, :name, :employee_number
-
   has_many :user_chats
   has_many :chats, :through => :user_chats
   has_many :user_messages

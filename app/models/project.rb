@@ -1,6 +1,5 @@
  class Project < ActiveRecord::Base
   attr_accessible  :name, :start_date, :end_date, :budget, :complete, :assigned_parts, :assigned_tasks, :completed_parts, :completed_tasks, :company_id, :complete?, :hours, :employee_days_worked, :manager_number, :clients, :managers, :employees, :manager
-
   belongs_to :company
   has_many :reports
   has_many :tasks
@@ -104,7 +103,6 @@
     else
       rep = reports
     end
-
     if (options["upcoming"])
       return rep.where("date < ?", Date.new)
     elsif (options["today"])

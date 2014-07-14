@@ -19,11 +19,8 @@ class Chat < ActiveRecord::Base
   def send_message(message_text, message_photo, user_id)
     message_hash = {}
     message_hash[:text] = message_text
-
     message = Message.create!(user_id: user_id, chat_id: id, group: users)
     message.data = message_text
-    # message.photo = Photo.create!(:data => message_photo, :message => message) if (message_photo.andand.present?)
-
     raise Exceptions::StdError, "Message could not be saved!" unless message.save
   end
 end

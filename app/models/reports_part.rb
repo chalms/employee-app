@@ -4,7 +4,6 @@ class ReportsPart < ActiveRecord::Base
   belongs_to :users_report
   has_many :photos
   has_and_belongs_to_many :locations
-
   attr_accessible :complete, :note, :completion_time, :manager_id, :users_report_id, :report_id, :part_id
 
   def manager
@@ -28,5 +27,4 @@ class ReportsPart < ActiveRecord::Base
   def report
     @report ||= (users_report.report || Report.find(users_report.report_id))
   end
-
 end
