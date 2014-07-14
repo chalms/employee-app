@@ -1,1 +1,2 @@
-$('#employee-hours').innerHtml = ('<%= escape_javascript(render partial: 'employees/hours_timesheet', locals => @data) %>');
+var apple = ('<%= escape_javascript(render partial: 'employees/hours_timesheet', locals => @data) %>');
+$(@div).html(apple).show();

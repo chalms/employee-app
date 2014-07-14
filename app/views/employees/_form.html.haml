@@ -1,10 +1,10 @@
 %form{ :method => 'post', action: 'employees/save_data'}
-  -# - if @employee_logs.errors.any?
-  -#   #error_explanation
-  -#     %h2= "#{pluralize(@employee_logs.errors.count, "error")} prohibited this company from being saved:"
-  -#     %ul
-  -#       - @employee_logs.errors.full_messages.each do |msg|
-  -#         %li= msg
+  - if @employee_logs.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@employee_logs.errors.count, "error")} prohibited this company from being saved:"
+      %ul
+        - @employee_logs.errors.full_messages.each do |msg|
+          %li= msg
   %table
     %theader
       %h2 Add Employees To Your Account

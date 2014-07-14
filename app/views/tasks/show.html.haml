@@ -1,6 +1,2 @@
-%p#notice= notice
-
-
-= link_to 'Edit', edit_task_path(@task)
-\|
-= link_to 'Back', tasks_path
+var new = $('<%= escape_javascript(render partial: 'tasks/show', locals => { task: @task}) %>');
+$(@div).html(new).show();

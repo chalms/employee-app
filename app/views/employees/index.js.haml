@@ -1,6 +1,5 @@
-plain:
-  var applebys = $('<%= escape_javascript(render partial: 'employees/index', :locals => { :employees => @employees }) %>');
-  $('#sector').hide();
-  $('#hidden').innerHtml = $('#sector').html();
-  $('#sector').html(applebys);
-  $('#sector').show();
+var applebys = $('<%= escape_javascript(render partial: 'employees/index', :locals => { :employees => @employees }) %>');
+$('#sector').hide();
+$('#hidden').innerHtml = $('#sector').html();
+$('#sector').html(applebys);
+$('#sector').show();

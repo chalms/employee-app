@@ -1,0 +1,2 @@
+var index = $('<%= escape_javascript(render partial: 'tasks/index', locals => @data) %>');
+$(@div).html(index).show();

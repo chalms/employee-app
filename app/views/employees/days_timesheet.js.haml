@@ -1,1 +1,2 @@
-$('#employee-days').innerHtml = $('<%= escape_javascript(render partial: 'employees/days_timesheet', locals => @data) %>');
+var moscow = $('<%= escape_javascript(render partial: 'employees/days_timesheet', locals => @data) %>');
+$(@div).html(moscow).show();

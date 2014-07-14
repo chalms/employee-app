@@ -1,0 +1,20 @@
+%h2
+  - if (name)
+    = "#{name} "
+  = "Tasks"
+  - if (options[:name])
+    %br=" for #{options[:name]}"
+%ul.grid
+  .gridrow
+    .well
+      - tasks.each do |task|
+        - if (task.completed)
+          .task-complete
+            %h5.task-name=link_to task.name, tasks(task)
+            %h5.task-description= task.description
+            - if (task.photos.count > 0)
+              - task.photos.each do |photo|
+                .img-well
+                  %img{:data => photo.data}
+            %h4.green= "Completed at: #{task.updated_at}"
+            %p.note task.note

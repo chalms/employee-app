@@ -1,5 +1,2 @@
-%h1 New task
-
-= render 'form'
-
-= link_to 'Back', tasks_path
+var new = $('<%= escape_javascript(render partial: 'tasks/new', locals => @data) %>');
+$(@div).html(new).show();

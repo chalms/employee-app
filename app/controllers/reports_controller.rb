@@ -4,7 +4,7 @@ class ReportsController < ApplicationController
   include ActionController::MimeResponds
   def index
     @user = current_user
-    is_manager!
+    validate_user_role!
     @div = params[:div]
     @data = params[:data]
     if (!!@data)
@@ -36,7 +36,7 @@ class ReportsController < ApplicationController
 
   def new
     @user = current_user
-    is_manager!
+    validate_user_role!
     @report = Report.new
     respond_to do |format|
       format.json { render json: @report, status: :success }
@@ -49,7 +49,7 @@ class ReportsController < ApplicationController
   # POST /api/reports.json
   def create
     @user = current_user
-    is_manager!
+    validate_user_role!
     params[:report].each { |k,v| params[k] = v if ((params[k]==nil) && (v != nil)) }
     params.each{ |k,v|  v = params[:report][k] unless (v.present? && (k.to_s == "report")) }
 
@@ -60,9 +60,7 @@ class ReportsController < ApplicationController
     end
 
     attr_hash = {:date => p[:report_date],  :name => p[:name],  :description => p[:description]}
-
     r = Report.find_by_id(p[:id])
-
     if (r.present?)
       @report = r.update_attributes!(attr_hash)
     else
