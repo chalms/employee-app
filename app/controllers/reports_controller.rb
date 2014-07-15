@@ -36,7 +36,10 @@ class ReportsController < ApplicationController
   def new
     @user = current_user
     validate_user_role!
-    @report = Report.new
+    params = (params[:report] || params)
+    @div = params[:div] ||= nil
+    @data = params[:data]
+    validate_user_role!
     respond_to do |format|
       format.json { render json: @report, status: :success }
       format.html { render haml: @report }

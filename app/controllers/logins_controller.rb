@@ -35,6 +35,12 @@ class LoginsController < ApplicationController
     end
   end
 
+  def logout
+    @user = current_user
+    current_api_session_token.delete!
+    render :new
+  end
+
   private
   def set_token!
     token = current_api_session_token

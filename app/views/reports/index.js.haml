@@ -1,1 +1,4 @@
-$('#display').prepend('<%= escape_javascript(render partial: 'reports/table', locals => @data) %>');
+:plain
+var appearance = $('<%= escape_javascript(render partial: 'reports/table', locals => @data) %>');
+$(@div).html(appearance);
+$(@div).show();

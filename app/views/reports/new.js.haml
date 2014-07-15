@@ -1,0 +1,4 @@
+:plain
+var appearance = $('<%= escape_javascript(render partial: 'reports/new', locals => @data) %>');
+$(@div).html(appearance);
+$(@div).show();

@@ -77,6 +77,7 @@ Metrics::Application.routes.draw do
   end
 
   get '/login' => 'logins#new'
+  get '/logout' => 'logins#logout'
   root :to => 'signups#new'
 
 
