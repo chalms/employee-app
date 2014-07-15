@@ -1,26 +1,44 @@
 class UsersReport < ActiveRecord::Base
   include JsonSerializingModel
-  attr_accessible :complete, :checkin, :checkout, :parts, :tasks, :location, :date, :hours, :employee, :manager, :report_id, :user_id
+  attr_accessible :complete, :checkin, :checkout, :parts, :tasks, :location, :date, :hours, :employee, :manager, :report_id, :user_id, :chat_id
 
   belongs_to :report
   belongs_to :user
   has_many :reports_parts
   has_many :reports_tasks
+  has_one :chat
   has_and_belongs_to_many :locations
+  after_create :create_chat
+  TYPES = ['UsersReportsChat', 'ReportsChat']
+
+  def create_chat
+    chat = Chat.joins(:users_chats).where('user_id = ? OR user_id = ?', user.id, manager_id).andand.first
+    unless !!chat
+      chat = UsersReportsChat.create!({:type => TYPES[0], :users_report_id => self.id, :name => "#{employee.name} & #{manager.name}"})
+      employee.users_chats.where({:chat_id => chat.id}).first_or_create!
+      chat.users_chats.create!({:user_id => employee.id})
+      manager.users_chats.where({:chat_id => chat.id}).first_or_create!
+      chat.users_chats.create!({:user_id => manager.id})
+    end
+    update_attribute(:chat_id, chat.id)
+  end
 
   def date
     @date ||= report.date
   end
 
   def manager
-    @manager ||= User.where(id: report.manager_id)
+    @manager ||= User.find(report.manager_id)
     if (@manager.present?)
-      raise Exceptions::StdError, "Not a manager!" if (@manager.role == 'employee')
+      raise Exceptions::StdError, "User report cant find manager!" if (@manager.role == 'employee')
     end
+    @manager
   end
 
   def employee
     @employee ||= self.user
+    @employee ||= User.find(self.user_id)
+    @employee
   end
 
   def hours

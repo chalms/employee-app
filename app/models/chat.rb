@@ -4,12 +4,21 @@ class Chat < ActiveRecord::Base
   has_many :users_chats
   has_many :users, :through => :users_chats
   has_many :messages
-  attr_accessible :company_id, :id
-  after_create :multi_user_unique
+  attr_accessible :company_id, :type, :name
+  after_create :has_owner
+  TYPES = ['UsersReportsChat', 'ReportsChat']
 
-  def multi_user_unique
-    raise Exceptions::StdError, "Something went wrong, hold on [for developers -> chat: no company id]" unless Company.find_by_id(company_id).present?
+  def has_owner
+    raise Exceptions::StdError, "Chat has no owner" unless (type != nil || !!self.company_id )
     return true
+  end
+
+  def company
+    if (!!self.company)
+      @company ||= self.company
+    else
+      @company ||= Company.find(self.company_id)
+    end
   end
 
   def get_messages

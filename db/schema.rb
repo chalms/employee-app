@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140713151947) do
+ActiveRecord::Schema.define(version: 20140715033052) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,10 @@ ActiveRecord::Schema.define(version: 20140713151947) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "company_id"
+    t.integer  "report_id"
+    t.integer  "users_report_id"
+    t.integer  "name"
+    t.string   "type"
   end
 
   create_table "clients", force: true do |t|
@@ -154,6 +158,7 @@ ActiveRecord::Schema.define(version: 20140713151947) do
     t.integer "client_id"
     t.integer "user_id"
     t.integer "project_id"
+    t.integer "chat_id"
   end
 
   create_table "reports_parts", force: true do |t|
@@ -227,6 +232,7 @@ ActiveRecord::Schema.define(version: 20140713151947) do
     t.boolean  "complete",    default: false
     t.integer  "location_id"
     t.integer  "manager_id"
+    t.integer  "chat_id"
   end
 
   add_index "users_reports", ["user_id", "report_id"], name: "index_users_reports_on_user_id_and_report_id", using: :btree
