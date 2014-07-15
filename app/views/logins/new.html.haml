@@ -1,8 +1,9 @@
-.block
-  .page-header
-    %h1
-      Welcome back!
-    %div.instruction
-      Enter your user name and password to login.
+- content_for :user_nav, render(:partial => 'logins/user_nav')
+.page-header
+  %h1.h1
+    Welcome back!
+  %div.instruction
+    Enter your user name and password to login.
+.block.bounded
   %div.login
     = render 'login_form'

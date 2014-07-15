@@ -2,7 +2,7 @@
 %html
   %head
     %title TimeCard
-    = stylesheet_link_tag "web-app-theme/base", "web-app-theme/themes/drastic-dark/style", :cache => true
+    = stylesheet_link_tag "web-app-theme/base", "web-app-theme/themes/drastic-dark/style"
     = stylesheet_link_tag "application"
     = javascript_include_tag :application
     = csrf_meta_tag
@@ -22,9 +22,8 @@
               %div{:class => "message #{type}"}
                 %p= message
           = yield
-          #footer
-            .block
-              %p
-                Copyright &copy; #{Time.now.year} TimeCard
         #sidebar
           = yield :sidebar
+    #sticky-footer
+      .container
+        %h5 Copyright &copy; #{Time.now.year} TimeCard

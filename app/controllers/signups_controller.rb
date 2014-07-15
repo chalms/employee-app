@@ -4,7 +4,6 @@ class SignupsController < ApplicationController
   def new
     begin
       @signup ||= Signup.new
-      flash[:notice] = ""
     rescue Exceptions::StdError => e
       @signup = Signup.new
     end
@@ -17,7 +16,6 @@ class SignupsController < ApplicationController
   def create
     begin
       @signup ||= Signup.new
-      flash[:notice] = ""
       @signup.update(params)
       @user = @signup.save!
       route!

@@ -1,14 +1,13 @@
-.form.form-inline
+.form
   %form{:role => 'form', :method => 'post', :action => '/logins'}
     %p= link_to "Not a member?", '/'
-    .group
+    .from-group
       .input-prepend.first
         %span.add-on
-          %i.icon-envelope
-        %input.span2.form-control{:type => "text", :name => "email", :placeholder => "Email"}
-    .group
+      %input.form-control{:type => "text", :name => "email", :placeholder => "Email"}
+    .from-group
       .input-prepend
         %span.add-on
-          %i.icon-key
+          %i.fa.icon-key
         %input.span2.form-control{:type => "password", :name => "password", :placeholder => "Password"}
     %input.btn.btn-default{:style => "visibility: hidden;", :type => "submit"}

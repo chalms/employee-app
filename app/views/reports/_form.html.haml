@@ -1,8 +1,9 @@
-%form.form-inline{:method => 'post', :action => '/reports'}
-  - if (flash[:error])
-    #error_explanation
-      %h2= "#{pluralize(@report.errors.count, "error")} prohibited this report from being saved:"
-  .group
-    %label Date:
-    %input#report-date{ :type => "date", :name => "date" }
+.form
+  %form{:method => 'post', :action => '/reports'}
+    - if (flash[:error])
+      #error_explanation
+        %h2= "#{pluralize(@report.errors.count, "error")} prohibited this report from being saved:"
+    .form-group
+      %label.date Date:
+      %input#report-date.form-control{ :type => "date", :name => "date" }
 

@@ -24,12 +24,6 @@ body {
 	border-radius: 0 0 5px 5px;
 }
 
-#taskapp h1 {
-	font-size: 36px;
-	font-weight: bold;
-	text-align: center;
-	padding: 0 0 10px 0;
-}
 
 #taskapp input[type="text"] {
 	width: 466px;

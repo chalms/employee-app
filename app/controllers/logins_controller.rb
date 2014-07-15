@@ -6,7 +6,6 @@ class LoginsController < ApplicationController
   def new
     begin
       @login ||= Login.new
-      flash[:notice] = ""
     rescue Exceptions::StdError => e
       @login = Login.new
     end
@@ -19,7 +18,6 @@ class LoginsController < ApplicationController
   def create
     begin
       @login ||= Login.new
-      flash[:notice] = ""
       @login.update(params)
       @user = @login.save!
       set_token!

@@ -1,5 +1,117 @@
 @import "bootstrap";
 
+$brand-primary: #428bca;
+$brand-success: #5cb85c;
+$brand-info:    #5bc0de;
+$brand-warning: #f0ad4e;
+$brand-danger:  #d9534f;
+$gray-darker:  lighten(#000, 13.5%);
+$gray-dark:    lighten(#000, 20%);
+$gray:         lighten(#000, 33.5%);
+$gray-light:   lighten(#000, 46.7%);
+$gray-lighter: lighten(#000, 93.5%);
+
+$link-color: $brand-primary;
+$link-hover-color: darken($link-color, 15%);
+
+$font-family-sans-serif:  "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-family-serif:       Georgia, "Times New Roman", Times, serif;
+$font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace;
+$font-family-base:        $font-family-sans-serif;
+
+$font-size-base:          14px;
+$font-size-large:         ceil(($font-size-base * 1.25)); // ~18px
+$font-size-small:         ceil(($font-size-base * 0.85)); // ~12px
+
+$font-size-h1:            floor(($font-size-base * 2.6)); // ~36px
+$font-size-h2:            floor(($font-size-base * 2.15)); // ~30px
+$font-size-h3:            ceil(($font-size-base * 1.7)); // ~24px
+$font-size-h4:            ceil(($font-size-base * 1.25)); // ~18px
+$font-size-h5:            $font-size-base;
+$font-size-h6:            ceil(($font-size-base * 0.85)); // ~12px
+
+$line-height-base:        1.428571429; // 20/14
+$line-height-computed:    floor(($font-size-base * $line-height-base)); // ~20px
+
+$headings-font-family:    inherit;
+$headings-font-weight:    500;
+$headings-line-height:    1.1;
+$headings-color:          inherit;
+
+$body-bg:    #fff;
+//
+$text-color: #fff 50;
+
+body {
+  background-color: $body-bg;
+  color: $text-color;
+  font-family: $font-family-sans-serif;
+}
+.primary {
+  background-color: $brand-primary;
+}
+.success {
+  background-color: $brand-success;
+}
+.info {
+  background-color: $brand-info;
+}
+.warning {
+  background-color: $brand-warning;
+}
+.danger {
+  background-color: $brand-danger;
+}
+
+h1 {
+  font-size: $font-size-h1;
+}
+
+h2 {
+  font-size: $font-size-h2;
+}
+
+h3 {
+  font-size: $font-size-h3;
+}
+
+h4 {
+  font-size: $font-size-h4;
+}
+
+h5 {
+  font-size: $font-size-h5;
+}
+
+h6 {
+  font-size: $font-size-h6;
+}
+
+a {
+  color: $link-color;
+  text-decoration: none;
+
+  &:hover {
+    color: $link-hover-color;
+    text-decoration: underline;
+  }
+}
+.masthead {
+  background-color: $brand-primary;
+}
+
+// Reassigned variables in Less
+$alert-message-background: $brand-info;
+.alert {
+  background-color: $alert-message-background;
+}
+  #container {
+    min-width: 0;
+  }
+  .page-header {
+    margin-top: 5%;
+  }
+
 // make all images responsive by default
 img {
   @extend .img-responsive;
@@ -13,6 +125,9 @@ img {
 // THESE ARE EXAMPLES YOU CAN MODIFY
 // create your own classes
 // to make views framework-neutral
+.bounded {
+  max-width: 300px;
+}
 .column {
   @extend .col-md-6;
   @extend .text-center;
@@ -79,42 +194,7 @@ section {
   @extend .btn-xs;
 }
 
-body {
-  background-color: #fff;
-  color: #333;
-  font-family: verdana, arial, helvetica, sans-serif;
-  font-size: 13px;
-  line-height: 18px;
-}
 
-p, ol, ul, td {
-  font-family: verdana, arial, helvetica, sans-serif;
-  font-size: 13px;
-  line-height: 18px;
-}
-
-pre {
-  background-color: #eee;
-  padding: 10px;
-  font-size: 11px;
-}
-
-a {
-  color: #000;
-  &:visited {
-    color: #666;
-  }
-  &:hover {
-    color: #fff;
-    background-color: #000;
-  }
-}
-
-div {
-  &.field, &.actions {
-    margin-bottom: 10px;
-  }
-}
 
 #notice {
   color: green;
@@ -157,3 +237,4 @@ div {
     list-style: square;
   }
 }
+

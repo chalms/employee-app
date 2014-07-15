@@ -2,15 +2,15 @@
   .secondary-navigation
     %ul.wat-cf.project-items
       %li.first.active
-        %a= link_to "Project Summary", "projects/summary", :data => {:project => @project}, :div => '#projects-template', :remote => :true
+        %a= link_to "Project Summary", "projects/summary", :data => {:project => @project, :div => '#projects-template'}, :remote => :true
       %li
-        %a= link_to "Project Reports", "reports/index", :data => {:reports => @project.reports.order(:date), :options => {:project_id => project.id}, :div => '#projects-template', :remote => :true
+        %a= link_to "Project Reports", "reports/index", :data => {:reports => @project.reports.order(:date), :options => {:project_id => project.id}, :div => '#projects-template'}, :remote => :true
       %li
-        %a= link_to "Project Clients", "clients/index", :data => {:clients => project.clients.order(:name), :options => {:project_id => project.id}, :div => '#projects-template', :remote => true
+        %a= link_to "Project Clients", "clients/index", :data => {:clients => project.clients.order(:name), :options => {:project_id => project.id}, :div => '#projects-template'}, :remote => true
       %li
-        %a= link_to "Project Employees", "employees/index", :data => {:employees => project.employees.order(:name), :name => project.name, :options => {:project_id => project.id}}, :div => '#projects-template', :remote => true
+        %a= link_to "Project Employees", "employees/index", :data => {:employees => project.employees.order(:name), :name => project.name, :options => {:project_id => project.id}, :div => '#projects-template'}, :remote => true
       %li
-        %a= link_to "Project Managars", "managers/index", :data => {:managers => project.managers.order(:name), :options => {:project_id => project.id} :name => project.name}, :div => '#projects-template', :remote => true
+        %a= link_to "Project Managars", "managers/index", :data => {:managers => project.managers.order(:name), :options => {:project_id => project.id}, :name => project.name, :div => '#projects-template'}, :remote => true
       = render partial: 'projects/jscript'
   .content
     .inner

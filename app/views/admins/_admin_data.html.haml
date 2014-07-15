@@ -1,17 +1,22 @@
+%h2.title
+  = "#{user.name}"
 .inner
-  %p.edit-user{"user-id" => "#{user.id}"}
-    %b
-      Name:
-    = user.name
-  %p
-    %b
-      Email:
-    = user.email
-  %p
-    %b
-      Employee Number:
-    = user.employee_number
-  %p
-    %b
-      Company:
-    = user.company.name
+  %table.table.table-hover
+    %thead
+      %a{onclick: 'showProjectData()'} Projects
+    %tr
+      %th Name
+      %th Start Date
+      %th Employee Number
+      %th Company
+    %tr
+      %td= user.name
+      %td= user.email
+      %td= user.employee_number
+      %td= user.company.name
+
+:javascript
+  function showProjectData() {
+    $('#admin-data').hide();
+    $('#project-data').show();
+  }
