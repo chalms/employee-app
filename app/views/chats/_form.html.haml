@@ -1,10 +1,32 @@
-= form_for @chat do |f|
-  - if @chat.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@chat.errors.count, "error")} prohibited this chat from being saved:"
-      %ul
-        - @chat.errors.full_messages.each do |msg|
-          %li= msg
+.form#new-message-form{:method => 'post', :action => "chats/new_message"}
+  .error
+  .form-group
+    %input.form-control{:type => 'text', :name => 'text', "placeholder" => 'Enter a message here'}
+  .form-group
+    %input.hidden{:type => 'hidden', :name => 'id'}
+  %input.form-control{:type => 'submit', :name => 'submit'} Submit
 
-  .actions
-    = f.submit 'Save'
+:javascript
+  $('#new-message-form').submit(function() {
+    var valuesToSubmit = $(this).serialize();
+    $.ajax({
+        type: 'POST',
+        url: $(this).attr('action'),
+        data: valuesToSubmit,
+        dataType: "JSON"
+    }).success(function(json){
+      $(':input','#new-message-form')
+        .not(':button, :submit, :reset, :hidden')
+        .val('')
+        .removeAttr('checked')
+        .removeAttr('selected');
+    }).error(function(err){
+      str = err.toString();
+      var htmlString = '<p>' + str + '</p>';
+      $('.error','#new-message-form').html(htmlString);
+    });
+    return false;
+  });
+
+  // Or this will work just as well
+  //$('form#myForm').trigger('submit.rails');

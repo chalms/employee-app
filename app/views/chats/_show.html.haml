@@ -1,0 +1,7 @@
+.chat.container
+  .grid
+    - messages.each do |m|
+      .gridrow.message
+        %h4="#{m.text}"
+        %small="#{m.status}"
+  = render partial: 'chats/form'

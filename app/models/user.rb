@@ -42,14 +42,16 @@ class User < ActiveRecord::Base
     @users_messages.andand.each do |m|
       message = m.message
       m.update_attribute(:read, true) unless m.read
-      if (m.user != message.sender)
+      if (m.user == message.sender)
         if (message.read_by_all)
           status = "#{message.updated_at}"
         else
           status = "#{message.updated_at} - #{message.read_by} of #{message.users_messages.count} read"
         end
+      else
+        status = "#{message.sender.name} sent at #{m.created_at}"
       end
-       @messages << {:text => message.data, :sent_at => m.created_at, :sender => message.sender, :status => status }
+       @messages << {:text => message.data, :status => status }
     end
     return @messages
   end
