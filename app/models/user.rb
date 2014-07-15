@@ -24,6 +24,45 @@ class User < ActiveRecord::Base
     @company ||= Company.find(company_id)
   end
 
+  def add_report(params)
+    params = params[:report] || params
+    hash = {}
+    hash[:date] = string_to_date(params)
+    hash[:summary] = params[:summary] || nil
+    hash[:project_id] = params[:project_id] || nil
+    hash[:client_id] = params[:client_id] || nil
+    report = reports.create!(hash)
+    report.add_tasks(params[:tasks]) if params[:tasks]
+    return report
+  end
+
+  def messages(id)
+    @users_messages = users_chats.find(id.to_i).users_messages.find(:all, :order => "date desc", :limit => 20)
+    @messages = []
+    @users_messages.andand.each do |m|
+      message = m.message
+      m.update_attribute(:read, true) unless m.read
+      if (m.user != message.sender)
+        if (message.read_by_all)
+          status = "#{message.updated_at}"
+        else
+          status = "#{message.updated_at} - #{message.read_by} of #{message.users_messages.count} read"
+        end
+      end
+       @messages << {:text => message.data, :sent_at => m.created_at, :sender => message.sender, :status => status }
+    end
+    return @messages
+  end
+
+  def string_to_date(params)
+    if params[:date].is_a? String
+      date = Date.strptime(params[:date], '%m/%d/%Y')
+      return date
+    else
+      return nil
+    end
+  end
+
   def set_type
     puts "set_type"
     if (role == 'companyAdmin')

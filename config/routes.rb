@@ -3,6 +3,7 @@ Metrics::Application.routes.draw do
   resources :reports_parts, except: [:new, :edit]
   resources :contacts
   resources :companies
+  resources :chats
   resources :reports_tasks
   resources :reports_parts
   resources :tasks
@@ -18,6 +19,7 @@ Metrics::Application.routes.draw do
   resources :signups, only: [:new, :create]
   resources :admins, only: [:show, :update]
 
+  post '/chats/new_message' => 'chats#new_message'
   get '/employees/days_timesheet' => 'employees#days_timesheet'
   get '/employees/hours_timesheet' => 'employees#hours_timesheet'
   put '/employees/save_data' => 'employees#save_data'

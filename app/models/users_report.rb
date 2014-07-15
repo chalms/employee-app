@@ -12,6 +12,7 @@ class UsersReport < ActiveRecord::Base
   TYPES = ['UsersReportsChat', 'ReportsChat']
 
   def create_chat
+    # NEEDS TO BE SPED UP
     chat = Chat.joins(:users_chats).where('user_id = ? OR user_id = ?', user.id, manager_id).andand.first
     unless !!chat
       chat = UsersReportsChat.create!({:type => TYPES[0], :users_report_id => self.id, :name => "#{employee.name} & #{manager.name}"})

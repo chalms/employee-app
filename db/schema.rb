@@ -217,12 +217,10 @@ ActiveRecord::Schema.define(version: 20140715033052) do
   add_index "users_chats", ["user_id", "chat_id"], name: "index_users_chats_on_user_id_and_chat_id", using: :btree
 
   create_table "users_messages", force: true do |t|
-    t.integer "user_id"
+    t.integer "users_chat_id"
     t.integer "message_id"
-    t.boolean "read",       default: false
+    t.boolean "read",          default: false
   end
-
-  add_index "users_messages", ["user_id", "message_id"], name: "index_users_messages_on_user_id_and_message_id", using: :btree
 
   create_table "users_reports", force: true do |t|
     t.integer  "user_id"

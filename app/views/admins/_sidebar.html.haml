@@ -9,4 +9,4 @@
     %li
       %a{:href => "/reports/new"} Add a Report
 .block
-  = render partial: '/chats'
+  = render partial: '/chats', locals => { @user.user_chats

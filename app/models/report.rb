@@ -17,6 +17,7 @@ class Report < ActiveRecord::Base
   TYPES = ['UsersReportsChat', 'ReportsChat']
 
   def create_chat
+    # NEEDS TO BE SPED UP
     chat = Chat.joins(:users_chats).where('user_id = ? OR user_id = ?', user.id, manager_id).andand.first
     unless !!chat
       chat = ReportsChat.create!({:type => TYPES[1], :report_id => self.id, :name => "Report: #{self.id}"})
@@ -30,6 +31,18 @@ class Report < ActiveRecord::Base
     update_attribute(:chat_id, chat.id)
   end
 
+  def add_tasks(tasks = [])
+    tasks.each do |task_hash|
+      if (task_hash[:employee_id])
+        employee_id = task_hash.delete(:employee_id)
+        new_task = tasks.create!(task_hash)
+        assign_task(employee_id, new_task.id)
+      else
+        tasks.create!(task_hash)
+      end
+    end
+  end
+
   def manager
     @manager ||= user
   end
@@ -39,11 +52,11 @@ class Report < ActiveRecord::Base
   end
 
   def employee_reports(employee)
-    users_reports.where(:report_id => self.id, :user_id => employee.id)
+    users_reports.where(:user_id => employee.id)
   end
 
   def report_for_user(employee)
-    employee_reports(employee).find_or_create
+    employee_reports(employee).first_or_create
   end
 
   def assign_task(employee_id, task_id)

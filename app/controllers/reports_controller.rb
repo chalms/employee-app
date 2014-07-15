@@ -19,7 +19,6 @@ class ReportsController < ApplicationController
         format.js
       end
     end
-
   end
 
   # GET /api/reports/1
@@ -45,28 +44,11 @@ class ReportsController < ApplicationController
     end
   end
 
-  # POST /api/reports
-  # POST /api/reports.json
   def create
     @user = current_user
     validate_user_role!
-    params[:report].each { |k,v| params[k] = v if ((params[k]==nil) && (v != nil)) }
-    params.each{ |k,v|  v = params[:report][k] unless (v.present? && (k.to_s == "report")) }
-
-    p = params
-    if p[:report_date].is_a? String
-      date = Date.strptime(p[:report_date], '%m/%d/%Y')
-      p[:report_date] = date
-    end
-
-    attr_hash = {:date => p[:report_date],  :name => p[:name],  :description => p[:description]}
-    r = Report.find_by_id(p[:id])
-    if (r.present?)
-      @report = r.update_attributes!(attr_hash)
-    else
-      @report = Report.create!(attr_hash)
-    end
-
+    @div = params.delete(:div) if (params[:div])
+    @report = @user.add_report(params)
     if @report
       respond_to do |format|
         format.json { render json: @api_report};

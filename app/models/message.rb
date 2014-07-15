@@ -3,8 +3,8 @@ class Message  < ActiveRecord::Base
   has_one :photo
   belongs_to :user
   belongs_to :chat
-  has_many :users_messages, as: :group
-  attr_accessible :data, :recipients, :sender, :created_at, :read_by_all, :chat_id, :user_id
+  has_many :users_messages
+  attr_accessible :data, :sender, :created_at, :read_by_all, :chat_id, :user_id
   after_create :set_recipients
 
   def sender
@@ -12,18 +12,24 @@ class Message  < ActiveRecord::Base
   end
 
   def set_recipients
-    unless @recipients
-      UsersMessage.create!(:user => user, :message => self, :read => true)
-      @recipients = chat.users_chats.where('user_id != ?', sender.id)
-      @recipients.each { |r| UsersMessage.create!({:user => r, :message => self})}
+    if (users_messages.andand.count == 0)
+      chat.users_chats.each do |u_c|
+        if (u_c.user_id == sender.id)
+          u_c.users_messages.create!(:message_id => self.id, :read => true)
+        else
+          u_c.users_messages.create!(:message_id => self.id)
+        end
+      end
     end
   end
 
   def read_by_all
-    unless @read_by_all
-      lock = true
-      @recipients.each { |r| lock = false unless (UsersMessage.where(:user => r, :message => self).first_or_create.read) }
-      @read_by_all = lock
-    end
+    read_by_all = !!@recipients.find(read: false)
+  end
+
+  def recipients
+    @recipients ||= (users_messages || self.users_messages)
+    @recipients ||= UserMessages.where(message_id: self.id)
+    @recipients
   end
 end
