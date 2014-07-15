@@ -3,7 +3,7 @@
   .form-group
     %input.form-control{:type => 'text', :name => 'text', "placeholder" => 'Enter a message here'}
   .form-group
-    %input.hidden{:type => 'hidden', :name => 'id'}
+    %input.hidden{:type => 'hidden', :name => 'id', :value => "#{id}"}
   %input.form-control{:type => 'submit', :name => 'submit'} Submit
 
 :javascript

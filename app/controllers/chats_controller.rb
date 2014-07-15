@@ -1,4 +1,5 @@
 class ChatsController < ApplicationController
+  include ActionController::MimeResponds
   def index
     @user = current_user
     @users_chats = []

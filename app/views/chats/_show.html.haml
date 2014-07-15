@@ -4,4 +4,4 @@
       .gridrow.message
         %h4="#{m.text}"
         %small="#{m.status}"
-  = render partial: 'chats/form'
+  = render partial: 'chats/form', :locals => { id: id }

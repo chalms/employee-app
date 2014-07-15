@@ -4,7 +4,7 @@ class Message  < ActiveRecord::Base
   belongs_to :user
   belongs_to :chat
   has_many :users_messages
-  attr_accessible :data, :sender, :created_at, :read_by_all, :chat_id, :user_id
+  attr_accessible :data, :sender, :created_at, :read_by_all, :chat_id, :user_id, :read_by
   after_create :set_recipients
 
   def sender
@@ -21,6 +21,10 @@ class Message  < ActiveRecord::Base
         end
       end
     end
+  end
+
+  def read_by
+    @recipients.find(read: true).count
   end
 
   def read_by_all

@@ -1,4 +1,6 @@
 class TasksController < ApplicationController
+  include ActionController::MimeResponds
+
   def index
     user!
     admin_manager!

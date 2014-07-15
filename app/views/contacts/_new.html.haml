@@ -1,0 +1,18 @@
+.new-contact
+  - if (!embedded)
+    .form
+      %form{:action => '/contacts', :method => 'post'}
+        .form-group
+          %input.form-control{:name => "contact[:name]", :type => "text", :placeholder => "Contact Name"}
+        .form-group
+          %input.form-control{:name => "contact[:email]", :type => "text", :placeholder => "Email"}
+        .form-group
+          %input.form-control{:name => "contact[:phone]", :type => "text", :placeholder => "Phone Number"}
+      %input.submit{:name => "submit", :type => "submit"}
+  - else
+    .form-group
+      %input.form-control{:name => "contact[:name][]", :type => "text", :placeholder => "Contact Name"}
+    .form-group
+      %input.form-control{:name => "contact[:email][]", :type => "text", :placeholder => "Email"}
+    .form-group
+      %input.form-control{:name => "contact[:phone][]", :type => "text", :placeholder => "Phone Number"}

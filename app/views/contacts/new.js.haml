@@ -1,0 +1,3 @@
+plain:
+var newContactForm = $('<%= javascript_escape(render partial: 'contacts/new', locals => @data) %>');
+$(@div).html(newContactForm);
