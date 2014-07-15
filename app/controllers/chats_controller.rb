@@ -27,5 +27,4 @@ class ChatsController < ApplicationController
   def new_message
     message = params[:message]
   end
-
 end
