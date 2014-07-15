@@ -5,10 +5,10 @@
 //= require hamlcoffee
 //= require json2
 //= require underscore
-//= require html5.js
 //= require jquery.jeditable
 //= require bootstrap
 //= require bootstrap-datepicker
+//= require backbone
 
 $(document).ready(function() {
   $( document ).ajaxSend(function(elem, xhr, options) {
@@ -39,9 +39,6 @@ $(document).ready(function() {
     return true;
   });
 });
-
-
-
 
 function log(text) {
   if(window && window.console) console.log(text);

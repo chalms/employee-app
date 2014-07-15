@@ -22,6 +22,9 @@ class ModelSimulation
     @user_reports.each do |u_r|
       @reports_parts << u_r.parts
     end
+    @user_reports.each do |u_r|
+      u_r.chat.send_message("Hello!", nil, u_r.user.id )
+    end
 
     # f_chat = FakeChats.new([@report])
     # @chats = f_chat.fake_chats

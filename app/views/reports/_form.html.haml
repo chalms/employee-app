@@ -1,9 +1,23 @@
 .form
-  %form{:method => 'post', :action => '/reports'}
+  %form{:method => 'post', :action => '/reports', :role => 'form'}
     - if (flash[:error])
       #error_explanation
         %h2= "#{pluralize(@report.errors.count, "error")} prohibited this report from being saved:"
     .form-group
       %label.date Date:
-      %input#report-date.form-control{ :type => "date", :name => "date" }
+      %input.form-control{ :type => "date", :name => "date" }
+    .form-group
+      %label.summary Summary:
+      %input.input-large.form-control{ :type => "text", :name => "summary"}
+    - if (project_id)
+      .form-group
+        %input.hidden{:type => "hidden", :name => "project_id", :value => project_id}
+    - else
+      .form-group
+        %select.form-control{:type => "select", :name => "project_id"}
+          - @user.company.projects.each do |p|
+            %option{:value => p.id} p.name
+    = render partial: 'tasks/form', locals: { :owner => @user, :employees => @user.company.employees }
+    %button.btn.btn-default=link_to 'Add Task',
+    %input.form-control{ :type => 'submit', :name => 'submit'}
 

@@ -1,7 +1,7 @@
 .chat.container
-  .grid
+  .grid{ id: => "#users-chat-#{id}"}
     - messages.each do |m|
       .gridrow.message
         %h4="#{m.text}"
         %small="#{m.status}"
-  = render partial: 'chats/form', :locals => { id: id }
+  = render partial: 'chats/form', :locals => { id: id, div:  "#users-chat-#{id}"}

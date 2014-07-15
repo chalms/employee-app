@@ -31,5 +31,6 @@ class Chat < ActiveRecord::Base
     message = Message.create!(user_id: user_id, chat_id: id, group: users)
     message.data = message_text
     raise Exceptions::StdError, "Message could not be saved!" unless message.save
+    message
   end
 end

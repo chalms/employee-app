@@ -1,0 +1,32 @@
+.form-group
+  %input{:type => 'hidden', :name => @owner, :value => @owner.id}
+.form-group
+  %label Description:
+  %input.form-control{:type => 'text', :name => 'description'}
+.form-group
+  %table.table
+    %thead Employees:
+    #task-employees
+      %tr.last
+        %td
+          %select#employee-select
+            - options @employees.each do |employee|
+              %option{:value => employee.id} employee.name
+
+:javascript
+  $(document).ready(function() {
+    $( "#employee-select" ).change(function() {
+      var selected = $( "#employee-select option:selected" );
+      var html = JST['templates/employees/task_row']({value: selected.val(), name: selected.text()});
+      $('#task-employees').prepend(html);
+    });
+
+    $('.employee-button').click({
+      var value = $(this).attr('value');
+      $('#task-employees').$("tr[value=" + value + "]").remove();
+      $("#employee-select option[value=" + value + "]").prop("selected", false);
+    });
+  };
+
+
+

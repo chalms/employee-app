@@ -20,6 +20,19 @@
         .val('')
         .removeAttr('checked')
         .removeAttr('selected');
+      console.log("ajax success with json ---> ");
+      console.log(json);
+      hash = $.parseJSON(json);
+      console.log("json parsed with hash ---> ");
+      consoel.log(hash);
+      for (var key in hash) {
+        console.log("key: " + key)
+        console.log("hash[key]: " + hash[key])
+        if (key === 'message') {
+          console.log("div appended: " + "#{@div}");
+          $(@div).append(hash[key]);
+        }
+      }
     }).error(function(err){
       str = err.toString();
       var htmlString = '<p>' + str + '</p>';
