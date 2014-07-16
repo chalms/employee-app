@@ -2,6 +2,14 @@ class ProjectsController < ApplicationController
 
   include ActionController::MimeResponds
 
+  def summary
+    @data = params[:data]
+    @div = params[:data][:div]
+   respond_to do |format|
+     format.js
+   end
+  end
+
   def index
     @user = current_user
     puts @user.inspect
@@ -20,6 +28,7 @@ class ProjectsController < ApplicationController
   def show
     @user = current_user
     @project = Project.find(params[:id])
+
     validate_permissions!
     puts @project.inspect
 

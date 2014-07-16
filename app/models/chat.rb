@@ -25,6 +25,26 @@ class Chat < ActiveRecord::Base
     messages.order_by(:created_at, "DESC")
   end
 
+  def name
+    @name ||= self.name
+    unless @name
+      str = ""
+      names = {}
+      users.each { |u| names[u.name] = u.id }
+      lock = false
+      names.each do |k, v|
+        if (lock)
+          str += "& #{k}"
+        else
+          str += "#{k}"
+          lock = true
+        end
+      end
+      @name = update_attribute(:name, str) if (str.present?)
+    end
+    @name
+  end
+
   def send_message(message_text, message_photo, user_id)
     message_hash = {}
     message_hash[:text] = message_text

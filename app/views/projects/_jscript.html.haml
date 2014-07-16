@@ -1,17 +1,10 @@
 :javascript
-  $('.project-items').on('click','li', function(){
-    console.log("here")
-   $(this).addClass('active').siblings().removeClass('active');
+  $('.linkster').click(function(event){
+    event.preventDefault();
+    $("#projects-nav td").each(function(){
+      if ($(this).hasClass("active")) {
+        $(this).removeClass("active")
+      }
+    });
+    $(this).parent().addClass("active").show();
   });
-
--# reports/index
--# {:reports => @project.reports.order(:date), :name => project.name, :options => {:project_id => project.id}
-
--# clients/index
--# {:clients => project.clients.order(:name), :name => project.name, :options => {:project_id => project.id}
-
--# employees/index
--# {:employees => project.employees.order(:name), :name => project.name, :options => {:project_id => project.id}}
-
--# managers/index
--# :managers => project.managers.order(:name), :options => {:project_id => project.id} :name => project.name}

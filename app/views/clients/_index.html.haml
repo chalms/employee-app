@@ -1,19 +1,22 @@
 .clients-table
-  %table
-    %thead
-      %h2.title
-        = "#{name} Clients"
-    %tbody
+  %table.table
+    %thead.header
+      - if (options[:name].present?)
+        %h3.title= "#{options[:name]} Clients"
+      - else
+        %h3.title= "Clients"
+    %tr.headers
+      %th Name
+      %th Assigned Tasks
+      %th % Complete
+      %th Hours
+      %th Contact
+    - clients.each do |client|
       %tr
-        %th Name
-        %th Assigned Tasks
-        %th % Complete
-        %th Hours
-        %th Contact
-      - clients.each do |client|
-        %tr
-          %td= link_to client.name, clients_path(client.id)
-          %td= client.assigned_tasks
-          %td= client.tasks_percent_completion
-          %td= client.hours
-          %td= client.contact.name
+        %td= link_to client.name, clients_path(client.id)
+        %td= client.assigned_tasks
+        %td= client.tasks_percent_completion
+        %td= client.hours
+        %td= client.contact.name
+    %tfooter
+      %h5=link_to 'Add a client!', '/clients/new', :remote => true

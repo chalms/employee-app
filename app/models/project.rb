@@ -101,7 +101,7 @@
     elsif (options["employee"])
       rep = employee(options["employee"]).reports.where(:project_id => self.id)
     else
-      rep = reports
+      rep = self.reports
     end
     if (options["upcoming"])
       return rep.where("date < ?", Date.new)

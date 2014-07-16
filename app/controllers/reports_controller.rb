@@ -2,17 +2,29 @@ class ReportsController < ApplicationController
   # GET /api/reports
   # GET /api/reports.json
   include ActionController::MimeResponds
+
   def index
+    puts "received request"
     @user = current_user
+    puts @user.inspect
+    puts "ABOVE IS USER"
     validate_user_role!
-    @div = params[:div]
+    puts "params: #{params.inspect}"
+
+
     @data = params[:data]
+    @data[:reports] = Report.where(params[:options]).order(:date)
+    @div = params[:data].delete(:div)
+
     if (!!@data)
+      puts "in @data"
       respond_to do |format|
+        puts format.inspect
         format.json { render json: @data, status: :success }
-        format.js
+        format.js { }
       end
     else
+      puts "in @reports = @user_reports"
       @reports = @user.reports
       respond_to do |format|
         format.json { render json: @reports, status: :success }

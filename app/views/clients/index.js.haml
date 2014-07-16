@@ -1,2 +1,3 @@
-var clients = $('<%= escape_javascript(render partial: 'clients/index', locals => { data: @data }) %>');
-$(@div).html(clients).show();
+:plain
+  var clients = $('#{ escape_javascript(render partial: 'clients/index', :locals =>  @data ) }');
+  $('#{@div}').html(clients).show();

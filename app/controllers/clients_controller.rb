@@ -5,10 +5,14 @@ class ClientsController < ApplicationController
 
   def index
     @user = current_user
-    @clients = @user.company.clients
+    @data = params[:data]
+    if @data[:options][:project_id].present?
+      @data[:clients] = Project.find(@data[:options][:project_id]).clients.order(:name)
+    end
+    @div = @data.delete(:div)
     respond_to do |format|
       format.json { render json: @clients };
-      format.html { render @clients };
+      format.js
     end
   rescue Exceptions::StdError => e
     redirect_to :root_url
