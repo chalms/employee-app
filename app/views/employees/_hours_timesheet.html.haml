@@ -9,8 +9,8 @@
       %th Checkin
       %th Checkout
       %th Hours
-    - user_reports.each do |report|
-      %td=link_to report.report.name, reports(report)
+    - users_reports.each do |report|
+      %td=link_to report.report.name, reports_path(report)
       %td=report.checkin
       %td=report.checkout
       %td=report.hours

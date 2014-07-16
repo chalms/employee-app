@@ -6,3 +6,4 @@
       = "Listing #{@company.name} Employees"
     #employees-dash
       = render partial: 'employees/table', :locals => { :employee_logs => @employee_logs, :options => { :company_id => @company.id, :name => @company.name }  }
+

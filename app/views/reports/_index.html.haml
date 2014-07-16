@@ -16,8 +16,8 @@
         %th Date
       - @reports.each do |report|
         %tr
-          %td= link_to report.summary, reports_path(report.id)
-          %td= link_to report.manager.name, managers_path(report.manager.id)
+          %td= link_to report.summary, reports_path(report.id), :options => options, :remote => true
+          %td= link_to report.manager.name, managers_path(report.manager.id), :options => options, :remote => true
           %td= report.tasks_completion_percent
           %td= report.hours
           %td= report.date

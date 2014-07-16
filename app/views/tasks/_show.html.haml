@@ -1,0 +1,17 @@
+- if (task.completed)
+  %tr.success
+    %td= task.name
+    %td= task.description
+    %td= "Completed at: #{task.updated_at}"
+    %td= task.note
+    %td
+      %a.btn.btn-default Edit
+- else
+  %tr.warning
+    %td= task.name
+    %td= task.description
+    %td &nbps;
+    %td &nbps;
+    %td
+      %a.btn.btn-default Edit
+= end

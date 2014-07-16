@@ -1,13 +1,17 @@
-%p#notice= notice
-%h1="#{@user_report.users.name} report for #{user_report.report.name}"
-.block
-  %h3 Hours:
-  %h4.span @employee.hours
-
-  %h4 @report.hours
-
-
-
-= link_to 'Edit', edit_users_report_path(@users_report)
-\|
-= link_to 'Back', users_reports_path
+- if (users_report.completed)
+  .gridrow.bg-success
+- else
+  .gridrow.bg-warning
+= end
+  %h3="#{report.name} - #{users_report.employee.name}"
+  %table.table
+    %tr
+      %td=link_to '#{users_report.employee.name}', employees_path(users_report.employee)
+      %td="Checkin: #{users_report.checkin}"
+      %td="Checkout: #{users_report.checkout}"
+      %td="Hours: #{users_report.hours}"
+      %td
+        %a.btn.btn-default Edit
+    %tfooter
+      %h4=link_to "Chat with #{users_report.employee.name}", chats_path(users_report.chat), :remote => true
+  = render 'tasks/index', :locals => {tasks: users_report.reports_tasks, :owner=> users_report, :name => "#{report.name} - #{users_report.employee.name}"}

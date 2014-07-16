@@ -1,0 +1,151 @@
+<employees>
+  <days_timesheet>
+    <params>
+      <users_reports name='users_reports'/>
+      <string name='name'/>
+      <integer-string name='days'/>
+      <integer name='id'/>
+      <hash name='options'>
+        <string name='name'/>
+      </hash>
+    </params>
+    <link type='get' to='show'/>
+    <link type='get' to='reports/show'/>
+  </days_timesheet>
+
+  <hours_timesheet>
+    <params>
+      <users_reports name='users_reports'/>
+      <string name='name'/>
+      <integer-string name='hours'/>
+      <integer name='id'/>
+      <hash name='options'>
+        <string name='name'/>
+      </hash>
+    </params>
+    <link type='get' to='show'/>
+    <link type='get' to='reports/show'/>
+  </hours_timesheet>
+
+  <nav>
+    <link type='remote' to='active[1]'/>
+    <link type='remote' to='inactive[1]'/>
+    <params>
+      <array name='active'></array>
+      <array name='inactive'></array>
+    </params>
+  </nav>
+
+  <index>
+    <link type='partial' to='nav'/>
+    <link type='partial' to='table'/>
+    <params>
+      <company name='company'/>
+      <employee_logs name='employee_logs'/>
+    </params>
+  </index>
+
+  <table>
+    <params>
+      <employee_logs name='employee_logs'/>
+      <hash name='options'>
+        <integer name='company_id'/>
+        <string name='name'/>
+      </hash>
+    </params>
+    <link type='partial' to='table_row'/>
+  </table>
+
+  <table_row>
+    <params>
+      <employee name='employee'/>
+    </params>
+    <link type='remote' to='reports/index'>
+      <div>#employee-dash</div>
+    </link>
+    <link type='remote' to='reports/index'>
+      <div>#employee-dash</div>
+    </link>
+    <link type='remote' to='tasks/index'>
+      <div>#employee-dash</div>
+    </link>
+    <link type='remote' to='days_timesheet'>
+      <div>#employee-dash</div>
+    </link>
+    <link type='remote' to='hours_timesheet'>
+      <div>#employee-dash</div>
+    </link>
+  </table_row>
+
+  <new>
+    <params>
+      <employee_logs name='employee_logs'/>
+    </params>
+    <link type='partial' to='form'/>
+  </new>
+
+  <form>
+    <link type='post' to='save_data'/>
+    <link type='post' to='upload'/>
+    <link type='partial' to='row'/>
+    <params>
+      <employee_logs name='employe_logs'/>
+    </params>
+  </form>
+
+  <row>
+    <params>
+      <employee_log name='log'/>
+    </params>
+  </row>
+
+  <show>
+    <params>
+      <employee name='employee'/>
+    </params>
+    <link type='partial' to='reports/index'/>
+    <link type='partial' to='reports/index'/>
+    <link type='partial' to='tasks/index'/>
+    <link type='partial' to='employees/hours_timesheet'/>
+    <link type='partial' to='employees/days_timesheet'/>
+  </show>
+</employees>
+
+<reports>
+  <index>
+    <params>
+      <string name='table_name'/>
+      <string name='name'/>
+      <hash name='options'>
+        <string name='name'/>
+      </hash>
+      <reports name='reports'/>
+    </params>
+    <link type='remote' to='reports/show'/>
+    <link type='remote' to='managers/show'/>
+  </index>
+
+  <show>
+    <params>
+      <report name='report'/>
+      <hash name='options'>
+        <string name='name'/>
+      </hash>
+    </params>
+    <link type='partial' to='employees/table_row'/>
+    <link type='partial' to='tasks/index'/>
+  </show>
+</reports>
+
+<tasks>
+  <index>
+    <params>
+      <tasks name='tasks'/>
+      <string name='name'/>
+      <hash name='options'>
+        <string name='name'/>
+      </hash>
+    </params>
+  </index>
+</tasks>
+

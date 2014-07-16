@@ -1,0 +1,17 @@
+.grid
+  %h2.title="#{employee.name}"
+  .gridrow
+    .well
+      = render partial: 'reports/index', locals: { :reports => employee.assigned_reports(options), :name => employee.name, :id => employee.id, :options => options, :div => '#employees-dash', :table_name => 'assigned' }
+  .gridrow
+    .well
+      = render partial: 'reports/index', locals: { :reports => employee.completed_reports(options), :name => employee.name, :id => employee.id, :options => options, :table_name => 'completed' }
+  .gridrow
+    .well
+      = render partial: 'tasks/index', locals: { :tasks => employee.assigned_tasks(options), :name => employee.name, :id => employee.id, :options => options}
+  .gridrow
+    .well
+      = render partial: 'employees/hours_timesheet', locals: { :users_reports => employee.user_reports.where(options).order(:date), :name => employee.name, :id => employee.id, :options => options }
+  .gridrow
+    .well
+      = render partial: 'employees/days_timesheet', locals: { :users_reports => employee.user_reports.where(options).order(:date), :name => employee.name, :id => employee.id, :options => options }

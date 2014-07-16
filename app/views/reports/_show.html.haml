@@ -1,4 +1,11 @@
 .grid
-  = render 'employees/index', :locals => { :user => @user }
-.grid
-  = render 'tasks/index', :locals => { :user => @user }
+  .header
+    .lead="#{report.name}"
+    .date="Date: #{report.date}"
+    .chat=link_to "Team Chat: #{report.name}", chats_path(report.chat), :remote => :true
+  .gridrow
+    .btn.btn-success= link_to "+",
+    .well
+      %div.description="#{report.summary}"
+  - report.users_reports.each do |users_report|
+    = render partial: 'users_reports/show', locals: {users_report: users_report, report: report}

@@ -1,0 +1,17 @@
+:javascript
+  $(document).ready(function() {
+    $( "#employee-select" ).change(function() {
+      var selected = $( "#employee-select option:selected" );
+      var html = JST['templates/employees/task_row']({value: selected.val(), name: selected.text()});
+      $('#task-employees').prepend(html);
+    });
+
+    $('.employee-button').click({
+      var value = $(this).attr('value');
+      $('#task-employees').$("tr[value=" + value + "]").remove();
+      $("#employee-select option[value=" + value + "]").prop("selected", false);
+    });
+  };
+
+
+

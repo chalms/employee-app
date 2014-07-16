@@ -9,8 +9,8 @@
       %th Date
       %th Assigned Tasks
       %th Completed Tasks
-    - user_reports.each do |report|
-      %td=link_to report.report.name, reports(report)
+    - users_reports.each do |report|
+      %td=link_to report.report.name, reports_path(report)
       %td=report.date
       %td=report.assigned_tasks.count
       %td=report.completed_tasks.count

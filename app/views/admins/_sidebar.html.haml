@@ -1,12 +1,2 @@
 .block
-  %ul.navigation
-    %li
-      %a= link_to "Add Employees", 'employees/new', :remote => true
-    %li
-      %a{:href => "/projects/new"} Add a Project
-    %li
-      %a{:href => "/reports/new"} Add a Report
-    %li
-      %a{:href => "/reports/new"} Add a Report
-.block
   = render partial: '/chats', :locals => { :users_chats => @user.users_chats_hash }
