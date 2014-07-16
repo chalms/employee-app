@@ -1,3 +1,6 @@
-%form{ :method => 'post', :action => '/tasks'}
-  = render partial: 'tasks/embedded_form', locals: { owner: @owner, employees: @employees }
-  %input.submit{:type => 'submit', :name => 'submit'} Save
+.form
+  %h4= link_to "Or, Upload a Csv instead: ", 'tasks/upload_form', :div => '#tasks-form', :remote => true
+  #tasks-form
+    %form{ :method => 'post', :action => '/tasks', :role => 'form'}
+      = render partial: 'tasks/embedded_form', locals: { owner: @owner, employees: @employees }
+      %input.submit{:type => 'submit', :name => 'submit'} Save
