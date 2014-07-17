@@ -2,10 +2,12 @@
 - column_color = task.complete ? 'success' : 'danger'
 - id_name = task.id ? task.id.to_s : nil
 - new_task_id_name = id_name ? "#{id_name.to_s}" : ''
+- task_task = task.task ? task.task : nil
+- description = task_task ? task_task.description : ""
 
 %tr{:class => column_color}
   %td= id_name
-  %td= task.task.description
+  %td= description
   %td= complete
   %td= task.note
   %td

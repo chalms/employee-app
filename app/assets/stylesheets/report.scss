@@ -1,0 +1,48 @@
+.report {
+  h4 {
+    margin: 0px;
+    padding: 0px;
+  }
+  h4 .lead {
+    margin: 0px;
+    padding: 0px;
+  }
+
+  div .gridrow .show-report {
+    display: inline;
+  }
+
+  h5 > a {
+    color: #008080;
+    .red {
+      color:  #d14;
+    }
+  }
+
+  .wrapper.right > h4 {
+    text-align: right;
+    margin: 0px;
+  }
+
+
+
+  .wrapper{
+    width: 45%;
+  }
+
+  .wrapper .right {
+    float: right;
+    width: 45%;
+    text-align: right;
+    vertical-align: top;
+  }
+
+  h4 .lead .summary {
+    display: inline-block;
+    margin: 0px;
+  }
+
+  description {
+    display: inline-block;
+  }
+}

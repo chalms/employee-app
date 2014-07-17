@@ -1,17 +1,18 @@
-- table_wrapper = (users_report.complete) ? '.gridrow.success' : '.gridrow.warning'
+- table_wrapper = (users_report.complete) ? '.success' : ''
 - checkin = (users_report.checkin) ? users_report.checkin : '--'
 - checkin_class = (users_report.checkin) ? '.red' : '.green'
 - checkout = (users_report.checkout) ? users_report.checkout : '--'
 - checkout_class = (users_report.checkout) ? '.red' : '.green'
 - hours = (users_report.hours) ? users_report.hours : '--'
-%table.table{:class => table_wrapper}
-  .wrapper
-    %h3= link_to "#{users_report.employee.name}", chats_path(users_report.chat), :remote => true
-    %h4 Total Hours: #{hours}
-  .wrapper.right
-    %h5= link_to 'Edit', '', :onclick => 'edit()'
-    %h5 Checkin: #{checkin}
-    %h5 Checkout: #{checkout}
-
-- if (users_report.reports_tasks)
-  = render partial: 'tasks/index', locals: {tasks: users_report.reports_tasks, owner: users_report, name: "#{users_report.report.name} - #{users_report.employee.name}"}
+.gridrow
+  .well{:class => table_wrapper}
+    %table.table.table_hover
+      .wrapper
+        %h3= link_to "#{users_report.employee.name}", chats_path(users_report.chat), :remote => true
+        %h4 Total Hours: #{hours}
+      .wrapper.right
+        %h5= link_to 'Edit', '', :onclick => 'edit()'
+        %h5 Checkin: #{checkin}
+        %h5 Checkout: #{checkout}
+    - if (users_report.reports_tasks)
+      = render partial: 'tasks/index', locals: {tasks: users_report.reports_tasks, owner: users_report, name: "#{users_report.report.name} - #{users_report.employee.name}"}

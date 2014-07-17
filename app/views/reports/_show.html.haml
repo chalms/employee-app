@@ -1,11 +1,16 @@
 .grid
-  .header
-    .lead="#{report.name}"
-    .date="Date: #{report.date}"
-    .chat=link_to "Team Chat: #{report.name}", chats_path(report.chat), :remote => :true
-  .gridrow
-    .btn.btn-success= link_to "+",
-    .well
-      %div.description="#{report.summary}"
-  - report.users_reports.each do |users_report|
-    = render partial: 'users_reports/show', locals: {users_report: users_report, report: report}
+  .report
+    .gridrow
+      .wrapper
+        %h3="Report: #{report.id}"
+        %h4 Manager: #{report.manager.name}
+      .wrapper.right
+        %h4="Date: #{report.date}"
+        %h5
+          %a= link_to "New Report", new_report_path(options), :remote => :true
+      .blockquotes
+        %h5
+          %em="#{report.summary}"
+    %h3 Employees
+    - report.users_reports.each do |users_report|
+      = render partial: 'users_reports/show', locals: {users_report: users_report, options: options, report: report, :div => div}

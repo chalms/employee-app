@@ -14,7 +14,7 @@ class ReportsController < ApplicationController
 
     @data = params[:data]
     @data[:reports] = Report.where(params[:options]).order(:date)
-    @div = params[:data].delete(:div)
+    @div = params[:data][:div]
 
     if (!!@data)
       puts "in @data"
@@ -39,6 +39,13 @@ class ReportsController < ApplicationController
     @user = current_user
     puts params
     @report = Report.find(params[:id])
+    @options = params[:options]
+    @div = params[:div]
+    @data = {}
+    @data[:report] = @report
+    @data[:options] = @options if (@options)
+    @data[:div] = @div if (@div)
+
     respond_to do |format|
       format.json { render json: @report, status: :success }
       format.js
@@ -51,6 +58,7 @@ class ReportsController < ApplicationController
     params = (params[:report] || params)
     @div = params[:div] ||= nil
     @data = params[:data]
+    @data[:div] = @div if @div
     validate_user_role!
     respond_to do |format|
       format.json { render json: @report, status: :success }
