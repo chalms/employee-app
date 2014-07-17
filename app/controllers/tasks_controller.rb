@@ -1,11 +1,17 @@
 class TasksController < ApplicationController
   include ActionController::MimeResponds
 
+
   def index
     user!
     admin_manager!
     @data = params[:data]
-    @data = { :tasks => params[:tasks], :div => params[:div] } unless @data
+    @data = { :tasks => params[:tasks] } unless @data
+    if (@data[:div])
+      @div = @data[:div]
+    else
+      @div = params[:div]
+    end
     if (@data)
       respond_to do |format|
         format.json { render json: @data }
@@ -23,14 +29,15 @@ class TasksController < ApplicationController
   end
 
   def new
+    puts "IN NEW"
     user!
     admin_manager!
     @data = params[:data] || { :owner => 'company', :owner_id => @user.company.id }
     @data[:employees].map! { |e| Employee.find(e.to_i)}
     @data[:owner_id] = @data[:owner].to_i if (@data[:owner].to_i != 0)
     @data[:owner] = UsersReport.find(@data[:owner_id])
-    @data[:div] ||= "#new-task"
-    @div = @data.delete(:div)
+    @div = @data[:div] || params[:div]
+    @data[:div] = @div if (@div.present? && (!@data[:div]))
     respond_to do |format|
       format.json { render json: @data }
       format.js
@@ -42,6 +49,7 @@ class TasksController < ApplicationController
     can_view!
     @div = params[:div]
     @task = Task.find(params[:id])
+    @data = {task: @task}
     respond_to do |format|
       format.json { render json: @task }
       format.js
@@ -49,14 +57,19 @@ class TasksController < ApplicationController
   end
 
   def create
+    puts "IN CREATE"
     user!
     admin_manager!
-    puts params
-    params = params['task'] || params
-    puts params.inspect
-    puts params[:users_report]
-    puts params[:description]
-    @task = create_task(params[:users_report], params[:users_report], { :description => params[:description] } )
+    puts "Params: #{params}"
+    puts params.class.name
+    @data = {}
+    @div = params['div']
+    @task = create_task('users_report', params['users_report'], { :description => params['description'] } )
+    @data[:task] = @task
+    @data[:users_report] = params['users_report']
+    @data[:description] = params['description']
+    @data[:employees] = params['employees']
+
     raise Exceptions::StdError, "Error creating task!" unless (@task)
     respond_to do |format|
       format.js
@@ -79,15 +92,16 @@ class TasksController < ApplicationController
 
   def destroy
     user!
-    is_admin_manager!
+    admin_manager!
     @task = Task.find(params[:id])
     @task.destroy
-    head :no_content
+    render nothing: true
   end
 
   private
 
   def create_task(owner, id, hash)
+
     if owner == 'company'
       return @user.company.create!(hash)
     elsif owner == 'report'
@@ -95,8 +109,16 @@ class TasksController < ApplicationController
     elsif owner == 'project'
       return @user.company.andand.clients.find(id).andand.create!(hash)
     elsif owner == 'users_report'
-      return @user.andand.users_reports.find(id).andand.create!(hash)
+      users_report = UsersReport.find(id.to_i)
+      hash[:users_report] = users_report
+      return create_with_task_and_users_report(hash)
     end
+  end
+
+  def create_with_task_and_users_report(hash)
+    raise Exceptions::StdError, "Must add a description!" unless (hash[:description])
+    task = Task.create!({:description => hash[:description], :report_id => hash[:users_report].report.id, :user_id => hash[:users_report].user.id})
+    ReportsTask.create!({:task_id => task.id, :users_report_id => hash[:users_report].id})
   end
 
   def user!

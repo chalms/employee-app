@@ -1,2 +1,2 @@
-var new = $('<%= escape_javascript(render partial: 'tasks/show', locals => { task: @task}) %>');
-$(@div).html(new).show();
+var n = $("#{ escape_javascript(render partial: 'tasks/show', locals => @data)}");
+$("#{@div}").append(n).show();

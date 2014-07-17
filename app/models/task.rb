@@ -8,7 +8,7 @@ class Task < ActiveRecord::Base
   has_many :users_reports, :through => :reports_tasks
   has_many :reports, :through => :users_reports
   has_many :projects, :through => :reports
-  attr_accessible :description, :name, :manager, :manager_id, :assignment, :owners
+  attr_accessible :description, :name, :manager, :manager_id, :assignment, :owners, :report_id, :user_id
 
   def owners
     unless (@owners)

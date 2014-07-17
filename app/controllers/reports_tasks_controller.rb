@@ -1,6 +1,7 @@
 class ReportsTasksController < ApplicationController
   # GET /reports_tasks
   # GET /reports_tasks.json
+  include ActionController::MimeResponds
   def index
     @reports_tasks = ReportsTask.all
 
@@ -41,10 +42,25 @@ class ReportsTasksController < ApplicationController
 
   # DELETE /reports_tasks/1
   # DELETE /reports_tasks/1.json
-  def destroy
-    @reports_task = ReportsTask.find(params[:id])
-    @reports_task.destroy
+   def destroy
+    user!
+    admin_manager!
+    @task = ReportsTask.find(params[:id])
+    @task.destroy
+    render nothing: true
+  end
 
-    head :no_content
+  private
+
+  def user!
+    @user = current_user
+  end
+
+  def can_view!
+    raise Exceptions::StdError, "Unauthorized" if (@task.company != @user.company)
+  end
+
+  def admin_manager!
+    raise Exceptions::StdError, "Employee cannot create a task" unless (@user.role.downcase == 'companyadmin' || @user.role.downcase == 'manager')
   end
 end

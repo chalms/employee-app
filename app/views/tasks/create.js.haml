@@ -1,0 +1,5 @@
+:plain
+  var n = $("#{escape_javascript(render partial: 'tasks/show', :locals => @data) }");
+  $("table#task-table > tbody > tr:last").after($(n)).show();
+
+  console.log("executed");

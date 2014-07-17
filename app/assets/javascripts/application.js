@@ -43,6 +43,9 @@ $(document).ready(function() {
 function log(text) {
   if(window && window.console) console.log(text);
 }
+function taskDescriptionClear() {
+  $('.task-description-text').val("");
+}
 
 
 var menuOpen;

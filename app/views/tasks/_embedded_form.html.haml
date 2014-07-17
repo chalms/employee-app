@@ -1,10 +1,10 @@
 .form-group
-  = hidden_field_tag :users_report, :value => owner_id
+  %input{:type => 'hidden', :name => 'users_report', :value => owner_id}
 %td.form-group
-  = text_field_tag :description, 'Task Description'
+  %input.text_field{:type => 'text', :class => 'task-description-text', :name => 'description', :placeholder => 'Task Description'}
 %td.form-group
   - if (employees.count == 1)
-    = hidden_field_tag 'employees[]', :value => employees[0].id
+    %input{:type => 'hidden', :name =>  'employees', :value => employees[0].id}
   - else
     %table.table
       %thead Employees:

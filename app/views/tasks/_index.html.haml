@@ -9,5 +9,6 @@
       %td Completed
       %td Notes
       %td
+      %td
     - tasks.each do |task|
       = render partial: 'tasks/show', locals: { task: task }
