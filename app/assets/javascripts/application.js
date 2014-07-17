@@ -9,6 +9,11 @@
 //= require bootstrap
 //= require bootstrap-datepicker
 //= require backbone
+//= require backbone.wreqr
+//= require backbone.babysitter
+//= require backbone.marionette
+//= require_tree ./templates
+
 
 $(document).ready(function() {
   $( document ).ajaxSend(function(elem, xhr, options) {
@@ -47,7 +52,50 @@ function taskDescriptionClear() {
   $('.task-description-text').val("");
 }
 
+  function loadBros() {
 
+    var s = $("select.employee-select.form-control");
+    console.log(s[0]);
+    console.log(s[0]['options'][0]);
+    var s = $( s[0]['options'][0] );
+    var t = $("input.task-description-text.text_field")
+    ;
+    console.log(t.val());
+    var model = {
+      task: {
+        description: t.val()
+      },
+      employee: {
+        id: s.val(),
+        name: s.text()
+      }
+    }
+
+    console.log('placing JST');
+    console.log(JST);
+    var html = JST['templates/employees/task_row'](model);
+    console.log(html);
+    $("#new-report-table tr:eq(" + t.closest('tr').index() +")").after(html);
+    return false;
+  }
+
+  function removeView() {
+    console.log('sheeet');
+    return true;
+  }
+
+  function onSubmit() {
+  console.log('onSubmit');
+    var b1 = $("input.task-description-text.text_field").is(':focus');
+    console.log(b1);
+    var b2 = $("select.employee-select.form-control").is(":focus");
+    if (b1 || b2) {
+     console.log('loading bros');
+      loadBros();
+    } else {
+      removeView();
+    }
+  }
 var menuOpen;
 
 $(function() {

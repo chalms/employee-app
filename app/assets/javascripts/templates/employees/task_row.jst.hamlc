@@ -1,5 +1,4 @@
-%tr{:name => @name, :value => @value}
-  %td
-    %input{:type => 'hidden', :value => @value, :name => 'employees[]'}
-    %span
-      %button.btn.btn-warning.employee-button{:value => @value}
+%tr
+  %td= @task['description']
+  %td= @employee['name']
+    %input{:type => 'hidden', :value => @employee['id'], :name => ':id'}

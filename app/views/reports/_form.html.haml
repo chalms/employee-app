@@ -1,26 +1,39 @@
-.form
-  %form{:method => 'post', :action => '/reports', :role => 'form'}
-    - if (flash[:error])
-      #error_explanation
-        %h2= "#{pluralize(@report.errors.count, "error")} prohibited this report from being saved:"
-    .form-group
-      %label Name:
-      %input.form-contol{ :type => "text", :name => "name"}
-    .form-group
-      %label.date Date:
-      %input.form-control{ :type => "date", :name => "date" }
-    .form-group
-      %label.summary Summary:
-      %input.input-large.form-control{ :type => "text", :name => "summary"}
-    - if (project_id)
-      .form-group
-        %input.hidden{:type => "hidden", :name => "project_id", :value => project_id}
-    - else
-      .form-group
-        %select.form-control{:type => "select", :name => "project_id"}
-          - @user.company.projects.each do |p|
-            %option{:value => p.id} p.name
-    = render partial: 'tasks/form', locals: { :owner => @user, :employees => @user.company.employees }
-    %button.btn.btn-default=link_to 'Add Task',
-    %input.form-control{ :type => 'submit', :name => 'submit'}
+.grid
+  .well
+    %h3.lead{:style => 'text-align: center;'} New Report
+    .form
+      %form{'accept-charset' => "UTF-8", :class => "new_report",'method' => 'post', 'action' => 'reports/create.js', 'data-remote' => "true", 'id' => "new_report", 'onsubmit' => "return onSubmit()" }
+        - if (flash[:error])
+          #error_explanation
+            %h2= "#{pluralize(@report.errors.count, "error")} prohibited this report from being saved:"
+        %table.table#new-report-table
+          %tr
+            %td
+              %input.text_field.form-control{ :type => "text", :name => "name", placeholder: 'Report Name'}
+            %td
+              %input.date_field.form-control{ :type => "date", :name => "date"}
+          - if (project_id)
+            %input.hidden{:type => "hidden", :name => "project_id", :value => project_id}
+            %tr{:colspan => 2}
+              %td
+                %input.text_field.input-large.form-control{ :type => "text", :name => "summary", placeholder: 'Summary'}
+          - else
+            %tr
+              %td
+                %input.text_field.input-large.form-control{ :type => "text", :name => "summary", placeholder: 'Summary'}
+              %td
+                %select.form-control{:type => "select", :name => "project_id"}
+                  - @user.company.projects.each do |p|
+                    %option{:value => p.id}=p.name
+          = render partial: 'tasks/embedded_form', locals: { owner: @user, owner_id: @user.id, employees: @user.company.employees, :options => options, :div => div}
+          %tr
+            %td{colspan: 2}
+              %input.form-control{ :type => 'submit', :name => 'submit'}
+
+  :javascript
+    $(document).ready ->
+      $("#new_report").on("ajax:success", (e, data, status, xhr) ->
+        $("#new_report").append xhr.responseText
+      ).on "ajax:error", (e, xhr, status, error) ->
+        $("#new_report").append "<p>ERROR</p>"
 

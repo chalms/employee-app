@@ -1,17 +1,14 @@
-.form-group
-  %input{:type => 'hidden', :name => 'users_report', :value => owner_id}
-%td.form-group
-  %input.text_field{:type => 'text', :class => 'task-description-text', :name => 'description', :placeholder => 'Task Description'}
-%td.form-group
+%tr.first
   - if (employees.count == 1)
     %input{:type => 'hidden', :name =>  'employees', :value => employees[0].id}
+    %td{:colspan => 2}
+      %input{:type => 'hidden', :name => 'users_report', :value => owner_id}
+      %input.text_field{:type => 'text', :class => 'task-description-text', :name => 'description', :placeholder => 'Task Description'}
   - else
-    %table.table
-      %thead Employees:
-      #task-employees
-        %tr.last
-          %td
-            %select#employee-select
-              - options employees.each do |employee|
-                %option{:value => employee.id} employee.name
-    = render partial: 'tasks/jscript'
+    %td
+      %input{:type => 'hidden', :name => 'users_report', :value => owner_id}
+      %input.text_field{:type => 'text', :class => 'task-description-text', :name => 'description', :placeholder => 'Task Description'}
+    %td.last.task-employees
+      %select.form-control{:class => 'employee-select'}
+        - employees.each do |employee|
+          %option{:value => employee.id}=employee.name

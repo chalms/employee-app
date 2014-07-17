@@ -26,6 +26,7 @@ Metrics::Application.routes.draw do
   get '/employees/upload' => 'employees#upload'
   get '/projects/summary' => 'projects#summary', as: :projects_summary
   post '/tasks/create' => 'tasks#create'
+  post '/reports/create' => 'reports#create'
 
 
   namespace :api, defaults: {:format => 'json'} do

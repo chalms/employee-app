@@ -58,7 +58,8 @@ class User < ActiveRecord::Base
 
   def string_to_date(params)
     if params[:date].is_a? String
-      date = Date.strptime(params[:date], '%m/%d/%Y')
+      date = Date.strptime(params[:date], '%Y-%m-%d')
+      date = Date.strptime(params[:date], '%m/%d/%Y') unless date
       return date
     else
       return nil

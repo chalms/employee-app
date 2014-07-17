@@ -1,13 +1,13 @@
 .grid
   .report
-    .gridrow
+    .gridrow.well
       .wrapper
         %h3="Report: #{report.id}"
         %h4 Manager: #{report.manager.name}
       .wrapper.right
         %h4="Date: #{report.date}"
         %h5
-          %a= link_to "New Report", new_report_path(options), :remote => :true
+          %a= link_to "New Report", new_report_path({:options => options, :div => div}), :remote => :true
       .blockquotes
         %h5
           %em="#{report.summary}"

@@ -55,9 +55,13 @@ class ReportsController < ApplicationController
   def new
     @user = current_user
     validate_user_role!
-    params = (params[:report] || params)
+    @data = {}
+    if params[:options]
+      @data[:report] = Report.new(params[:options])
+      @data[:options] = params[:options]
+    end
+    @data[:options] =
     @div = params[:div] ||= nil
-    @data = params[:data]
     @data[:div] = @div if @div
     validate_user_role!
     respond_to do |format|

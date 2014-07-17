@@ -2,7 +2,7 @@
   %h4 Tasks
   .wrapper-right
     %h5= link_to 'New Task', new_task_path({:data => {:owner => owner, :employees => [owner.user], :div => ".tasks[name=#{owner.id}]"}}), :remote => true
-  .tasks{:name => owner.id}
+  .task{:name => owner.id}
     %tr
       %td Name
       %td Description

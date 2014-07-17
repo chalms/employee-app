@@ -27,6 +27,7 @@ module Metrics
 
      config.autoload_paths += %W[ #{config.root}/lib ]
      config.autoload_paths += %W[ #{config.root}/lib/support ]
+     # config.assets.paths << "#{ Rails.root }/app/assets/templates"
      config.middleware.use ActionDispatch::Flash
      config.active_record.whitelist_attributes
 
