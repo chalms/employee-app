@@ -25,13 +25,19 @@ class User < ActiveRecord::Base
   end
 
   def add_report(params)
+    # {"name"=>"Andrew's First Report", "date"=>"2014-07-24", "summary"=>"This report rules!", "project_id"=>"1", "users_report"=>"1", "description"=>"New Task", ":id"=>"3", "submit"=>"", "controller"=>"reports", "action"=>"create", "format"=>"js"}
     params = params[:report] || params
+    puts "params shouldnt have changed --> #{params}"
     hash = {}
+
     hash[:date] = string_to_date(params)
+    puts "here is the date: #{hash[:date]}"
     hash[:summary] = params[:summary] || nil
     hash[:project_id] = params[:project_id] || nil
     hash[:client_id] = params[:client_id] || nil
+    puts "creating a report with hash: #{hash}"
     report = reports.create!(hash)
+    puts "report created: #{report.inspect}"
     report.add_tasks(params[:tasks]) if params[:tasks]
     return report
   end

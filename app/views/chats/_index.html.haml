@@ -2,8 +2,8 @@
   - users_chats.each do |u_c|
     - if (u_c.unread.count != 0)
       %li.in-red
-        %a= link_to "#{u_c.chat.name}", chats_path(u_c), :remote => true
+        %a= link_to "#{u_c.chat.name}", chats_path(u_c.chat), :remote => true
         %span.unread= u_c.unread
     - else
       %li.red
-        %a= link_to "#{u_c.chat.name}", chats_path(u_c), :remote => true
+        %a= link_to "#{u_c.chat.name}", chats_path(u_c.chat), :remote => true

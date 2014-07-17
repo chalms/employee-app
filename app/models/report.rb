@@ -18,20 +18,30 @@ class Report < ActiveRecord::Base
 
   def create_chat
     # NEEDS TO BE SPED UP
+    puts "creating chat"
     chat = Chat.joins(:users_chats).where('user_id = ? OR user_id = ?', user.id, manager_id).andand.first
+    puts "chat made from joins: #{chat.inspect}"
     unless !!chat
-      chat = ReportsChat.create!({:type => TYPES[1], :report_id => self.id, :name => "Report: #{self.id}"})
+      puts "chat does not exist!"
+      chat = Chat.create!({:type => TYPES[1], :report_id => self.id})
+      puts "second chat made: #{chat.inspect}"
       users.each do |u|
-        chat.users_chats.create!({:user_id => u.id})
-        users.users_chats.where({:chat_id => chat.id}).first_or_create!
+        user_chats = chat.users_chats.create!({:user_id => u.id})
+        puts "user_chats: #{user_chats.inspect}"
+        users_chats.where({:chat_id => chat.id}).first_or_create!
       end
       manager.users_chats.where({:chat_id => chat.id}).first_or_create!
       chat.users_chats.create!({:user_id => manager_id})
     end
     update_attribute(:chat_id, chat.id)
+    puts "chat created"
   end
 
   def add_tasks(tasks = [])
+    puts "adding tasks: #{tasks}"
+    if (tasks.is_a? Hash)
+      tasks = [tasks]
+    end
     tasks.each do |task_hash|
       if (task_hash[:employee_id])
         employee_id = task_hash.delete(:employee_id)

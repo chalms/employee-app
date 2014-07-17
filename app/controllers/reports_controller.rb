@@ -75,6 +75,7 @@ class ReportsController < ApplicationController
     @user = current_user
     validate_user_role!
     @div = params.delete(:div) if (params[:div])
+    puts "trying to creating report with params: #{params}"
     @report = @user.add_report(params)
     if @report
       respond_to do |format|

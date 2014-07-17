@@ -6,10 +6,14 @@ class UsersChat  < ActiveRecord::Base
   has_many :users_messages
 
   def read_all?
-    self.users_messages.find(:read, false).present?
+    users_messages.find(:read, false).present?
   end
 
   def unread
-    self.users_messages.where(:read, false)
+    users_messages.where(read: false)
+  end
+
+  def chat
+    @chat ||= Chat.find(self.chat_id)
   end
 end

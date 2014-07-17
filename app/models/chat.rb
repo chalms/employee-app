@@ -26,11 +26,13 @@ class Chat < ActiveRecord::Base
   end
 
   def name
-    @name ||= self.name
+    puts "getting chat name"
     unless @name
       str = ""
       names = {}
+      puts "waiting for it..."
       users.each { |u| names[u.name] = u.id }
+      puts "got it.."
       lock = false
       names.each do |k, v|
         if (lock)
@@ -40,8 +42,11 @@ class Chat < ActiveRecord::Base
           lock = true
         end
       end
-      @name = update_attribute(:name, str) if (str.present?)
+      puts "now updating.... with: #{str}"
+      @name = str
+      puts "done updating"
     end
+    puts "returning"
     @name
   end
 
