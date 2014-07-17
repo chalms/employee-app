@@ -1,12 +1,10 @@
 .form-group
-  %input{:type => 'hidden', :name => @owner, :value => @owner.id}
-.form-group
-  %label Description:
-  %input.form-control{:type => 'text', :name => 'description'}
-.form-group
-  - if (@employees.count == 1)
-    %label="Employee: #{@employees[0].name}"
-    %input.hidden{:type => 'hidden', :value => @employees[0].id, :name => 'employees[]'}
+  = hidden_field_tag :users_report, :value => owner_id
+%td.form-group
+  = text_field_tag :description, 'Task Description'
+%td.form-group
+  - if (employees.count == 1)
+    = hidden_field_tag 'employees[]', :value => employees[0].id
   - else
     %table.table
       %thead Employees:
@@ -14,7 +12,6 @@
         %tr.last
           %td
             %select#employee-select
-              - options @employees.each do |employee|
+              - options employees.each do |employee|
                 %option{:value => employee.id} employee.name
     = render partial: 'tasks/jscript'
-  = end

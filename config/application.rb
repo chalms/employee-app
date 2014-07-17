@@ -11,6 +11,7 @@ module Metrics
   class Application < Rails::Application
 
     config.assets.precompile += ['app.js']
+    config.assets.precompile += ['/fonts']
 
     # config.middleware.insert_after ActiveRecord::QueryCache, ActionDispatch::Cookies
     # Settings in config/environments/* take precedence over those specified here.
@@ -26,8 +27,6 @@ module Metrics
 
      config.autoload_paths += %W[ #{config.root}/lib ]
      config.autoload_paths += %W[ #{config.root}/lib/support ]
-     config.app_generators.stylesheet_engine :less
-
      config.middleware.use ActionDispatch::Flash
      config.active_record.whitelist_attributes
 

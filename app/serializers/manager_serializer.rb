@@ -1,8 +1,5 @@
-class ManagerSerializer < ActiveModel::Serializer
-  attributes :hours, :days_worked, :assigned_tasks,
-  :completed_tasks, :assigned_parts,
-  :completed_parts, :tasks_completion_percent,
-  :parts_completion_percent, :reports_completion_percent, :todays_activity, :email, :name, :employee_number
+class ManagerSerializer < UserSerializer
+  attributes :employee_number
 
   has_many :chats
   has_many :users_messages

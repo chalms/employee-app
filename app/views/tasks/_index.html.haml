@@ -1,13 +1,13 @@
-%table.table
-  %thead
-    %h2
-      - if (name)
-        = "#{name} "
-      = "Tasks"
-      - if (options[:name])
-        %br=" for #{options[:name]}"
-  .tasks{:name => name}
+%table.table#task-table
+  %h4 Tasks
+  .wrapper-right
+    %h5= link_to 'New Task', new_task_path({:data => {:owner => owner, :employees => [owner.user], :div => ".tasks[name=#{owner.id}]"}}), :remote => true
+  .tasks{:name => owner.id}
+    %tr
+      %td Name
+      %td Description
+      %td Completed
+      %td Notes
+      %td
     - tasks.each do |task|
       = render partial: 'tasks/show', locals: { task: task }
-    = link_to 'New Task', 'tasks/new', :data => {:owner => @owner, :employees => [users_report.user], :div => ".tasks[name=#{name}]", :remote => true
-

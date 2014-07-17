@@ -1,10 +1,10 @@
 %td
-  %a=link_to employee.assigned_reports(options).count, 'reports/index', :data => { :reports => employee.assigned_reports(options), :name => employee.name, :id => employee.id, :options => options, :div => '#employees-dash', :table_name => 'assigned' }, :remote => true
+  %a=link_to employee.assigned_reports(options).count, reports_path({:data => { :reports => 'date', :name => employee.name, :id => employee.id, :options => options, :div => '#projects-template', :table_name => 'assigned' }}), :remote => true
 %td
-  %a=link_to employee.completed_reports(options).count, 'reports/index', :data => { :reports => employee.completed_reports(options), :name => employee.name, :id => employee.id, :options => options, :div => '#employees-dash', :table_name => 'completed' }, :remote => true
+  %a=link_to employee.completed_reports(options).count, reports_path({ :data => { :reports => 'date', :name => employee.name, :id => employee.id, :options => options, :div => '#projects-template', :table_name => 'completed' }}), :remote => true
 %td
-  %a=link_to employee.tasks_completion_percent, 'tasks/index', :data => { :tasks => employee.assigned_tasks(options), :name => employee.name, :id => employee.id, :div => '#employees-dash', :options => options}, :remote => true
+  %a=link_to employee.tasks_completion_percent(options), tasks_path({ :data => { :tasks => 'date', :name => employee.name, :id => employee.id, :div => '#projects-template', :options => options}}), :remote => true
 %td
-  %a=link_to employee.hours(options), 'employees/hours_timesheet', :data => { :users_reports => employee.user_reports.where(options).order(:date), :name => employee.name, :id => employee.id, :div => '#employees-dash', :options => options }, :remote => true
+  %a=link_to employee.hours(options), employees_hours_timesheet_path({:data => { :users_reports => 'date', :name => employee.name, :id => employee.id, :div => '#projects-template', :options => options }}), :remote => true
 %td
-  %a=link_to employee.days_worked(options), 'employee/days_timesheet', :data => { :users_reports => employee.user_reports.where(options).order(:date), :name => employee.name, :id => employee.id, :div => '#employees-dash', :options => options }, :remote => true
+  %a=link_to employee.days_worked(options), employees_days_timesheet_path({ :data => { :users_reports => 'date', :name => employee.name, :id => employee.id, :div => '#projects-template', :options => options }}), :remote => true

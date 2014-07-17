@@ -1,5 +1,5 @@
  class Project < ActiveRecord::Base
-  attr_accessible  :name, :start_date, :end_date, :budget, :complete, :assigned_parts, :assigned_tasks, :completed_parts, :completed_tasks, :company_id, :complete?, :hours, :employee_days_worked, :manager_number, :clients, :managers, :employees, :manager
+  attr_accessible  :name, :start_date, :end_date, :budget, :complete, :assigned_parts, :assigned_tasks, :completed_parts, :completed_tasks, :company_id, :complete?, :hours, :days_worked, :manager_number, :clients, :managers, :employees, :manager
   belongs_to :company
   has_many :reports
   has_many :tasks
@@ -22,44 +22,44 @@
   end
 
   def employees
-    @employees ||= users.where(role: 'employee')
+    @employees ||= users.where(type: 'Employee')
   end
 
   def managers
-    @managers ||= users.where(role: 'manager')
+    @managers ||= users.where(type: 'Manager')
   end
 
   def assigned_tasks(options = {})
     @assigned_tasks = []
-    get_reports(options).each { |r| @assigned_tasks += r.assigned_tasks }
+    get_reports(options).each { |r| @assigned_tasks += r.assigned_tasks(options) }
     @assigned_tasks
   end
 
   def assigned_parts(options = {})
     @assigned_parts = []
-    get_reports(options).each { |r| @assigned_parts += r.assigned_parts }
+    get_reports(options).each { |r| @assigned_parts += r.assigned_parts(options) }
     @assigned_parts
   end
 
   def assigned_reports(options = {})
     @assigned_reports = []
-    get_reports(options).each { |r| @assigned_reports += r if (r.assigned_tasks.count > 0)}
+    get_reports(options).each { |r| @assigned_reports << r if (r.assigned_tasks(options).count > 0)}
     @assigned_reports
   end
 
   def completed_reports(options = {})
-    get_reports(options).where(completed :true)
+    get_reports(options).where(complete: :true)
   end
 
   def completed_tasks(options = {})
     @completed_tasks = []
-    get_reports(options).each { |r| @completed_tasks += r.completed_tasks }
+    get_reports(options).each { |r| @completed_tasks += r.completed_tasks(options) }
     @completed_tasks
   end
 
   def completed_parts(options = {})
     @completed_parts = []
-    get_reports(options).each { |o| @completed_parts += o.completed_parts }
+    get_reports(options).each { |o| @completed_parts += o.completed_parts(options) }
     @completed_parts
   end
 
@@ -81,18 +81,18 @@
     @hours
   end
 
-  def employee_days_worked(options = {})
-    @employee_days_worked = 0
+  def days_worked(options = {})
+    @days_worked = 0
     h = {}
     get_reports(options).each do |r|
-      if (r.andand.user_reports)
+      if (r.andand.users_reports)
         r.users_reports do |u_r|
           h[[u_r.employee.id, u_r.date]] = true
         end
       end
     end
-    h.each { |k, v| @employee_days_worked += 1 }
-    @employee_days_worked
+    h.each { |k, v| @days_worked += 1 }
+    @days_worked
   end
 
   def get_reports(options = {})

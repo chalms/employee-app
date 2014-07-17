@@ -1,3 +1,1 @@
-%h2 New Task
-.form
-  = render partial: 'tasks/form', :locals => {:owner => @owner, :owner_id => @owner.id, :employees => @employees}
+= render partial: 'tasks/form', :locals => {:owner => owner, :owner_id => owner.id, :employees => employees}

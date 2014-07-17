@@ -5,15 +5,36 @@ class EmployeesController < ApplicationController
 
   def index
     manager_or_admin!
-    @company = @user.company
-    @employee_logs = @user.company.employee_logs
+    puts params
+    @data = params[:data]
+    @div = @data.delete(:div)
+    type = @data[:options].delete(:type)
+
+
+    if @data[:options][:project_id].present?
+      if type != 'Employee'
+        q1 = User.joins(:reports).where(reports: @data[:options], user: { type: ('Manager' || 'Admin')} ).uniq!
+        puts q1.inspect
+        @data[:employees] = q1
+
+      else
+        q2 = User.joins(users_reports: [:user, :report]).where(reports: @data[:options], users: { type: 'Employee'} ).uniq!
+        puts q2.inspect
+        @data[:employees] = q2
+      end
+    end
+    @data[:type] = @data[:options].delete(:type)
+
+    puts "PAST THE QUERY"
     respond_to do |format|
+      format.json { render json: @data }
       format.js
     end
   end
 
   def days_timesheet
     @data = params[:data]
+    @div = @data.delete(:div)
     respond_to do |format|
       format.json { render json: @data }
       format.js
@@ -29,6 +50,12 @@ class EmployeesController < ApplicationController
   end
 
   def show
+    @user = current_user
+    manager_or_admin!
+    @data = params[:data] || params
+    @data[:employee] = @user.company.employees.find(params[:id].to_i)
+    @data[:options] ||= {}
+    @div = @data.delete(:div)
     respond_to do |format|
       format.json { render json: @user }
       format.js
@@ -91,7 +118,7 @@ rescue Exceptions::StdError => e
   private
 
   def manager_or_admin!
-    raise Exceptions::StdError, "User is an employee" if (@user.role.downcase != 'employee')
+    raise Exceptions::StdError, "User is an employee" if (@user.role.downcase == 'employee')
   end
 
   def user!

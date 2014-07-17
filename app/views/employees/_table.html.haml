@@ -1,15 +1,12 @@
 %table.table.table-hover
-  %thead
-    %h2.title
-      = "#{name} Employees"
-  %tbody
-    %tr.headers
-      %th Name
-      %th Assigned Reports
-      %th Completed Reports
-      %th Task Completion %
-      %th Hours
-      %th Days Working on #{name}
-    - employees.each do |employee|
-      %tr.table-row
-        = render partial: 'employees/table_row', locals: { employee: employee }
+  %tr.headers
+    %th Name
+    %th Assigned Reports
+    %th Completed Reports
+    %th Task Completion %
+    %th Hours
+    %th Days Working on #{name}
+  - employees.each do |employee|
+    %tr.table-row
+      %td= link_to employee.name, "employees/#{employee.id}", remote: true
+      = render partial: 'employees/table_row', locals: { employee: employee, options: options, type: type}

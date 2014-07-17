@@ -1,6 +1,11 @@
-.form
-  %h4= link_to "Or, Upload a Csv instead: ", 'tasks/upload_form', :div => '#tasks-form', :remote => true
-  #tasks-form
-    %form{ :method => 'post', :action => '/tasks', :role => 'form'}
-      = render partial: 'tasks/embedded_form', locals: { owner: @owner, employees: @employees }
-      %input.submit{:type => 'submit', :name => 'submit'} Save
+- upload = employees.count > 1 ? 'false' : ''
+%h5{:hidden => upload}= link_to "Or, Upload a Csv instead: ", 'tasks/upload_form', :div => '#tasks-form', :remote => true
+%tr
+  .form
+    = form_tag tasks_path, method: :post, :remote => true do
+      = render partial: 'tasks/embedded_form', locals: { owner: owner, owner_id: owner_id, employees: employees }
+    = submit_tag
+  :javascript
+    $(document).ready(function(){
+      $('form#task-form').trigger('submit.rails');
+    })

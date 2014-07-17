@@ -1,6 +1,6 @@
 %table.table.table-hover
   %thead
-    %h3= "#{name}: #{hours} hours"
+    %h3= "#{employee.name}: #{employee.hours} hours"
     - if (options[:name])
       %br= " on #{options[:name]}"
   %tbody
@@ -9,10 +9,8 @@
       %th Checkin
       %th Checkout
       %th Hours
-    - users_reports.each do |report|
-      %td=link_to report.report.name, reports_path(report)
+    - employee.users_reports.each do |report|
+      %td=link_to report.report.name, users_reports_path(report)
       %td=report.checkin
       %td=report.checkout
       %td=report.hours
-  %tfooter
-    %small=link_to name, employees_path(id)

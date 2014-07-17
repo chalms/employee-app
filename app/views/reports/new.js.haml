@@ -1,5 +1,5 @@
 :plain
   var appearance = $('#{ escape_javascript(render partial: 'reports/new', :locals => @data) }');
-  var div = $('#{escape_javascript(@div)}');
+  var div = $('#{@div)}');
   div.html(appearance);
   div.show();

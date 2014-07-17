@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   include JsonSerializingModel
-  attr_accessible :email, :name, :employee_number, :hours, :days_worked, :role, :password, :company_id
+  attr_accessible :email, :name, :employee_number, :hours, :days_worked, :role, :password, :company_id, :assigned_tasks, :completed_tasks, :assigned_parts, :completed_parts, :tasks_completion_percent, :reports_completion_percent
   after_initialize :_set_defaults
   validates_presence_of :password, :length => {:minimum  => 6},  on: :create!
   validate :email, :format => {:with => /\A[^@]+@[^@]+\.[^@]+\Z/}
@@ -86,7 +86,7 @@ class User < ActiveRecord::Base
   end
 
   def is_admin?
-    return (self.role == 'companyAdmin')
+    return (self.role.downcase == 'companyadmin' || self.role.downcase == 'admin')
   end
 
   def is_manager?
@@ -113,15 +113,15 @@ class User < ActiveRecord::Base
   def hours(options = {})
     @hours = 0
     return @hours unless (self.role == 'employee')
-    get_users_report(options).each { |u_r| @hours += u_r.hours }
+    get_users_reports(options).each { |u_r| @hours += u_r.hours }
     @hours
   end
 
   def days_worked(options = {})
     @days_worked = 0
     h = {}
-    return @days_worked unless (self.role == 'employee')
-    get_users_report(options).each { |u_r| h[u_r.date] = true }
+    return @days_worked unless (self.role.downcase == 'employee')
+    get_users_reports(options).each { |u_r| h[u_r.date] = true }
     h.each { |k, v| @days_worked += 1 }
     @days_worked
   end
@@ -144,6 +144,14 @@ class User < ActiveRecord::Base
     @assigned_parts
   end
 
+  def assigned_reports(options = {})
+    get_users_reports(options)
+  end
+
+  def completed_reports(options = {})
+    assigned_reports(options).where(complete: true)
+  end
+
   def completed_parts(options = {})
     @completed_parts = []
     get_users_reports(options).each {|u_r| @completed_parts += u_r.completed_parts}
@@ -163,21 +171,30 @@ class User < ActiveRecord::Base
   end
 
   def todays_activity
-    @todays_activity = get_user_reports({"today" => true})
+    @todays_activity = get_users_reports({"today" => true})
   end
 
   private
 
   def get_users_reports(options = {})
     if (options["before"])
-      users_reports.where('date < ?', Date.today)
+      @users_reports = users_reports.where('date < ?', Date.today)
     elsif (options["today"])
-      users_reports.where('date = ?', Date.today)
+     @users_reports = users_reports.where('date = ?', Date.today)
     elsif (options["future"])
-      users_reports.where('date > ?', Date.today)
+      @users_reports =users_reports.where('date > ?', Date.today)
     else
-      users_reports
+      if (options.count != 0)
+        if (options[:project_id])
+          @users_reports = users_reports.joins(:report).where(reports: { project_id: options.delete(:project_id) })
+        else
+          @users_reports = users_reports.where(options)
+        end
+      else
+        @users_reports = users_reports
+      end
     end
+    @users_reports
   end
 
   def _set_defaults

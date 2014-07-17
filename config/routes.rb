@@ -20,11 +20,11 @@ Metrics::Application.routes.draw do
   resources :admins, only: [:show, :update]
 
   post '/chats/new_message' => 'chats#new_message'
-  get '/employees/days_timesheet' => 'employees#days_timesheet'
-  get '/employees/hours_timesheet' => 'employees#hours_timesheet'
+  get '/employees/days_timesheet' => 'employees#days_timesheet', as: :employees_days_timesheet
+  get '/employees/hours_timesheet' => 'employees#hours_timesheet', as: :employees_hours_timesheet
   put '/employees/save_data' => 'employees#save_data'
   get '/employees/upload' => 'employees#upload'
-  get '/projects/summary' => 'projects#summary'
+  get '/projects/summary' => 'projects#summary', as: :projects_summary
 
   namespace :api, defaults: {:format => 'json'} do
 

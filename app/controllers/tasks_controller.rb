@@ -26,7 +26,11 @@ class TasksController < ApplicationController
     user!
     admin_manager!
     @data = params[:data] || { :owner => 'company', :owner_id => @user.company.id }
+    @data[:employees].map! { |e| Employee.find(e.to_i)}
+    @data[:owner_id] = @data[:owner].to_i if (@data[:owner].to_i != 0)
+    @data[:owner] = UsersReport.find(@data[:owner_id])
     @data[:div] ||= "#new-task"
+    @div = @data.delete(:div)
     respond_to do |format|
       format.json { render json: @data }
       format.js
@@ -46,12 +50,16 @@ class TasksController < ApplicationController
 
   def create
     user!
-    is_admin_manager!
-    params = params[:task] if params[:task]
-    @task = create_task(params[:owner], params[:owner_id], { :description => params[:description] } )
+    admin_manager!
+    puts params
+    params = params['task'] || params
+    puts params.inspect
+    puts params[:users_report]
+    puts params[:description]
+    @task = create_task(params[:users_report], params[:users_report], { :description => params[:description] } )
     raise Exceptions::StdError, "Error creating task!" unless (@task)
     respond_to do |format|
-      format.js { render js: @task }
+      format.js
     end
   rescue Exceptions::StdError => e
     flash[:errors] = e.message

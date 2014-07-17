@@ -64,6 +64,14 @@ class UsersReport < ActiveRecord::Base
     reports_parts.where(id: reports_parts.id).first_or_create
   end
 
+  def assigned_tasks(options = {})
+    reports_tasks
+  end
+
+  def complete_tasks(options = {})
+    reports_tasks.where(:complete, true)
+  end
+
   def add_task(task_id)
     return reports_tasks.where(task_id: task_id).first_or_create
   end
@@ -80,11 +88,11 @@ class UsersReport < ActiveRecord::Base
     return reports_tasks.where(:complete => false)
   end
 
-  def self.completed_parts
+  def completed_parts
     return reports_parts.where(:complete => true)
   end
 
-  def self.completed_tasks
+  def completed_tasks
     return reports_tasks.where(:complete => true)
   end
 

@@ -340,6 +340,7 @@ PLATFORMS
 DEPENDENCIES
   active_model_serializers
   andand
+  arel
   asset_sync!
   bcrypt-ruby (~> 3.0.0)
   better_errors

@@ -1,12 +1,5 @@
 .reports{:name => @table_name}
   %table.table.table-hover
-    %thead
-      %h4
-        - if (@name)
-          = "#{@name} "
-        = "Reports"
-        - if (options[:name])
-          %br=" for #{options[:name]}"
     %tbody
       %tr
         %th Summary
