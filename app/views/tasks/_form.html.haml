@@ -1,5 +1,6 @@
 - upload = employees.count > 1 ? 'false' : ''
 - owner_idd =  owner.id ? owner.id : owner_id
+- options = options ? options : {}
 %h5{:hidden => upload}= link_to "Or, Upload a Csv instead: ", 'tasks/upload_form', :div => '#tasks-form', :remote => true
 %tr
   .form

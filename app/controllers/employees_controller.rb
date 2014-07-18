@@ -24,6 +24,7 @@ class EmployeesController < ApplicationController
       end
     end
     @data[:type] = @data[:options].delete(:type)
+    @data[:employe_logs] = @user.company.employee_logs
 
     puts "PAST THE QUERY"
     respond_to do |format|
@@ -72,13 +73,23 @@ class EmployeesController < ApplicationController
 
   def upload
     is_admin!
-    file_data = params[:upload]
-    @employee_logs = EmployeeCsv.new(file_data).employee_logs
+    puts "params: => #{params}"
+    file_data = params[:file]
+    puts "file_data: => #{file_data}"
+    @employee_logs = EmployeeCsv.new(file_data, @user).employee_logs
+    puts "employee logs: #{@employee_logs}"
     @employee_logs.each do |log|
       render 'employees/log_row', :locals => {:log => log}
     end
 rescue Exceptions::StdError => e
     flash[:error] = e
+  end
+
+  def upload_form
+    is_admin!
+    respond_to do |format|
+      format.js
+    end
   end
 
   def save_data
@@ -116,6 +127,10 @@ rescue Exceptions::StdError => e
   end
 
   private
+
+  def is_admin!
+    raise Exceptions::StdError, "User is not an admin" if (@user.role.downcase != 'admin' || @user.role.downcase != 'companyadmin')
+  end
 
   def manager_or_admin!
     raise Exceptions::StdError, "User is an employee" if (@user.role.downcase == 'employee')

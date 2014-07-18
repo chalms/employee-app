@@ -18,12 +18,10 @@ class UsersReportsController < ApplicationController
   # POST /users_reports
   # POST /users_reports.json
   def create
-    @users_report = UsersReport.new(params[:users_report])
-
-    if @users_report.save
-      render json: @users_report, status: :created, location: @users_report
-    else
-      render json: @users_report.errors, status: :unprocessable_entity
+    @report = Report.find(params[:report_id])
+    @users_report = @report.users_reports.create!(:user_id => params[:user_id])
+    respond_to do |format|
+      format.js
     end
   end
 

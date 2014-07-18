@@ -37,18 +37,21 @@ class Report < ActiveRecord::Base
     puts "chat created"
   end
 
-  def add_tasks(tasks = [])
+
+  def add_tasks(ts = [])
     puts "adding tasks: #{tasks}"
-    if (tasks.is_a? Hash)
-      tasks = [tasks]
+    if (ts.is_a? Hash)
+      ts = [tasks]
     end
-    tasks.each do |task_hash|
-      if (task_hash[:employee_id])
-        employee_id = task_hash.delete(:employee_id)
-        new_task = tasks.create!(task_hash)
-        assign_task(employee_id, new_task.id)
+    ts.each do |task_hash|
+      if (task_hash['employee_id'])
+        emp_id = task_hash.delete('employee_id')
+        puts "emp_id: #{emp_id}"
+        puts "task_hash: #{task_hash}"
+        new_task = ts.create!(task_hash)
+        assign_task(emp_id[0], new_task.id)
       else
-        tasks.create!(task_hash)
+        ts.create!(task_hash)
       end
     end
   end

@@ -23,10 +23,11 @@ Metrics::Application.routes.draw do
   get '/employees/days_timesheet' => 'employees#days_timesheet', as: :employees_days_timesheet
   get '/employees/hours_timesheet' => 'employees#hours_timesheet', as: :employees_hours_timesheet
   put '/employees/save_data' => 'employees#save_data'
-  get '/employees/upload' => 'employees#upload'
+  post '/employees/upload' => 'employees#upload'
   get '/projects/summary' => 'projects#summary', as: :projects_summary
   post '/tasks/create' => 'tasks#create'
   post '/reports/create' => 'reports#create'
+  get '/todays_reports' => 'reports#today'
 
 
   namespace :api, defaults: {:format => 'json'} do

@@ -52,7 +52,18 @@ function taskDescriptionClear() {
   $('.task-description-text').val("");
 }
 
-  function loadBros() {
+function uploadForm() {
+  var html = JST['templates/employees/upload_form']();
+  $('.form#employees-logs-form').after(html);
+  $('.form#employees-logs-form').hide();
+}
+
+function showOldForm() {
+  $('.form#employees-logs-form').after().hide();
+  $('.form#employees-logs-form').show();
+}
+
+function loadBros() {
 
     var s = $("select.employee-select.form-control");
     console.log(s[0]);

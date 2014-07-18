@@ -1,4 +1,4 @@
-.grid
+.grid#report-table
   .report
     .gridrow.well
       .wrapper
@@ -11,6 +11,14 @@
       .blockquotes
         %h5
           %em="#{report.summary}"
-    %h3 Employees
+    .gridrow.well
+      %h4 Add Employees
+      .form
+        %form{'accept-charset' => "UTF-8", :class => "new_users_report",'method' => 'post', 'action' => '/users_reports.js', 'data-remote' => "true", 'id' => "new_users_report", 'onsubmit' => "return sub()" }
+          %input{:type => 'hidden', :name => 'report_id', :value => "#{report.id}"}
+          %select.form-control{:class => 'employee-select', :name => 'user_id'}
+            - report.manager.company.employees.each do |employee|
+              %option{:value => employee.id}=employee.name
+          %input.submit{:type => 'submit', :name => 'submit'}
     - report.users_reports.each do |users_report|
       = render partial: 'users_reports/show', locals: {users_report: users_report, options: options, report: report, :div => div}

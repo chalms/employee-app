@@ -1,0 +1,9 @@
+%table.table#upload-table
+  %tr
+    %td Email
+    %td Employee ID
+    %td Role
+.format
+  %form{:action=>"employees/upload", :method=>"post", :enctype=>"multipart/form-data", "data-remote" => "true", :onsubmit => 'showOldForm()'}
+    %input{:type=>"file",:name=>"file"}
+    %input{:type=>"submit",:value=>"Upload"}

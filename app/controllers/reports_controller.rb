@@ -33,6 +33,16 @@ class ReportsController < ApplicationController
     end
   end
 
+  def today
+    @user = current_user
+    if @user.role.downcase == 'employee'
+      @reports = @user.todays_activity
+      if @reports
+        render json: @reports
+      end
+    end
+  end
+
   # GET /api/reports/1
   # GET /api/reports/1.json
   def show
