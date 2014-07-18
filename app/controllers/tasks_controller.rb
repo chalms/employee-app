@@ -101,7 +101,6 @@ class TasksController < ApplicationController
   private
 
   def create_task(owner, id, hash)
-
     if owner == 'company'
       return @user.company.create!(hash)
     elsif owner == 'report'

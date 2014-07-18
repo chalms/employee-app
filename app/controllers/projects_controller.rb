@@ -23,8 +23,6 @@ class ProjectsController < ApplicationController
     head 500, :content_type => 'text/html'
   end
 
-  # GET /projects/1
-  # GET /projects/1.json
   def show
     @user = current_user
     @project = Project.find(params[:id])
@@ -41,8 +39,6 @@ class ProjectsController < ApplicationController
     head 500, :content_type => 'text/html'
   end
 
-  # POST /projects
-  # POST /projects.json
   def create
     @user = current_user
     @clients = params[:project][:clients]
@@ -60,12 +56,11 @@ class ProjectsController < ApplicationController
     head 500, :content_type => 'text/html'
   end
 
-  # PATCH/PUT /projects/1
-  # PATCH/PUT /projects/1.json
   def update
+    @user = current_user
     @project = Project.find(params[:id])
-    params = clean!
     validate_permissions!
+    params = clean!
     @project.update_attributes!(params)
     respond_to do |format|
       format.json { render json: @project };
@@ -76,10 +71,10 @@ class ProjectsController < ApplicationController
     head 500, :content_type => 'text/html'
   end
 
-  # DELETE /projects/1
-  # DELETE /projects/1.json
   def destroy
+    @user = current_user
     @project = Project.find(params[:id])
+    validate_permissions!
     @project.destroy
     head 200, :content_type => 'text/html'
   rescue Exceptions::StdError => e

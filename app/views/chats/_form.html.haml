@@ -1,45 +1,7 @@
-.form#new-message-form{:method => 'post', :action => "chats/new_message"}
+.form#new-message-form{:action => "chats/new_message"}
   .error
   .form-group
     %input.form-control{:type => 'text', :name => 'text', "placeholder" => 'Enter a message here'}
   .form-group
     %input.hidden{:type => 'hidden', :name => 'id', :value => "#{id}"}
-  %input.form-control{:type => 'submit', :name => 'submit'} Submit
-
-:javascript
-  $('#new-message-form').submit(function() {
-    var valuesToSubmit = $(this).serialize();
-    $.ajax({
-        type: 'POST',
-        url: $(this).attr('action'),
-        data: valuesToSubmit,
-        dataType: "JSON"
-    }).success(function(json){
-      $(':input','#new-message-form')
-        .not(':button, :submit, :reset, :hidden')
-        .val('')
-        .removeAttr('checked')
-        .removeAttr('selected');
-      console.log("ajax success with json ---> ");
-      console.log(json);
-      hash = $.parseJSON(json);
-      console.log("json parsed with hash ---> ");
-      consoel.log(hash);
-      for (var key in hash) {
-        console.log("key: " + key)
-        console.log("hash[key]: " + hash[key])
-        if (key === 'message') {
-          console.log("div appended: " + "#{@div}");
-          $(@div).append(hash[key]);
-        }
-      }
-    }).error(function(err){
-      str = err.toString();
-      var htmlString = '<p>' + str + '</p>';
-      $('.error','#new-message-form').html(htmlString);
-    });
-    return false;
-  });
-
-  // Or this will work just as well
-  //$('form#myForm').trigger('submit.rails');
+  %button.form-control{:onclick => 'return submitMessageForm();'} Submit

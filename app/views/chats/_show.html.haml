@@ -1,7 +1,11 @@
+- chat_prompt = 'Start a conversation!'
+- has_messages = messages.present? ? (messages.first? ? true : false ) : false
+- user_messages = has_messages ? messages : (Model.new({:text => chat_prompt, :status => nil}))
 .chat.container
-  .grid{ id: => "#users-chat-#{id}"}
-    - messages.each do |m|
-      .gridrow.message
+  .well{ :id => "#users-chat-#{@id}"}
+    %h4= "Chat with: #{@name}"
+    - user_messages.each do |m|
+      .message
         %h4="#{m.text}"
         %small="#{m.status}"
-  = render partial: 'chats/form', :locals => { id: id, div:  "#users-chat-#{id}"}
+    = render partial: 'chats/form', :locals => { id: @id, div:  "#users-chat-#{@id}"}

@@ -1,0 +1,3 @@
+:plain
+  var chat = $("#{escape_javascript(render partial: 'chats/show', :locals => @data)}");
+  $('#chats li:last').after(chat).show();

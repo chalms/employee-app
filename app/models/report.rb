@@ -17,39 +17,29 @@ class Report < ActiveRecord::Base
   TYPES = ['UsersReportsChat', 'ReportsChat']
 
   def create_chat
-    # NEEDS TO BE SPED UP
-    puts "creating chat"
     chat = Chat.joins(:users_chats).where('user_id = ? OR user_id = ?', user.id, manager_id).andand.first
-    puts "chat made from joins: #{chat.inspect}"
     unless !!chat
-      puts "chat does not exist!"
       chat = Chat.create!({:type => TYPES[1], :report_id => self.id})
-      puts "second chat made: #{chat.inspect}"
       users.each do |u|
         user_chats = chat.users_chats.create!({:user_id => u.id})
-        puts "user_chats: #{user_chats.inspect}"
         users_chats.where({:chat_id => chat.id}).first_or_create!
       end
       manager.users_chats.where({:chat_id => chat.id}).first_or_create!
       chat.users_chats.create!({:user_id => manager_id})
     end
     update_attribute(:chat_id, chat.id)
-    puts "chat created"
   end
 
 
   def add_tasks(ts = [])
-    puts "adding tasks: #{tasks}"
     if (ts.is_a? Hash)
       ts = [tasks]
     end
     ts.each do |task_hash|
       if (task_hash['employee_id'])
         emp_id = task_hash.delete('employee_id')
-        puts "emp_id: #{emp_id}"
-        puts "task_hash: #{task_hash}"
         new_task = ts.create!(task_hash)
-        assign_task(emp_id[0], new_task.id)
+        assign_task(emp_id, new_task.id)
       else
         ts.create!(task_hash)
       end

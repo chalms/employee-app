@@ -29,6 +29,13 @@
 */
 /*/*/
 
+.chat .container {
+  width: 30%;
+  height: 30%;
+  float: right;
+  margin-bottom: 0px;
+}
+
 .wrapper {
     margin: 0px;
     width: 50%;

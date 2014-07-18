@@ -1,30 +1,20 @@
 class ReportsController < ApplicationController
-  # GET /api/reports
-  # GET /api/reports.json
+
   include ActionController::MimeResponds
 
   def index
-    puts "received request"
     @user = current_user
-    puts @user.inspect
-    puts "ABOVE IS USER"
     validate_user_role!
-    puts "params: #{params.inspect}"
-
-
     @data = params[:data]
     @data[:reports] = Report.where(params[:options]).order(:date)
     @div = params[:data][:div]
-
     if (!!@data)
-      puts "in @data"
       respond_to do |format|
         puts format.inspect
         format.json { render json: @data, status: :success }
-        format.js { }
+        format.js
       end
     else
-      puts "in @reports = @user_reports"
       @reports = @user.reports
       respond_to do |format|
         format.json { render json: @reports, status: :success }
@@ -43,8 +33,6 @@ class ReportsController < ApplicationController
     end
   end
 
-  # GET /api/reports/1
-  # GET /api/reports/1.json
   def show
     @user = current_user
     puts params
@@ -55,7 +43,6 @@ class ReportsController < ApplicationController
     @data[:report] = @report
     @data[:options] = @options if (@options)
     @data[:div] = @div if (@div)
-
     respond_to do |format|
       format.json { render json: @report, status: :success }
       format.js
@@ -85,7 +72,6 @@ class ReportsController < ApplicationController
     @user = current_user
     validate_user_role!
     @div = params.delete(:div) if (params[:div])
-    puts "trying to creating report with params: #{params}"
     @report = @user.add_report(params)
     if @report
       respond_to do |format|

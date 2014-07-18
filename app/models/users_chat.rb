@@ -13,6 +13,25 @@ class UsersChat  < ActiveRecord::Base
     users_messages.where(read: false)
   end
 
+  def name
+    @name ||= nil
+    unless @name
+      str = ""
+      lock = true
+      chat.users.each do |u|
+        if (u.id != user.id)
+          str += ", #{u.name}" unless lock
+          if lock
+            str += u.name
+            lock = false
+          end
+        end
+      end
+      @name = str
+    end
+    @name
+  end
+
   def chat
     @chat ||= Chat.find(self.chat_id)
   end

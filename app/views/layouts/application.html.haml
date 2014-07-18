@@ -16,6 +16,8 @@
         #main-navigation
           = yield :main_nav
       #wrapper.wat-cf
+        %ul.navigation#chats
+          %li{:hidden => ""}
         #main
           .flash
             - flash.each do |type, message|
