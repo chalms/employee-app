@@ -1,0 +1,20 @@
+TODOS:
+- fix error with task rendering and updating
+- fix error with weird completion percents
+- finish csv uploading for employees
+- do csv uploading for tasks
+- fix manager [:display]
+- fix client [:display]
+- connect reports to phone
+- fix server-side chat
+- connect chats to phone
+- display reports by current date
+- add part(s)
+- add geolocation return from phone
+- add geolocation column to server forms
+- add contacts to server forms
+- fix employee_timesheets/manager_timesheets
+- add error handlers
+- restyle
+- migration to backbone for faster user
+- incorporate with nicos models
