@@ -1,5 +1,6 @@
 :plain
   var n = $("#{escape_javascript(render partial: 'tasks/show', :locals => @data) }");
-  $("table#task-table > tbody > tr:last").after($(n)).show();
-
+  var row = $("table.table#tasks-#{@data[:users_report]} > tbody > tr:last")
+  row.after(n).show();
+  $(".task[name=#{@data[:users_report]}] > .form > form > input.task-description-text.text_field").val("");
   console.log("executed");

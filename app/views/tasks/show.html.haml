@@ -1,2 +1,4 @@
-var n = $("#{ escape_javascript(render partial: 'tasks/show', locals => @data)}");
-$("#{@div}").append(n).show();
+:plain
+  var n = $("#{ escape_javascript(render partial: 'tasks/show', locals => @data)}");
+  $(".task[name=#{@data[:users_report].id}]").append(n).show();
+  $('input.text_field[text=#{@data[:task].description}]').text("")

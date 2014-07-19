@@ -73,6 +73,10 @@ class ReportsController < ApplicationController
     validate_user_role!
     @div = params.delete(:div) if (params[:div])
     @report = @user.add_report(params)
+    @data = {}
+    @data[:report] = @report
+    @data[:options] = params[:options] || {}
+    @data[:div] = @div
     if @report
       respond_to do |format|
         format.json { render json: @api_report};

@@ -6,19 +6,8 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def go_home
-    if @user
-      @route = route!
-      respond_to do |format|
-        format.html{ render @route, haml: Signup.new }
-        format.json{ render @route, json: Signup.new }
-      end
-    else
-      respond_to do |format|
-        format.html{ render 'signup/new', haml: Signup.new }
-        format.json{ render 'signup/new', json: Signup.new }
-      end
-    end
+  def go_home(e)
+    render js: 'layouts/flash_error', e
   rescue Exceptions::StdError => e
     respond_to do |format|
       format.html { flash[:error] = e }

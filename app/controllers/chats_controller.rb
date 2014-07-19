@@ -36,7 +36,7 @@ class ChatsController < ApplicationController
     users_chat = UsersChat.find(id)
     message = users_chat.chat.send_message(params[:text], nil, users_chat.user.id)
     hash = {}
-    hash = {:message => "<p>#{message.text}</p>"}
+    hash = {:message => "<p>#{message.data}</p>"}
     respond_to do |format|
       format.json { render json: hash.to_json }
     end

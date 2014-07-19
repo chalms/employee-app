@@ -26,28 +26,25 @@ class Chat < ActiveRecord::Base
   end
 
   def name
-    unless @name
-      str = ""
-      names = {}
-      users.each { |u| names[u.name] = u.id }
-      lock = false
-      names.each do |k, v|
-        if (lock)
-          str += "& #{k}"
-        else
-          str += "#{k}"
-          lock = true
-        end
+    str = ""
+    names = {}
+    users.each { |u| names[u.name] = u.id }
+    lock = false
+    names.each do |k, v|
+      if (lock)
+        str += "& #{k}"
+      else
+        str += "#{k}"
+        lock = true
       end
-      @name = str
     end
-    @name
+    @name = str
   end
 
   def send_message(message_text, message_photo, user_id)
     message_hash = {}
     message_hash[:text] = message_text
-    message = Message.create!(user_id: user_id, chat_id: id, group: users)
+    message = Message.create!(user_id: user_id, chat_id: id)
     message.data = message_text
     raise Exceptions::StdError, "Message could not be saved!" unless message.save
     message

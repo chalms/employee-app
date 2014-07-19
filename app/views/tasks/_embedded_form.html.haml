@@ -3,11 +3,13 @@
     %input{:type => 'hidden', :name =>  'employees', :value => employees[0].id}
     %td{:colspan => 2}
       %input{:type => 'hidden', :name => 'users_report', :value => owner_id}
-      %input.text_field{:type => 'text', :class => 'task-description-text', :name => 'tasks[description]', :placeholder => 'Task Description'}
+      %input{:type => 'hidden', :name => 'div', :value => div}
+      %input.text_field{:type => 'text', :class => 'task-description-text', :name => 'description', :placeholder => 'Task Description'}
   - else
     %td
-      %input{:type => 'hidden', :name => 'tasks[users_reports][]', :value => owner_id}
-      %input.text_field{:type => 'text', :class => 'task-description-text', :name => 'tasks[description][]', :placeholder => 'Task Description'}
+      %input{:type => 'hidden', :name => 'users_reports', :value => owner_id}
+      %input{:type => 'hidden', :name => 'div', :value => div}
+      %input.text_field{:type => 'text', :class => 'task-description-text', :name => 'task[description][]', :placeholder => 'Task Description'}
     %td.last.task-employees
       %select.form-control{:class => 'employee-select', :name => 'tasks[employee_id][]'}
         - employees.each do |employee|

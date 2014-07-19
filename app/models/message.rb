@@ -3,7 +3,8 @@ class Message  < ActiveRecord::Base
   has_one :photo
   belongs_to :user
   belongs_to :chat
-  has_many :users_messages
+  has_many :users_chats, through: :chat
+  has_many :users_messages, through: :users_chats
   attr_accessible :data, :sender, :created_at, :read_by_all, :chat_id, :user_id, :read_by
   after_create :set_recipients
 
@@ -13,27 +14,34 @@ class Message  < ActiveRecord::Base
 
   def set_recipients
     if (users_messages.andand.count == 0)
-      chat.users_chats.each do |u_c|
+      users_chats.each do |uc|
         if (u_c.user_id == sender.id)
-          u_c.users_messages.create!(:message_id => self.id, :read => true)
+          uc.users_messages.create!(:message_id => self.id, :read => true)
         else
-          u_c.users_messages.create!(:message_id => self.id)
+          uc.users_messages.create!(:message_id => self.id)
         end
       end
     end
   end
 
+  def status
+    if (read_by_all)
+      @status = "read"
+    else
+      @status = "read by #{read_by}"
+    end
+  end
+
   def read_by
-    @recipients.find(read: true).count
+    recipients.where(read: true).count
   end
 
   def read_by_all
-    read_by_all = !!@recipients.find(read: false)
+    read_by_all = (recipients.where(read: false).count > 0)
   end
 
   def recipients
-    @recipients ||= (users_messages || self.users_messages)
-    @recipients ||= UserMessages.where(message_id: self.id)
+    @recipients ||= (users_messages || UserMessages.where(message_id: self.id))
     @recipients
   end
 end

@@ -1,7 +1,8 @@
-.form#new-message-form{:action => "chats/new_message"}
-  .error
-  .form-group
-    %input.form-control{:type => 'text', :name => 'text', "placeholder" => 'Enter a message here'}
-  .form-group
-    %input.hidden{:type => 'hidden', :name => 'id', :value => "#{id}"}
-  %button.form-control{:onclick => 'return submitMessageForm();'} Submit
+.form
+  %form#new-message-form{'accept-charset' => "UTF-8", :class => "new_message",'method' => 'post', 'action' => 'chats/new_message', 'data-remote' => "true", 'id' => "new_message", 'onsubmit' => "return clickedThis('#{div}')" }
+    .form-group
+      %input.message.text_field.form-control{:type => 'text', :name => 'text', "placeholder" => 'Enter a message here'}
+    .form-group
+      %p= "Id shoould be here: #{id}"
+      %input.message.hidden{:type => 'hidden', :name => 'id', :value => "#{id}"}
+    %input.submit{:type => 'submit', :name => 'submit' }

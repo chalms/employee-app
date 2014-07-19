@@ -47,6 +47,7 @@ $(document).ready(function() {
 function log(text) {
   if(window && window.console) console.log(text);
 }
+
 function taskDescriptionClear() {
   $('.task-description-text').val("");
 }
@@ -104,41 +105,19 @@ console.log('onSubmit');
   }
 }
 
+function renderMessage() {
+  console.log("rendering messages");
+  attrs = $.closest('.render-message').attributes;
+  console.log(attrs);
+  JST['templates/employees/messages'](attrs)
+}
 
-function submitMessageForm() {
-  console.log("submitting");
-  var valuesToSubmit = $("#new-message-form").serialize();
-  console.log(valuesToSubmit);
-  $.ajax({
-      type: 'POST',
-      url: $(this).attr('action'),
-      data: valuesToSubmit,
-      dataType: "JSON"
-  }).success(function(json){
-    $(':input','#new-message-form')
-      .not(':button, :submit, :reset, :hidden')
-      .val('')
-      .removeAttr('checked')
-      .removeAttr('selected');
-    console.log("ajax success with json ---> ");
-    console.log(json);
-    hash = $.parseJSON(json);
-    console.log("json parsed with hash ---> ");
-    consoel.log(hash);
-    for (var key in hash) {
-      console.log("key: " + key)
-      console.log("hash[key]: " + hash[key])
-      if (key === 'message') {
-        console.log("div appended: " + "#{@div}");
-        $(@div).append(hash[key]);
-      }
-    }
-  }).error(function(err){
-    str = err.toString();
-    var htmlString = '<p>' + str + '</p>';
-    $('.error','#new-message-form').html(htmlString);
-  });
-  return false;
+function clickedThis(str) {
+  console.log(str);
+  var t =  $('input.message.text_field.form-control').val();
+  vals = { text: t}
+  $(str).append(JST['templates/employees/message'](vals));
+  return true;
 }
 
 var menuOpen;

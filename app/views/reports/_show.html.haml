@@ -11,14 +11,22 @@
       .blockquotes
         %h5
           %em="#{report.summary}"
-    .gridrow.well
-      %h4 Add Employees
-      .form
-        %form{'accept-charset' => "UTF-8", :class => "new_users_report",'method' => 'post', 'action' => '/users_reports.js', 'data-remote' => "true", 'id' => "new_users_report", 'onsubmit' => "return sub()" }
-          %input{:type => 'hidden', :name => 'report_id', :value => "#{report.id}"}
-          %select.form-control{:class => 'employee-select', :name => 'user_id'}
-            - report.manager.company.employees.each do |employee|
-              %option{:value => employee.id}=employee.name
-          %input.submit{:type => 'submit', :name => 'submit'}
+      .add-employees
+        %h5
+          %a{:onclick => 'toggleEmployeeForm()'} Add Employees?
+      = render partial: 'reports/employee_form', :locals => {report: report}
     - report.users_reports.each do |users_report|
       = render partial: 'users_reports/show', locals: {users_report: users_report, options: options, report: report, :div => div}
+
+:javascript
+  function toggleEmployeeForm() {
+    var form = $('.employee-form');
+    var prompt = $('.add-employees');
+    if (form.is(":visible")) {
+      form.hide();
+      prompt.show();
+    } else {
+      form.show();
+      prompt.hide();
+    }
+  }

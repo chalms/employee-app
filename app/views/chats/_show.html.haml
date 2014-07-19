@@ -1,11 +1,12 @@
 - chat_prompt = 'Start a conversation!'
-- has_messages = messages.present? ? (messages.first? ? true : false ) : false
-- user_messages = has_messages ? messages : (Model.new({:text => chat_prompt, :status => nil}))
-.chat.container
-  .well{ :id => "#users-chat-#{@id}"}
-    %h4= "Chat with: #{@name}"
+- has_messages = messages.present? ? (messages.first.present? ? true : false ) : false
+- user_messages = has_messages ? messages : ([Model.new({:text => chat_prompt, :status => ''})])
+.chat
+  %h4= "Chat with: #{@name}"
+  .well{ :id => "users-chat-#{id}"}
     - user_messages.each do |m|
-      .message
-        %h4="#{m.text}"
-        %small="#{m.status}"
-    = render partial: 'chats/form', :locals => { id: @id, div:  "#users-chat-#{@id}"}
+      %table.table
+        %tbody
+          %tr
+            %h4{:style => "color: blue"}= m.text
+  = render partial: 'chats/form', :locals => { id: id, div:  "#users-chat-#{id}"}

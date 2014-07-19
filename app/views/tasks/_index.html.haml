@@ -1,7 +1,7 @@
-%table.table#task-table
+%table.table{:id => "tasks-#{owner.id}"}
   %h4 Tasks
   .wrapper-right
-    %h5= link_to 'New Task', new_task_path({:data => {:owner => owner, :employees => [owner.user], :div => ".tasks[name=#{owner.id}]"}}), :remote => true
+    %h5= link_to 'New Task', new_task_path({:data => {:owner => owner, :employees => [owner.user], :div => ".task[name=#{owner.id}]"}}), :remote => true
   .task{:name => owner.id}
     %tr
       %td Name

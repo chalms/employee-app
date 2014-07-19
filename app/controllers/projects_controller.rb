@@ -25,18 +25,18 @@ class ProjectsController < ApplicationController
 
   def show
     @user = current_user
+    puts params
     @project = Project.find(params[:id])
-
     validate_permissions!
     puts @project.inspect
-
     respond_to do |format|
       format.json { render json: @project};
       format.html { render haml: @project };
       format.js
     end
   rescue Exceptions::StdError => e
-    head 500, :content_type => 'text/html'
+    puts e
+    flash[:error] = e.message
   end
 
   def create

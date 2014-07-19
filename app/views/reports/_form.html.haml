@@ -1,3 +1,4 @@
+- project_idd = project_id ? project_id : ''
 .grid
   .well
     %h3.lead{:style => 'text-align: center;'} New Report
@@ -12,28 +13,14 @@
               %input.text_field.form-control{ :type => "text", :name => "name", placeholder: 'Report Name'}
             %td
               %input.date_field.form-control{ :type => "date", :name => "date"}
-          - if (project_id)
-            %input.hidden{:type => "hidden", :name => "project_id", :value => project_id}
-            %tr{:colspan => 2}
-              %td
-                %input.text_field.input-large.form-control{ :type => "text", :name => "summary", placeholder: 'Summary'}
-          - else
-            %tr
-              %td
-                %input.text_field.input-large.form-control{ :type => "text", :name => "summary", placeholder: 'Summary'}
-              %td
-                %select.form-control{:type => "select", :name => "project_id"}
-                  - @user.company.projects.each do |p|
-                    %option{:value => p.id}=p.name
-          = render partial: 'tasks/embedded_form', locals: { owner: @user, owner_id: @user.id, employees: @user.company.employees, :options => options, :div => div}
+              %input.hidden_field{:type => "hidden", :name => "div", :value => div}
+          %tr
+            %td
+              %input.text_field.input-large.form-control{ :type => "text", :name => "summary", placeholder: 'Summary'}
+            %td
+              %select.form-control{:type => "select", :name => "project_id", :value => project_idd}
+                - @user.company.projects.each do |p|
+                  %option{:value => p.id}=p.name
           %tr
             %td{colspan: 2}
               %input.form-control{ :type => 'submit', :name => 'submit'}
-
-  :javascript
-    $(document).ready ->
-      $("#new_report").on("ajax:success", (e, data, status, xhr) ->
-        $("#new_report").append xhr.responseText
-      ).on "ajax:error", (e, xhr, status, error) ->
-        $("#new_report").append "<p>ERROR</p>"
-

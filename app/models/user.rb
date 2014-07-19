@@ -25,16 +25,18 @@ class User < ActiveRecord::Base
   end
 
   def add_report(params)
+    puts "report params: ---> #{params}"
     params = params[:report] || params
     hash = {}
 
     hash[:date] = string_to_date(params)
     puts "here is the date: #{hash[:date]}"
     hash[:summary] = params[:summary] || nil
-    hash[:project_id] = params[:project_id] || nil
-    hash[:client_id] = params[:client_id] || nil
+    hash[:project_id] = params[:project_id].to_i || nil
+    client_id =  params[:client_id] || Project.find(hash[:project_id]).clients.andand.first
+    hash[:client_id] = client_id if (client_id)
+    puts "hash ---> #{hash}"
     report = reports.create!(hash)
-    report.add_tasks(params[:tasks]) if params[:tasks]
     return report
   end
 

@@ -1,0 +1,4 @@
+%table.table
+  %tbody
+    %tr
+      %h4{:style => "color: blue"}= @text

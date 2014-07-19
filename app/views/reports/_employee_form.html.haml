@@ -1,0 +1,19 @@
+.employee-form{:hidden => ""}
+  .wrapper
+    .form.form-centered
+      %form{'accept-charset' => "UTF-8", :class => "new_users_report",'method' => 'post', 'action' => '/users_reports.js', 'data-remote' => "true", 'id' => "new_users_report" }
+        .row
+          .header
+            %h4.h4 Add Employees
+        .others{:hidden => ''}
+          %input{:type => 'hidden', :name => 'report_id', :value => "#{report.id}"}
+          %input{:type => 'hidden', :name => 'div', :value => '#projects-template'}
+        .row
+          .form-group
+            %select.form-control{:class => 'employee-select', :name => 'user_id'}
+              - report.manager.company.employees.each do |employee|
+                %option{:value => employee.id}=employee.name
+        .row
+          .form-group
+            %input.form-control{:type => 'submit', :name => 'submit'}
+      %small{:onclick => 'toggleEmployeeForm()'} Hide

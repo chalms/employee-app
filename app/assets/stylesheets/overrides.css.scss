@@ -194,6 +194,10 @@ section {
   @extend .btn-xs;
 }
 
+input .form-control {
+  max-width: 120px;
+}
+
 
 
 #notice {
@@ -238,3 +242,11 @@ section {
   }
 }
 
+.employee-form {
+  .wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    float: center;
+    display: inherit;
+  }
+}
