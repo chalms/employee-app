@@ -1,10 +1,10 @@
 class User < ActiveRecord::Base
   include JsonSerializingModel
-  attr_accessible :email, :name, :employee_number, :hours, :days_worked, :role, :password, :company_id, :assigned_tasks, :completed_tasks, :assigned_parts, :completed_parts, :tasks_completion_percent, :reports_completion_percent
+  attr_accessible :email, :employee_number, :hours, :days_worked, :role, :password, :company_id, :assigned_tasks, :completed_tasks, :assigned_parts, :completed_parts, :tasks_completion_percent, :reports_completion_percent, :setup, :name
   after_initialize :_set_defaults
-  validates_presence_of :password, :length => {:minimum  => 6},  on: :create!
   validate :email, :format => {:with => /\A[^@]+@[^@]+\.[^@]+\Z/}
   validates :employee_number, :uniqueness => true
+  validate :password_if_setup
   after_create :valid_employee_id?, :set_type
   has_one :contact
   has_many :users_reports
@@ -15,6 +15,16 @@ class User < ActiveRecord::Base
   has_many :projects, :through => :reports
   has_many :users_messages
   has_many :messages, :through => :users_messages
+
+  def password_if_setup
+    if (self.setup)
+      raise Exceptions::StdError, "Password is less than 6 characters!" if (password.length < 6)
+    end
+  end
+
+  def name
+    @name ||= self.email
+  end
 
   def update(params)
     params = (params[type.to_sym] || params)

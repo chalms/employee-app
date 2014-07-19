@@ -12,16 +12,19 @@ class UsersReport < ActiveRecord::Base
   TYPES = ['UsersReportsChat', 'ReportsChat']
 
   def create_chat
-    # NEEDS TO BE SPED UP
-    chat = Chat.joins(:users_chats).where('user_id = ? OR user_id = ?', user.id, manager_id).andand.first
-    unless !!chat
-      chat = UsersReportsChat.create!({:type => TYPES[0], :users_report_id => self.id, :name => "#{employee.name} & #{manager.name}"})
-      employee.users_chats.where({:chat_id => chat.id}).first_or_create!
-      chat.users_chats.create!({:user_id => employee.id})
-      manager.users_chats.where({:chat_id => chat.id}).first_or_create!
-      chat.users_chats.create!({:user_id => manager.id})
+    chat = Chat.joins(:users_chats).where('user_id = ? OR user_id = ?', user.id, manager_id)
+    if (chat)
+      if chat.empty?
+        puts "creating chat"
+        chat = UsersReportsChat.create!({:type => TYPES[0], :users_report_id => self.id, :name => "#{employee.name} & #{manager.name}"})
+        employee.users_chats.where({:chat_id => chat.id}).first_or_create!
+        chat.users_chats.create!({:user_id => employee.id})
+        manager.users_chats.where({:chat_id => chat.id}).first_or_create!
+        chat.users_chats.create!({:user_id => manager.id})
+      end
+    else
+      update_attribute(:chat_id, chat.id)
     end
-    update_attribute(:chat_id, chat.id)
   end
 
   def date

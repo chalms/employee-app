@@ -1,4 +1,5 @@
 %ul.navigation
+  %p Messages
   - users_chats.each do |u_c|
     - if (u_c.unread.count != 0)
       %li.in-red

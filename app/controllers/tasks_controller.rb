@@ -29,7 +29,6 @@ class TasksController < ApplicationController
   end
 
   def new
-    puts "IN NEW"
     user!
     admin_manager!
     @data = params[:data] || { :owner => 'company', :owner_id => @user.company.id }
@@ -57,11 +56,8 @@ class TasksController < ApplicationController
   end
 
   def create
-    puts "IN CREATE"
     user!
     admin_manager!
-    puts "Params: #{params}"
-    puts params.class.name
     @data = {}
     @div = params['div']
     @task = create_task('users_report', params['users_report'], { :description => params['description'] } )
@@ -69,7 +65,6 @@ class TasksController < ApplicationController
     @data[:users_report] = params['users_report']
     @data[:description] = params['description']
     @data[:employees] = params['employees']
-
     raise Exceptions::StdError, "Error creating task!" unless (@task)
     respond_to do |format|
       format.js

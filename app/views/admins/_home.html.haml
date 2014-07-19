@@ -8,4 +8,4 @@
       %ul.navigation#chats
         %li{:hidden => ""}
     #hidden{:hidden => ""}
-- content_for :sidebar, render(partial: 'admins/sidebar')
+- content_for :sidebar, render(partial: 'admins/sidebar', locals: { user: @user})

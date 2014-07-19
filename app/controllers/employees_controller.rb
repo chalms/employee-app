@@ -112,19 +112,24 @@ class EmployeesController < ApplicationController
     end
     @employee_logs[:employee_number].each_with_index do |log, i|
       hash = { :email => @employee_logs[:email][i], :employee_number => log, :role => @employee_logs[:role][i], :company_id => @user.company.id }
-      puts hash
-
-      employee = EmployeeLog.where(hash[:employee_number].gsub('/\s+/')).andand.first
-      employee ||= EmployeeLog.find_by_email(hash[:email].gsub('/\s+/'))
+      emp_num = hash[:employee_number].gsub('/\s+/', "")
+      employee = EmployeeLog.find_by_employee_number(emp_num)
+      employee ||= EmployeeLog.find_by_email(hash[:email].gsub('/\s+/',""))
       if (employee)
         user = User.find_by_email(employee.email)
         user ||= User.find_by_employee_number(employee.employee_number)
+        employee.update_attributes!(hash)
+        unless (!!user)
+          User.create!(hash)
+        end
+        employee = nil
+        user = nil
+      else
+        EmployeeLog.create!(hash)
+        User.create!(hash)
       end
-      employee.update_attributes!(hash) if (!!employee)
-      user.update_attributes!(hash) if (!!user)
-      employee = nil
-      user = nil
     end
+    puts 131
     @employee_logs = @user.company.employee_logs
     render :nothing => true
   rescue Exceptions::StdError => e
