@@ -1,7 +1,7 @@
 class EmployeesController < ApplicationController
   include ActionController::MimeResponds
 
-  before_action :user!
+  before_action :user!, except: [:upload]
 
   def index
     manager_or_admin!
@@ -24,7 +24,8 @@ class EmployeesController < ApplicationController
       end
     end
     @data[:type] = @data[:options].delete(:type)
-    @data[:employe_logs] = @user.company.employee_logs
+    @data[:employee_logs] = @user.company.employee_logs
+    puts @user.company.employee_logs
 
     puts "PAST THE QUERY"
     respond_to do |format|
@@ -72,6 +73,7 @@ class EmployeesController < ApplicationController
   end
 
   def upload
+    @user = current_user(params[:user_auth])
     is_admin!
     puts "params: => #{params}"
     file_data = params[:file]
@@ -79,13 +81,13 @@ class EmployeesController < ApplicationController
     @employee_logs = EmployeeCsv.new(file_data, @user).employee_logs
     puts "employee logs: #{@employee_logs}"
     @employee_logs.each do |log|
-      render 'employees/log_row', :locals => {:log => log}
+      render 'employees/log_row', :locals => {:log => log}, :formats => [:js]
     end
-rescue Exceptions::StdError => e
-    flash[:error] = e
+    return head :ok
   end
 
   def upload_form
+
     is_admin!
     respond_to do |format|
       format.js
@@ -95,24 +97,36 @@ rescue Exceptions::StdError => e
   def save_data
     @user = current_user
     is_admin!
-
+    puts params.inspect
     @employee_logs = params[:employee_logs]
-    puts @employee_logs.inspect!
+    @employee_logs.each do |k,v|
+      puts v
+      v.each_with_index do |c,i|
+        puts "c: #{c}, i: #{i}"
+        @employee_logs.each do |x,y|
+          puts "y[i] : #{y[i]}"
+          puts c.blank?
+          y.delete_at(i) if c.blank?
+        end
+      end
+    end
     @employee_logs[:employee_number].each_with_index do |log, i|
-      hash = { :email => @employee_logs[:email][i], :employee_number => log, :role => @employee_logs[:role][i] }
-      employee = EmployeeLog.find_by_employee_number(hash[:employee_number])
-      employee ||= EmployeeLog.find_by_email(hash[:email])
+      hash = { :email => @employee_logs[:email][i], :employee_number => log, :role => @employee_logs[:role][i], :company_id => @user.company.id }
+      puts hash
+
+      employee = EmployeeLog.where(hash[:employee_number].gsub('/\s+/')).andand.first
+      employee ||= EmployeeLog.find_by_email(hash[:email].gsub('/\s+/'))
       if (employee)
         user = User.find_by_email(employee.email)
         user ||= User.find_by_employee_number(employee.employee_number)
       end
       employee.update_attributes!(hash) if (!!employee)
       user.update_attributes!(hash) if (!!user)
+      employee = nil
+      user = nil
     end
     @employee_logs = @user.company.employee_logs
-    respond_to do |format|
-      format.js
-    end
+    render :nothing => true
   rescue Exceptions::StdError => e
     @error_message = "Logs could not be saved due to error: #{e.message}"
     flash[:error] = @error_message
@@ -129,7 +143,7 @@ rescue Exceptions::StdError => e
   private
 
   def is_admin!
-    raise Exceptions::StdError, "User is not an admin" if (@user.role.downcase != 'admin' || @user.role.downcase != 'companyadmin')
+    raise Exceptions::StdError, "user is not admin. role: #{@user.role}" if (@user.role.downcase != 'admin' && @user.role.downcase != 'companyadmin')
   end
 
   def manager_or_admin!

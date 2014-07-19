@@ -1,5 +1,6 @@
 require 'csv'
 class EmployeeCsv
+  attr_reader :employee_logs
   def initialize(file_data, user)
     @row = 1
     @user = user
@@ -24,6 +25,8 @@ class EmployeeCsv
     @csv.each do |row|
       hash = validate_row(row)
       begin
+        puts hash
+        puts "#{@user.company.employee_logs.inspect}"
         @employee_logs << @user.company.employee_logs.create!(hash)
       rescue Exceptions::StdError => e
         raise Exceptions::StdError, "Error with csv contents found on line #{@row}: #{e.message}"
@@ -36,13 +39,14 @@ class EmployeeCsv
   end
 
   def three_columns_present?(row)
-    raise Exceptions::StdError, "There must be at least three columns present!" unless (r.length > 2)
+    raise Exceptions::StdError, "There must be at least three columns present!" unless (row.length > 2)
   end
 
   def validate_row(r)
     @row += 1
     three_columns_present?(r)
-    hash = { :email =>  r[0], :employee_number => r[1], :role => r[2] }
+    puts "#{r[0]}, #{r[1]}, #{r[2]}"
+    hash = { :email =>  r[0].gsub('/\s+/',""), :employee_number => r[1].gsub('/\s+/',""), :role => r[2].gsub('/\s+/',""), :company_id => @user.company.id }
     return hash
   end
 end

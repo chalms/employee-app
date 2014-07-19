@@ -1,14 +1,14 @@
 - if (log)
   %td
-    %input{:type => "text", :name => "employee_logs[:email][]", :value => log.email }
+    %input{:type => "text", :name => "employee_logs[email][]", :value => log.email }
   %td
-    %input{:type => "text", :name => "employee_logs[:employee_number][]", :value => log.employee_number }
+    %input{:type => "text", :name => "employee_logs[employee_number][]", :value => log.employee_number }
   %td
-    %input{:type => "text", :name => "employee_logs[:role][]", :value => log.role }
+    %input{:type => "text", :name => "employee_logs[role][]", :value => log.role }
 - else
   %td
-    %input{:type => "text", :name => "employee_logs[:email][]" }
+    %input{:type => "text", :name => "employee_logs[email][]" }
   %td
-    %input{:type => "text", :name => "employee_logs[:employee_number][]"}
+    %input{:type => "text", :name => "employee_logs[employee_number][]"}
   %td
-    %input{:type => "text", :name => "employee_logs[:role][]"}
+    %input{:type => "text", :name => "employee_logs[role][]"}

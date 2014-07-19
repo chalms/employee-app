@@ -2,6 +2,7 @@ class Report < ActiveRecord::Base
   include JsonSerializingModel
   attr_accessible :summary, :date, :complete, :assigned_parts, :assigned_tasks, :unused_parts, :completed_parts, :incomplete_tasks, :completed_tasks, :company, :complete?, :hours, :days_worked, :manager, :manager_id, :user_id, :project_id, :id, :chat_id, :client_id
   belongs_to :user
+  belongs_to :admin
   belongs_to :project
   belongs_to :client
   has_many :locations_reports
@@ -17,15 +18,15 @@ class Report < ActiveRecord::Base
   TYPES = ['UsersReportsChat', 'ReportsChat']
 
   def create_chat
-    chat = Chat.joins(:users_chats).where('user_id = ? OR user_id = ?', user.id, manager_id).andand.first
+    chat = Chat.joins(:users_chats).where('user_id = ? OR user_id = ?', user.id, manager.id).andand.first
     unless !!chat
       chat = Chat.create!({:type => TYPES[1], :report_id => self.id})
       users.each do |u|
         user_chats = chat.users_chats.create!({:user_id => u.id})
-        users_chats.where({:chat_id => chat.id}).first_or_create!
+        chat.users_chats.where({:chat_id => chat.id}).find_or_create
       end
-      manager.users_chats.where({:chat_id => chat.id}).first_or_create!
-      chat.users_chats.create!({:user_id => manager_id})
+      user.users_chats.where({:chat_id => chat.id}).first_or_create
+      chat.users_chats.create!({:user_id => manager.id})
     end
     update_attribute(:chat_id, chat.id)
   end

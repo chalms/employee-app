@@ -2,10 +2,6 @@ class Manager < User
   include JsonSerializingModel
   attr_accessible :employee_number
 
-  has_many :users_chats
-  has_many :chats, :through => :users_chats
-  has_many :user_messages
-  has_many :messages, :through => :users_messages
   has_many :reports
   has_many :users_reports, :through => :reports
   has_many :users, :through => :users_reports

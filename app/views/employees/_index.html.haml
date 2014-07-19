@@ -1,6 +1,6 @@
 .block.content
   #employees-dash
-    = render partial: 'employees/new', locals: {employee_logs: @employee_logs}
     .grid
+      = render partial: 'employees/new', locals: {employee_logs: employee_logs}
       .gridrow.well
         = render partial: 'employees/table', locals: {name:  name, employees: employees, options: options, type: type }

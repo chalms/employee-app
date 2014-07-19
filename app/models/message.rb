@@ -15,7 +15,7 @@ class Message  < ActiveRecord::Base
   def set_recipients
     if (users_messages.andand.count == 0)
       users_chats.each do |uc|
-        if (u_c.user_id == sender.id)
+        if (uc.user_id == sender.id)
           uc.users_messages.create!(:message_id => self.id, :read => true)
         else
           uc.users_messages.create!(:message_id => self.id)

@@ -7,10 +7,16 @@ class ApplicationController < ActionController::Base
   private
 
   def go_home(e)
-    render js: 'layouts/flash_error', e
+
+    @data = { :error => e, :div => '#my-flash'}
+    respond_to do |format|
+      format.js { render 'layouts/flash_error' }
+      format.html { render partial: 'layouts/flash_error', locals: @data }
+    end
+    return
   rescue Exceptions::StdError => e
     respond_to do |format|
-      format.html { flash[:error] = e }
+      format.html { flash[:error] = e.message }
       format.json do
         if (e == "Not Authorized")
           render json: { error: e }, status: 401
@@ -23,8 +29,8 @@ class ApplicationController < ActionController::Base
     head 500, :content_type => 'text/html'
   end
 
-  def current_user
-    raise Exceptions::StdError, "No current user" unless (_authorization_header && current_api_session_token.valid?)
+  def current_user(tok = nil)
+    raise Exceptions::StdError, "No current user" unless (_authorization_header(tok) && current_api_session_token(tok).valid?)
     return current_api_session_token.user
   end
 
@@ -48,12 +54,16 @@ class ApplicationController < ActionController::Base
     return _not_authorized
   end
 
-  def current_api_session_token
-    @current_api_session_token ||= ApiSessionToken.new(_authorization_header)
+  def current_api_session_token(tok = nil)
+    @current_api_session_token ||= ApiSessionToken.new(_authorization_header(tok))
   end
 
-  def _authorization_header
-    return request.headers['HTTP_AUTHORIZATION']
+  def _authorization_header(tok = nil)
+    if tok
+      return tok
+    else
+      return request.headers['HTTP_AUTHORIZATION']
+    end
   end
 
   def _not_authorized message = "Not Authorized"

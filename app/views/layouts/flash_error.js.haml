@@ -1,0 +1,3 @@
+:plain
+  var flash = $("#{escape_javascript(render partial: 'layouts/flash_error', :locals => @data)}");
+  $(#{@div}).html(flash).show();
