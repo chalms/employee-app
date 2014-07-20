@@ -6,8 +6,11 @@ class ClientsController < ApplicationController
   def index
     @user = current_user
     @data = params[:data]
+    puts params
     if @data[:options][:project_id].present?
-      @data[:clients] = Project.find(@data[:options][:project_id]).clients.order(:name)
+      @data[:project] =  Project.find(@data[:options][:project_id])
+
+      @data[:clients] = Client.where(:project_id => @data[:options][:project_id]).all
     end
     @div = @data.delete(:div)
     respond_to do |format|

@@ -2,6 +2,7 @@ class SignupsController < ApplicationController
   include ActionController::MimeResponds
 
   def new
+    puts params.inspect
     begin
       @signup ||= Signup.new
     rescue Exceptions::StdError => e
@@ -14,6 +15,7 @@ class SignupsController < ApplicationController
   end
 
   def create
+    puts params.inspect
     begin
       @signup ||= Signup.new
       @signup.update(params)

@@ -12,7 +12,13 @@
 //= require backbone.wreqr
 //= require backbone.babysitter
 //= require backbone.marionette
-//= require_tree ./templates
+//= require metrics
+//= require_tree ../templates
+//= require_tree ./models
+//= require_tree ./collections
+//= require_tree ./views
+//= require_tree ./routers
+//= require_tree .
 
 $(document).ready(function() {
   $( document ).ajaxSend(function(elem, xhr, options) {

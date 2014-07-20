@@ -1,8 +1,0 @@
-.view
-  %input.toggle{type: "checkbox"}
-  - if (@completed) then checked
-  %label
-    - description
-  %button.btn.btn-warning
-%input.edit{value: ""}
-- description

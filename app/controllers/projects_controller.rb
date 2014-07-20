@@ -3,7 +3,10 @@ class ProjectsController < ApplicationController
   include ActionController::MimeResponds
 
   def summary
+    @user = current_user
+    @project = Project.find(params[:project_id])
     @data = params[:data]
+    @data[:project] = @project
     @div = params[:data][:div]
    respond_to do |format|
      format.js

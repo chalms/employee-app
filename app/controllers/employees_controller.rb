@@ -1,7 +1,24 @@
 class EmployeesController < ApplicationController
   include ActionController::MimeResponds
 
-  before_action :user!, except: [:upload]
+  before_action :user!, except: [:upload, :index, :special_index]
+
+  def special_index
+    puts params
+    if (params[:id])
+      company = Company.find(params[:id].to_i)
+      u = Employee.where(:company_id => company.id)
+    else
+      u = Employee.all
+    end
+    @users = []
+    u.each { |us| @users << {:email => us.email, :setup => us.setup}}
+    puts "#{@users.to_json}"
+    @users = @users.to_json
+    respond_to do |format|
+      format.json { render json: @users }
+    end
+  end
 
   def index
     manager_or_admin!

@@ -2,7 +2,7 @@
 Metrics::Application.routes.draw do
   resources :reports_parts, except: [:new, :edit]
   resources :contacts
-  resources :companies
+  resources :companies, only: [:show]
   resources :chats
   resources :reports_tasks
   resources :reports_parts
@@ -12,19 +12,25 @@ Metrics::Application.routes.draw do
   resources :reports
   resources :employee_logs
   resources :clients
-  resources :projects
+  resources :projects do
+    get 'summary'
+  end
   resources :locations
   resources :employees
   resources :logins, only: [:new, :create]
   resources :signups, only: [:new, :create]
   resources :admins, only: [:show, :update]
 
+  get '/login' => 'logins#new'
+  get '/logout' => 'logins#logout'
+  root :to => 'signups#new'
+
+  get '/companies/:id/employees' => 'employees#special_index'
   post '/chats/new_message' => 'chats#new_message'
   get '/employees/days_timesheet' => 'employees#days_timesheet', as: :employees_days_timesheet
   get '/employees/hours_timesheet' => 'employees#hours_timesheet', as: :employees_hours_timesheet
   post '/employees/save_data' => 'employees#save_data'
   post '/employees/upload' => 'employees#upload'
-  get '/projects/summary' => 'projects#summary', as: :projects_summary
   post '/tasks/create' => 'tasks#create'
   post '/reports/create' => 'reports#create'
   get '/todays_reports' => 'reports#today'
@@ -79,11 +85,6 @@ Metrics::Application.routes.draw do
 
     root :to => 'users#new', :as => :new
   end
-
-  get '/login' => 'logins#new'
-  get '/logout' => 'logins#logout'
-  root :to => 'signups#new'
-
 
   #   get '/signout' => 'login#signout'
   #   get '/login' => 'login#login', :as => :login
