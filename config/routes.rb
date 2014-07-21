@@ -2,7 +2,7 @@
 Metrics::Application.routes.draw do
   resources :reports_parts, except: [:new, :edit]
   resources :contacts
-  resources :companies, only: [:show]
+  resources :companies, only: [:show, :index]
   resources :chats
   resources :reports_tasks
   resources :reports_parts
@@ -24,7 +24,7 @@ Metrics::Application.routes.draw do
   get '/login' => 'logins#new'
   get '/logout' => 'logins#logout'
   root :to => 'signups#new'
-
+  get '/special_index' => 'employees#special_index'
   get '/companies/:id/employees' => 'employees#special_index'
   post '/chats/new_message' => 'chats#new_message'
   get '/employees/days_timesheet' => 'employees#days_timesheet', as: :employees_days_timesheet

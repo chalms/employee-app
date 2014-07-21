@@ -6,7 +6,7 @@ class EmployeesController < ApplicationController
   def special_index
     puts params
     if (params[:id])
-      company = Company.find(params[:id].to_i)
+      company = Company.find(params[:id])
       u = Employee.where(:company_id => company.id)
     else
       u = Employee.all

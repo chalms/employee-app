@@ -24,18 +24,15 @@ class Signup
   end
 
   def save!
-    @company = Company.find(id: @company)
+    @company = Company.find(@company_id)
     validate_company!
-    company_logs = @company.employee_logs.find_by_employee_number(@employee_number)
-    validate_company_logs!(company_logs)
-
-    return @company.users.create!({
-      "role" => company_logs.role,
-      "email" => @email,
+    @user = @company.users.find_by_email(@email)
+    raise Exceptions::StdError, "Invalid Data!" unless (@user.update_attributes!({
       "name" => @name,
-      "employee_number" => @employee_number,
-      "password" => @password
-    })
+      "password" => @password,
+      "setup" => true
+    }))
+    return @user
   end
 
   private
@@ -62,6 +59,6 @@ class Signup
   end
 
   def validate_company_logs!(company_logs)
-    raise Exceptions::StdError, "company logs could not be found" unless(company_logs)
+    raise Exceptions::StdError, "Employee Number does not match data" unless(@user.employee_number == @company.users.find_by_employee_number(@email))
   end
 end

@@ -7,7 +7,6 @@ class ApplicationController < ActionController::Base
   private
 
   def go_home(e)
-
     @data = { :error => e, :div => '#my-flash'}
     respond_to do |format|
       format.js { render 'layouts/flash_error' }

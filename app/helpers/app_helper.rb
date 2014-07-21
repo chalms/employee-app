@@ -28,8 +28,9 @@ module AppHelper
   end
 
   def employee!
-    @user = UserSerializer.new(@user).to_json
     @route = 'users/' + @user.id.to_s
+    @user = UserSerializer.new(@user).to_json
+    @route
   end
 
 end
