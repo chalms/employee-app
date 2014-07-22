@@ -6,6 +6,7 @@ class SignupsController < ApplicationController
     begin
       @signup ||= Signup.new
     rescue Exceptions::StdError => e
+    puts e.message.headers
       @signup = Signup.new
     end
     respond_to do |format|
@@ -24,9 +25,10 @@ class SignupsController < ApplicationController
       @route = route!
       respond_to do |format|
         format.html { render haml: @route }
-        format.json { render json: @route }
+        format.json { render json: @token }
       end
     rescue Exceptions::StdError => e
+      puts e.message
       :new
     end
   end

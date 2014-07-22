@@ -18,6 +18,7 @@ class ClientsController < ApplicationController
       format.js
     end
   rescue Exceptions::StdError => e
+    puts e.message
     redirect_to :root_url
   end
 
@@ -32,7 +33,7 @@ class ClientsController < ApplicationController
       format.html { render @client };
     end
 rescue Exceptions::StdError => e
-
+    puts e.message
   end
 
   # POST /api/clients
@@ -45,7 +46,7 @@ rescue Exceptions::StdError => e
       format.html { render @client };
     end
 rescue Exceptions::StdError => e
-
+    puts e.message
   end
 
   # PATCH/PUT /api/clients/1
@@ -61,7 +62,7 @@ rescue Exceptions::StdError => e
       format.html { head 200 };
     end
 rescue Exceptions::StdError => e
-
+    puts e.message
   end
 
   # DELETE /api/clients/1
@@ -73,7 +74,7 @@ rescue Exceptions::StdError => e
     @client.destroy
     head 200, :content_type => 'text/html'
 rescue Exceptions::StdError => e
-
+    puts e.message
   end
 
   private

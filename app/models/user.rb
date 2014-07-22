@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
-  include JsonSerializingModel
-  attr_accessible :email, :employee_number, :hours, :days_worked, :role, :password, :company_id, :assigned_tasks, :completed_tasks, :assigned_parts, :completed_parts, :tasks_completion_percent, :reports_completion_percent, :setup, :name
+
+  attr_accessible :email, :employee_number, :hours, :days_worked, :role, :password, :company_id, :assigned_tasks, :completed_tasks, :assigned_parts, :completed_parts, :tasks_completion_percent, :reports_completion_percent, :setup, :name, :users_reports_as_json
+
   after_initialize :_set_defaults
   validate :email, :format => {:with => /\A[^@]+@[^@]+\.[^@]+\Z/}
   validates :employee_number, :uniqueness => true
@@ -22,16 +23,60 @@ class User < ActiveRecord::Base
     end
   end
 
-  def name
-    @name ||= self.email
-  end
-
   def update(params)
     params = (params[type.to_sym] || params)
   end
 
+  def api_session_token=(tok)
+    @api_session_token = tok
+  end
+
+  def api_session_token
+    return @api_session_token
+  end
+
   def company
     @company ||= Company.find(company_id)
+  end
+
+  def to_json
+    return self.as_json({
+      only: [:name, :email, :id],
+      methods: [:users_reports_to_json, :users_chats_to_json, :api_session_token]
+    })
+  end
+
+  def users_chats_to_json(option = nil)
+    @users_chats = UsersChat.where({:user_id => id})
+    the_json = @users_chats.as_json({
+      only: [:name, :id, :chat_id],
+      include: {
+        chat: {
+          only: [:id],
+          methods: [:users_to_json, :get_messages]
+        }
+      }
+    })
+    unless option
+      return the_json
+    else
+      return the_json.to_json
+    end
+  end
+
+  def users_reports_to_json
+    return users_reports.joins(:report).where(reports: {:date => Date.today}).as_json({
+      include: {
+        reports_tasks: {
+          only: [:complete, :completion_time, :id, :note, :updated_at, :users_report_id],
+          include: {
+            task: {
+              only: [:description]
+            }
+          }
+        }
+      }
+    })
   end
 
   def add_report(params)

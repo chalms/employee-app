@@ -132,6 +132,7 @@ class Queens
     @options = []
     @options = @points_arr.uniq!
     puts "options { "
+  end
     puts "\toptions: #{@options.inspect}"
     puts "}"
     @options

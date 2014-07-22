@@ -1,0 +1,77 @@
+{
+    "email": "John@Wilson.com",
+    "id": 3,
+    "name": "John@Wilson.com",
+    "users_chats_to_json": [
+        {
+            "chat": {
+                "get_messages": [
+                    {
+                        "created_at": "Sat, 19 Jul 2014 09:21:58 UTC +00:00",
+                        "data": "Hello!",
+                        "id": 1
+                    }
+                ],
+                "id": 1,
+                "users_to_json": [
+                    3,
+                    2
+                ]
+            },
+            "chat_id": 1,
+            "id": 1
+        },
+        {
+            "chat": {
+                "get_messages": [
+                    {
+                        "created_at": "Sat, 19 Jul 2014 09:21:58 UTC +00:00",
+                        "data": "Hello!",
+                        "id": 1
+                    }
+                ],
+                "id": 1,
+                "users_to_json": [
+                    3,
+                    2
+                ]
+            },
+            "chat_id": 1,
+            "id": 2
+        }
+    ],
+    "users_reports_to_json": [
+        {
+            "chat_id": null,
+            "checkin": null,
+            "checkout": null,
+            "complete": false,
+            "id": 8,
+            "location_id": null,
+            "manager_id": null,
+            "report_id": 2,
+            "reports_tasks": [
+                {
+                    "complete": null,
+                    "completion_time": null,
+                    "id": 7,
+                    "note": null,
+                    "updated_at": "Mon, 21 Jul 2014 11:23:42 UTC +00:00",
+                    "users_report_id": 8
+                },
+                {
+                    "complete": null,
+                    "completion_time": null,
+                    "id": 10,
+                    "note": null,
+                    "task": {
+                        "description": "fuck this"
+                    },
+                    "updated_at": "Mon, 21 Jul 2014 11:24:47 UTC +00:00",
+                    "users_report_id": 8
+                }
+            ],
+            "user_id": 3
+        }
+    ]
+}

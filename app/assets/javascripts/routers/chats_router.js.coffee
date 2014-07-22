@@ -7,4 +7,3 @@ class Metrics.Routers.Chats extends Backbone.Router
     new Metrics.Views.ChatsIndex collection:chats
     console.log "fetching chats"
     chats.fetch()
-

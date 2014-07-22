@@ -70,7 +70,7 @@ class EmployeesController < ApplicationController
 
   def show
     @user = current_user
-    manager_or_admin!
+    @user = @user.id
     @data = params[:data] || params
     @data[:employee] = @user.company.employees.find(params[:id].to_i)
     @data[:options] ||= {}

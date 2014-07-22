@@ -9,7 +9,6 @@ class ChatsController < ApplicationController
       @users_chats << { :name => name, :id => u_c.id, :unread_count => u_c.unread.count }
     end
     respond_to do |format|
-      # if json error remember to 'require JSON'
       format.json { render json: @users_chats.to_json }
       format.js
     end

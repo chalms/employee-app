@@ -11,6 +11,14 @@ class UsersReport < ActiveRecord::Base
   after_create :create_chat
   TYPES = ['UsersReportsChat', 'ReportsChat']
 
+  def to_json
+    self.as_json({
+      only: [:complete, :checkin, :checkout, :report_id, :user_id, :chat_id],
+      methods: [:date_json, :manager_json],
+      include: :reports_tasks
+    }).to_json
+  end
+
   def create_chat
     chat = Chat.joins(:users_chats).where('user_id = ? OR user_id = ?', user.id, manager_id)
     if (chat)
@@ -25,6 +33,16 @@ class UsersReport < ActiveRecord::Base
     else
       update_attribute(:chat_id, chat.id)
     end
+  end
+
+  def data_json
+    {:date => date}.as_json
+  end
+
+  def manager_json
+    return manager.as_json({
+      only: [:name, :email, :employee_number, :id]
+    })
   end
 
   def date

@@ -30,7 +30,7 @@ class Part < ActiveRecord::Base
     return nil
   end
 
- def assignment
+  def assignment
     unless (@assignment)
       if ((reports_parts.count > 0) || self.assigned)
         @assignment = true
@@ -41,5 +41,4 @@ class Part < ActiveRecord::Base
     end
     @assignment
   end
-
 end
