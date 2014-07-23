@@ -1,14 +1,14 @@
 - if (log)
+  - log_id = log.id ? log.id : nil
+  - email_id = log_id ? "employee-log-email-#{log_id}" : nil
+  - employee_number_id = log_id ? "employee-log-employee-number-#{log_id}" : nil
+  - employee_role_id = log_id ? "employee-log-role-#{log_id}" : nil
   %td
-    %input{:type => "text", :name => "employee_logs[email][]", :value => log.email }
+    %h5.h5{:id => email_id}= log.email
   %td
-    %input{:type => "text", :name => "employee_logs[employee_number][]", :value => log.employee_number }
+    %h5.h5{:id => employee_number_id}= log.employee_number
   %td
-    %input{:type => "text", :name => "employee_logs[role][]", :value => log.role }
-- else
+    %h5.h5{:id => employee_role_id}= log.role
   %td
-    %input{:type => "text", :name => "employee_logs[email][]" }
-  %td
-    %input{:type => "text", :name => "employee_logs[employee_number][]"}
-  %td
-    %input{:type => "text", :name => "employee_logs[role][]"}
+    %h5.h5= link_to "X", employee_log_path({id: log.id}), :method => 'delete', remote: true, :onclick => "destroy_row('#{log_id}')"
+  = render partial: 'employees/logs_script', :locals => {:email_id => email_id, :employee_number_id => employee_number_id, :employee_role_id => employee_role_id }

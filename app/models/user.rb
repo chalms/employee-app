@@ -51,6 +51,12 @@ class User < ActiveRecord::Base
     })
   end
 
+  def destroy_me!
+    reports.each { |r| r.destroy_me! } if reports
+    users_reports.each {|ur| ur.destroy_me! } if users_reports
+    users_messages.destroy_all if users_messages
+  end
+
   def users_chats_to_json(option = nil)
     @users_chats = UsersChat.where({:user_id => id})
     the_json = @users_chats.as_json({

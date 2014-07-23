@@ -37,6 +37,7 @@ Metrics::Application.routes.draw do
   post '/reports/:id/update' => 'reports#update'
   post '/reports_tasks/:id/update' => 'reports_tasks#update'
   get '/test' => 'users#test'
+  post '/employee_logs/:id/update' => 'employee_logs#update'
 
   namespace :api, defaults: {:format => 'json'} do
 

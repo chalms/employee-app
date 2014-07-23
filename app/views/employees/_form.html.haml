@@ -15,5 +15,14 @@
               %tr
                 = render partial: 'employees/row', locals: { log: log }
             %tr.last
-              = render partial: 'employees/row', locals: { log: false }
-    %input.submit_field.form-control{:type => "submit", :name => "submit", :style => "width: 30%;"}
+              %td
+                %input.text_field{:type => "text", :name => "email", :placeholder => "employee@email.com" }
+              %td
+                %input.text_field{:type => "text", :name => "employee_number", :placeholder => "employee number" }
+              %td
+                %select{:type => "select", :name => "role"}
+                  %option Admin
+                  %option Manager
+                  %option Employee
+              %td
+                %input.submit_field.form-control{:type => "submit", :name => "submit"}
