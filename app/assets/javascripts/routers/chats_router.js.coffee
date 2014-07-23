@@ -1,9 +1,13 @@
 class Metrics.Routers.Chats extends Backbone.Router
   routes:
-    '' : 'index'
+    '/chats' : 'index'
+
+  initialize: ->
+    console.log "ininitalize routes called"
 
   index: ->
-    chats = new Metrics.Collections.Chats
+    console.log "index called"
+    chats = new Metrics.Collections.Chats({chat: "fuck you"})
     new Metrics.Views.ChatsIndex collection:chats
     console.log "fetching chats"
     chats.fetch()

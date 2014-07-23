@@ -8,6 +8,7 @@ class ChatsController < ApplicationController
       name = "#{u_c.name[0...10]}..." if (u_c.name.length > 13)
       @users_chats << { :name => name, :id => u_c.id, :unread_count => u_c.unread.count }
     end
+    @users_chats << Chat.new
     respond_to do |format|
       format.json { render json: @users_chats.to_json }
       format.js

@@ -25,4 +25,21 @@
                   %option Manager
                   %option Employee
               %td
-                %input.submit_field.form-control{:type => "submit", :name => "submit"}
+                %input.submit_field.form-control{:type => "submit", :name => "submit", :onclick => 'return addEmpRow();'}
+-# javascript:
+-#   addEmpRow = function () {
+-#     var k = $('.form#employees-logs-form');
+-#     var h = {};
+-#     k.find('input').each(function () {
+-#       h[$(this)[0].name] = $(this)[0].value;
+-#       $(this)[0].text = "";
+-#     }
+-#     var p = {};
+-#     p["email"] = h["email"];
+-#     p["employee_number"] = h["employee_number"];
+-#     p["role"] =  k.find('select')[0].value
+-#     var next = $("#{render :partial => 'employees/row', locals: { log: p }}");
+-#     var last = k.find('tr').last();
+-#     last.before(next);
+-#   }
+

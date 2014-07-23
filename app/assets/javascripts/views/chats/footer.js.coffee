@@ -1,6 +1,6 @@
 class Metrics.Views.Footer extends Backbone.View
   el: '#footer'
-  template: JST['tasks/footer']
+  template: JST['chats/footer']
   initialize: ->
     @collection.bind 'add', @updateRemaining, @
     @collection.bind 'remove', @updateRemaining, @

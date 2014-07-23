@@ -9,7 +9,7 @@
           %td
             %h3.h3#report-name{:name => "#{report.id}_"}= reportName
           %td
-            %h3.h3="Date: #{report.date}"
+            %h3.h3#report-date{:name => "#{report.id}_"}="Date: #{report.date}"
         %tr
           %td
             %h4.h4= "Manager: #{report.manager.name}"
@@ -52,6 +52,82 @@
     return lock;
   }
 
+  function callJ() {
+    $('#report-datepicker').on('blur', function () {
+      console.log("second clicked");
+        var input = $('#report-datepicker')
+        var data = input.val();
+
+        if ((data === null)  ||  (data === "") || (!data)) {
+          console.log("data is null");
+          input.remove();
+          var label = $('#report-date');
+          label.show();
+        } else {
+          var hash = {report : {date : data}};
+          callAjax('post', "/reports/" + "#{report.id}" + "/update", hash );
+          input.remove();
+          var label = $('#report-date');
+          label.text(data);
+          label.show();
+        }
+    });
+  }
+
+  $('#report-date').on('click', function () {
+      console.log("clicked");
+      var input = $('<input type="date" id="report-datepicker">');
+      var label = $('#report-date')
+      input.width(label.width);
+      input.height(label.height);
+      input.css("margin", label.css("margin"));
+      input.on('keyup', function (e) {
+          if( e.keyCode == 13 ) {
+              $(input).blur();
+          }
+      });
+      label.after(input);
+      label.hide();
+      callJ();
+  });
+
+
+  //   touch : true, // Whether or not to support touch (default true)
+  //   lineBreaks : true, // Whether or not to convert \n to <br /> (default true)
+  //   toggleFontSize : true, // Whether or not it should be possible to change font size (default true),
+  //   closeOnEnter : true, // Whether or not pressing the enter key should close the editor (default false)
+  //   event : 'click', // The event that triggers the editor (default dblclick)
+  //   element: function () {
+  //   },
+  //   plugin: function () {
+  //     var form = this;
+  //     settings.onblur = 'ignore';
+  //     $(this).find('input').datepicker().bind('click', function() {
+  //         $(this).datepicker('show');
+  //             return false;
+  //         }).bind('dateSelected', function(e, selectedDate, $td) {
+  //             $(form).submit();
+  //         });
+  //     }
+  //   },
+  //   callback: function (data) {
+  //     if( data.content ) {
+
+
+  //       var el = data.$el;
+  //       var id = el.attr('name').replace("_", "");
+  //       var hash = {};
+  //       hash["report"] = {}
+  //       hash["report"]["date"] = data.content;
+  //       var str =  "reports/" + id + "/update.json";
+  //       callAjax('post', str, hash)
+  //     }
+  //     if( data.fontSize ) {
+  //         // the font size has changed
+  //     }
+  //   }
+  // });
+
   $('#report-name').editable({
       touch : true, // Whether or not to support touch (default true)
       lineBreaks : true, // Whether or not to convert \n to <br /> (default true)
@@ -76,6 +152,28 @@
           // data.$el gives you a reference to the element that was edited
       }
   });
+
+  // $('#report-date').editable({
+  //     closeOnEnter : true, // Whether or not pressing the enter key should close the editor (default false)
+  //     event : 'click', // The event that triggers the editor (default dblclick)
+  //     type : 'datepicker'
+  //     callback : function( data ) {
+
+  //         if( data.content ) {
+  //           var el = data.$el;
+  //           var id = el.attr('name').replace("_", "");
+  //           var hash = {};
+  //           hash["report"] = {}
+  //           hash["report"]["date"] = data.content;
+  //           var str =  "reports/" + id + "/update.json";
+  //           callAjax('post', str, hash)
+  //         }
+  //         if( data.fontSize ) {
+  //             // the font size has changed
+  //         }
+  //         // data.$el gives you a reference to the element that was edited
+  //     }
+  // });
 
 
   $('#report-summary').editable({

@@ -113,41 +113,24 @@ class EmployeesController < ApplicationController
 
   def save_data
     @user = current_user
-    is_admin!
-    puts params.inspect
-    @employee_logs = params[:employee_logs]
-    @employee_logs.each do |k,v|
-      puts v
-      v.each_with_index do |c,i|
-        puts "c: #{c}, i: #{i}"
-        @employee_logs.each do |x,y|
-          puts "y[i] : #{y[i]}"
-          puts c.blank?
-          y.delete_at(i) if c.blank?
-        end
-      end
-    end
-    @employee_logs[:employee_number].each_with_index do |log, i|
-      hash = { :email => @employee_logs[:email][i], :employee_number => log, :role => @employee_logs[:role][i], :company_id => @user.company.id }
-      emp_num = hash[:employee_number].gsub('/\s+/', "")
-      employee = EmployeeLog.find_by_employee_number(emp_num)
-      employee ||= EmployeeLog.find_by_email(hash[:email].gsub('/\s+/',""))
-      if (employee)
-        user = User.find_by_email(employee.email)
-        user ||= User.find_by_employee_number(employee.employee_number)
-        employee.update_attributes!(hash)
-        unless (!!user)
-          User.create!(hash)
-        end
-        employee = nil
-        user = nil
-      else
-        EmployeeLog.create!(hash)
+    hash = params
+    hash[:company_id] = @user.company.id
+    emp_num = hash[:employee_number].gsub('/\s+/', "")
+    employee = EmployeeLog.find_by_employee_number(emp_num)
+    employee ||= EmployeeLog.find_by_email(hash[:email].gsub('/\s+/',""))
+    if (employee)
+      user = User.find_by_email(employee.email)
+      user ||= User.find_by_employee_number(employee.employee_number)
+      employee.update_attributes!(hash)
+      unless (!!user)
         User.create!(hash)
       end
+      employee = nil
+      user = nil
+    else
+      EmployeeLog.create!(hash)
+      User.create!(hash)
     end
-    puts 131
-    @employee_logs = @user.company.employee_logs
     render :nothing => true
   rescue Exceptions::StdError => e
     @error_message = "Logs could not be saved due to error: #{e.message}"

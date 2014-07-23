@@ -16,11 +16,13 @@
 //= require_tree ../templates
 //= require_tree ./models
 //= require_tree ./collections
-//= require_tree ./views
 //= require_tree ./routers
+//= require_tree ./views
 //= require_tree .
 
+
 $(document).ready(function() {
+ // window.Metrics.init();
   $( document ).ajaxSend(function(elem, xhr, options) {
     console.log("before send");
     xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
@@ -49,6 +51,7 @@ $(document).ready(function() {
     return true;
   });
 });
+
 
 function callAjax(type, url, data ) {
   $.ajax({
