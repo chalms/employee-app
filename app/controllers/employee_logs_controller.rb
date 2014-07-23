@@ -4,7 +4,7 @@ class EmployeeLogsController < ApplicationController
     @user = current_user
     raise Exceptions::StdError, "Unauthorized" if (@user.role.downcase != admin)
     puts "params => #{params.inspect}"
-    employee_log = EmployeeLog.find(params[:id])
+    employee_log = EmployeeLog.find_by_email(params[:id])
     params = params[:employee_log] || params
     if (employee_log)
       @user = User.find_by_email(employee_log.email)
@@ -24,7 +24,7 @@ class EmployeeLogsController < ApplicationController
     @user = current_user
     raise Exceptions::StdError, "Unauthorized" if (@user.role.downcase != 'admin')
     puts "params => #{params.inspect}"
-    employee_log = EmployeeLog.find(params[:id])
+    employee_log = EmployeeLog.find_by_email(params[:id])
     user = User.find_by_email(employee_log.email)
     user ||= User.find_by_employee_number(employee_log.employee_number)
     employee_log.destroy

@@ -1,22 +1,40 @@
 - complete = task.complete ? "#{task.updated_at}" : 'No'
 - column_color = task.complete ? 'success' : 'danger'
-- id_name = task.id ? task.id.to_s : nil
-- new_task_id_name = id_name ? "#{id_name.to_s}" : ''
+- new_task_id_name = task.id ? task.id.to_s : ''
 - task_task = task.task ? task.task : nil
 - description = task_task ? task_task.description : ""
+- doc_id = "task-description-#{new_task_id_name}"
 %tr{:class => column_color}
-  %td= task_task.andand.description
+  %td{:id => doc_id}= description
   %td= complete
   %td= task.note
   %td
     .form
-      %form{'accept-charset' => "UTF-8", :class => "##{new_task_id_name}", :action=>"reports_tasks/#{id_name}.json", 'data-remote' => "true", :method=>"delete", :onsubmit => "return greeting('##{new_task_id_name}')" }
+      %form{'accept-charset' => "UTF-8", :class => "#{new_task_id_name}", :action=>"reports_tasks/#{new_task_id_name}.json", 'data-remote' => "true", :method=>"delete", :onsubmit => "return greeting('##{new_task_id_name}')" }
         %input{'type' => :hidden, :name => 'id', :value => new_task_id_name}
         %input.btn.btn-danger{:type => 'submit', :id => "#{new_task_id_name}", :name => 'submit', :value => 'X' }
 
-    :javascript
-      function greeting(name) {
-        console.log(name);
-        $(name).closest('tr').remove();
-        return true;
-      };
+  :javascript
+    function greeting(name) {
+      console.log(name);
+      $(name).closest('tr').remove();
+      return true;
+    };
+
+    $("##{doc_id}").editable({
+      closeOnEnter : true, // Whether or not pressing the enter key should close the editor (default false)
+      event : 'click', // The event that triggers the editor (default dblclick)
+      emptyMessage : '<em>Add a task description</em>',
+      callback : function( data ) {
+          if( data.content ) {
+            var hash = {};
+            hash["task"] = {}
+            hash["task"]["description"] = data.content;
+            var str =  "reports_tasks/" + "#{new_task_id_name}" + "/update.json";
+            callAjax('post', str, hash)
+          }
+          if( data.fontSize ) {
+              // the font size has changed
+          }
+      }
+    });
