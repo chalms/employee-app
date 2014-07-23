@@ -4,14 +4,10 @@
 - new_task_id_name = id_name ? "#{id_name.to_s}" : ''
 - task_task = task.task ? task.task : nil
 - description = task_task ? task_task.description : ""
-
 %tr{:class => column_color}
-  %td= id_name
   %td= task_task.andand.description
   %td= complete
   %td= task.note
-  %td
-    %a.dunworry Edit
   %td
     .form
       %form{'accept-charset' => "UTF-8", :class => "##{new_task_id_name}", :action=>"reports_tasks/#{id_name}.json", 'data-remote' => "true", :method=>"delete", :onsubmit => "return greeting('##{new_task_id_name}')" }

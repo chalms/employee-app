@@ -5,4 +5,5 @@
     .form-group
       %p= "Id shoould be here: #{id}"
       %input.message.hidden{:type => 'hidden', :name => 'id', :value => "#{id}"}
-    %input.submit{:type => 'submit', :name => 'submit' }
+    .form-group
+      %input.submit{:type => 'submit', :name => 'submit' }

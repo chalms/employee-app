@@ -7,7 +7,7 @@
             %h4.h4 Add Employees
         .others{:hidden => ''}
           %input{:type => 'hidden', :name => 'report_id', :value => "#{report.id}"}
-          %input{:type => 'hidden', :name => 'div', :value => '#projects-template'}
+          %input{:type => 'hidden', :name => 'div', :value => '#report-table'}
         .row
           .form-group
             %select.form-control{:class => 'employee-select', :name => 'user_id'}
@@ -16,4 +16,4 @@
         .row
           .form-group
             %input.form-control{:type => 'submit', :name => 'submit'}
-      %small{:onclick => 'toggleEmployeeForm()'} Hide
+          %small{:onclick => 'toggleEmployeeForm()'} Hide

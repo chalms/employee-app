@@ -8,3 +8,8 @@
       %h3=flash[:error]
   %div.signup
     = render partial: 'sign_up_form', :locals => {:companies => @signup.companies}
+:javascript
+  function makeWhite() {
+    $('body').css("background","white");
+  }
+  makeWhite();

@@ -1,9 +1,27 @@
 class EmployeesController < ApplicationController
   include ActionController::MimeResponds
 
-  before_action :user!, except: [:upload]
+  before_action :user!, except: [:upload, :index, :special_index]
+
+  def special_index
+    puts params
+    if (params[:id])
+      company = Company.find(params[:id])
+      u = Employee.where(:company_id => company.id)
+    else
+      u = Employee.all
+    end
+    @users = []
+    u.each { |us| @users << {:email => us.email, :setup => us.setup}}
+    puts "#{@users.to_json}"
+    @users = @users.to_json
+    respond_to do |format|
+      format.json { render json: @users }
+    end
+  end
 
   def index
+    @user = current_user
     manager_or_admin!
     puts params
     @data = params[:data]
@@ -53,11 +71,10 @@ class EmployeesController < ApplicationController
 
   def show
     @user = current_user
-    manager_or_admin!
     @data = params[:data] || params
-    @data[:employee] = @user.company.employees.find(params[:id].to_i)
+    @data[:employee] = @user.company.users.find(params[:id].to_i)
     @data[:options] ||= {}
-    @div = @data.delete(:div)
+    @div = @data[:div]
     respond_to do |format|
       format.json { render json: @user }
       format.js
@@ -112,19 +129,24 @@ class EmployeesController < ApplicationController
     end
     @employee_logs[:employee_number].each_with_index do |log, i|
       hash = { :email => @employee_logs[:email][i], :employee_number => log, :role => @employee_logs[:role][i], :company_id => @user.company.id }
-      puts hash
-
-      employee = EmployeeLog.where(hash[:employee_number].gsub('/\s+/')).andand.first
-      employee ||= EmployeeLog.find_by_email(hash[:email].gsub('/\s+/'))
+      emp_num = hash[:employee_number].gsub('/\s+/', "")
+      employee = EmployeeLog.find_by_employee_number(emp_num)
+      employee ||= EmployeeLog.find_by_email(hash[:email].gsub('/\s+/',""))
       if (employee)
         user = User.find_by_email(employee.email)
         user ||= User.find_by_employee_number(employee.employee_number)
+        employee.update_attributes!(hash)
+        unless (!!user)
+          User.create!(hash)
+        end
+        employee = nil
+        user = nil
+      else
+        EmployeeLog.create!(hash)
+        User.create!(hash)
       end
-      employee.update_attributes!(hash) if (!!employee)
-      user.update_attributes!(hash) if (!!user)
-      employee = nil
-      user = nil
     end
+    puts 131
     @employee_logs = @user.company.employee_logs
     render :nothing => true
   rescue Exceptions::StdError => e

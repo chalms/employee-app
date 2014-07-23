@@ -12,7 +12,13 @@
 //= require backbone.wreqr
 //= require backbone.babysitter
 //= require backbone.marionette
-//= require_tree ./templates
+//= require metrics
+//= require_tree ../templates
+//= require_tree ./models
+//= require_tree ./collections
+//= require_tree ./views
+//= require_tree ./routers
+//= require_tree .
 
 $(document).ready(function() {
   $( document ).ajaxSend(function(elem, xhr, options) {
@@ -44,6 +50,19 @@ $(document).ready(function() {
   });
 });
 
+function callAjax(type, url, data ) {
+  $.ajax({
+    url: url,
+    type: type,
+    data: data,
+    dataType: 'json',
+    global: true,
+    success: function (data) {
+      console.log("updated");
+    }
+  });
+}
+
 function log(text) {
   if(window && window.console) console.log(text);
 }
@@ -53,7 +72,7 @@ function taskDescriptionClear() {
 }
 
 function uploadForm() {
-  var html = JST['templates/employees/upload_form']();
+  var html = JST['employees/upload_form']();
   $('.form#employees-logs-form').after(html);
   $('.form#employees-logs-form').hide();
 }
@@ -109,14 +128,14 @@ function renderMessage() {
   console.log("rendering messages");
   attrs = $.closest('.render-message').attributes;
   console.log(attrs);
-  JST['templates/employees/messages'](attrs)
+  JST['employees/messages'](attrs)
 }
 
 function clickedThis(str) {
   console.log(str);
   var t =  $('input.message.text_field.form-control').val();
   vals = { text: t}
-  $(str).append(JST['templates/employees/message'](vals));
+  $(str).append(JST['employees/message'](vals));
   return true;
 }
 
@@ -141,6 +160,15 @@ function toggleMenu() {
     }
 }
 
+function deleteMe(report) {
+  event.preventDefault();
+  report = "#" + report;
+  console.log(report);
+  var l = $(report);
+  console.log(l);
+  l.hide();
+  //l.closest('table').load();
+}
 // Fix safari links opening in new window
 
 if(("standalone" in window.navigator) && window.navigator.standalone){

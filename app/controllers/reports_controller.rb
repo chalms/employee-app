@@ -4,6 +4,7 @@ class ReportsController < ApplicationController
 
   def index
     @user = current_user
+    puts "#{@user.inspect}"
     validate_user_role!
     @data = params[:data]
     @data[:reports] = Report.where(params[:options]).order(:date)
@@ -52,12 +53,10 @@ class ReportsController < ApplicationController
   def new
     @user = current_user
     validate_user_role!
+    @report = build_new_report!(params)
     @data = {}
-    if params[:options]
-      @data[:report] = Report.new(params[:options])
-      @data[:options] = params[:options]
-    end
-    @data[:options] =
+    @data[:report] = @report
+    @data[:users_reports] = @report.users_reports
     @div = params[:div] ||= nil
     @data[:div] = @div if @div
     validate_user_role!
@@ -71,7 +70,12 @@ class ReportsController < ApplicationController
   def create
     @user = current_user
     validate_user_role!
-    @div = params.delete(:div) if (params[:div])
+    if (@user.type == 'Admin')
+      @user = Admin.find(@user.id)
+    elsif (@user.type == 'Manager')
+      @user = Manager.find(@user.id)
+    end
+    @div = params[:div] if (params[:div])
     @report = @user.add_report(params)
     @data = {}
     @data[:report] = @report
@@ -79,7 +83,7 @@ class ReportsController < ApplicationController
     @data[:div] = @div
     if @report
       respond_to do |format|
-        format.json { render json: @api_report};
+        format.json { render json: @report};
         format.html { render haml: @report }
         format.js
       end
@@ -99,33 +103,50 @@ class ReportsController < ApplicationController
     @user = current_user
     @report = Report.find(params[:id])
     if @report.update(params[:report])
+      puts "report, update -> #{@report.inspect}"
+      puts "report, update, to_json #{@report.to_json}"
       respond_to do |format|
-        format.json {render json: @report, status: :success }
+        format.json { render status: 200, json: @report.to_json.to_json }
         format.html {render haml: @report }
         format.js
       end
     else
       respond_to do |format|
-        format.json {render @report.errors status: :unprocessable_entity  }
+        format.json {render status: :unprocessable_entity  }
         format.html {render haml: @report }
-        format.js { head 500 }
+        format.js
       end
     end
+  rescue Exception => e
+    puts "#{e.inspect}"
+    puts "#{e.message}"
+    head 500
   end
 
   def destroy
     @report = Report.find(params[:id])
-    @report.destroy
+    @report.destroy_me!
     head :no_content
-rescue Exceptions::StdError => e
+  rescue Exceptions::StdError => e
+    puts "#{e.inspect}"
     head 500
   end
 
-
   private
 
+  def build_new_report!(params)
+    data = {}
+    if params[:options]
+      data[:project_id] = params[:options][:project_id] if params[:options][:project_id]
+    end
+    data[:user_id] = @user.id
+    data[:date] = (Date.today + 1)
+    data[:name] = "#{@user.name}, #{data[:date].to_s}"
+    data[:summary] = "Add a report summary here!"
+    return @user.reports.create!(data)
+  end
   def validate_user_role!
-    raise Exceptions::StdError, "Invalid permission to access" unless (@user.role == 'manager' || @user.role == 'companyAdmin')
+    raise Exceptions::StdError, "Invalid permission to access" if (@user.role.downcase == 'employee')
   end
 
 end

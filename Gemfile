@@ -30,6 +30,7 @@ gem 'haml-rails'
 gem 'html2haml'
 gem 'web-app-theme'
 gem 'coffee-rails'
+gem "backbone-on-rails"
 gem 'underscore-rails'
 gem 'andand'
 gem 'haml_coffee_assets'
@@ -52,7 +53,6 @@ gem 'mail_safe'
 gem 'fabrication'
 gem 'database_cleaner'
 gem 'poltergeist'
-gem "jasminerice", :git => 'https://github.com/bradphelan/jasminerice.git'
 
 # Dev tools
 gem 'guard'

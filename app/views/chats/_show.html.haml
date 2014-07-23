@@ -3,7 +3,7 @@
 - user_messages = has_messages ? messages : ([Model.new({:text => chat_prompt, :status => ''})])
 .chat
   %h4= "Chat with: #{@name}"
-  .well{ :id => "users-chat-#{id}"}
+  .new-well{ :id => "users-chat-#{id}"}
     - user_messages.each do |m|
       %table.table
         %tbody

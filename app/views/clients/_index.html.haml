@@ -1,8 +1,8 @@
 .clients-table
   %table.table
     %thead.header
-      - if (options[:name].present?)
-        %h3.title= "#{options[:name]} Clients"
+      - if (project.present?)
+        %h3.title= "#{project.name} Clients"
       - else
         %h3.title= "Clients"
     %tr.headers

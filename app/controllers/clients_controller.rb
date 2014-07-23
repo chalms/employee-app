@@ -6,8 +6,11 @@ class ClientsController < ApplicationController
   def index
     @user = current_user
     @data = params[:data]
+    puts params
     if @data[:options][:project_id].present?
-      @data[:clients] = Project.find(@data[:options][:project_id]).clients.order(:name)
+      @data[:project] =  Project.find(@data[:options][:project_id])
+
+      @data[:clients] = Client.where(:project_id => @data[:options][:project_id]).all
     end
     @div = @data.delete(:div)
     respond_to do |format|
@@ -15,6 +18,7 @@ class ClientsController < ApplicationController
       format.js
     end
   rescue Exceptions::StdError => e
+    puts e.message
     redirect_to :root_url
   end
 
@@ -29,7 +33,7 @@ class ClientsController < ApplicationController
       format.html { render @client };
     end
 rescue Exceptions::StdError => e
-
+    puts e.message
   end
 
   # POST /api/clients
@@ -42,7 +46,7 @@ rescue Exceptions::StdError => e
       format.html { render @client };
     end
 rescue Exceptions::StdError => e
-
+    puts e.message
   end
 
   # PATCH/PUT /api/clients/1
@@ -58,7 +62,7 @@ rescue Exceptions::StdError => e
       format.html { head 200 };
     end
 rescue Exceptions::StdError => e
-
+    puts e.message
   end
 
   # DELETE /api/clients/1
@@ -70,7 +74,7 @@ rescue Exceptions::StdError => e
     @client.destroy
     head 200, :content_type => 'text/html'
 rescue Exceptions::StdError => e
-
+    puts e.message
   end
 
   private

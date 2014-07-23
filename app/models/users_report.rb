@@ -11,21 +11,59 @@ class UsersReport < ActiveRecord::Base
   after_create :create_chat
   TYPES = ['UsersReportsChat', 'ReportsChat']
 
+  def to_json
+    self.as_json({
+      only: [:complete, :checkin, :checkout, :report_id, :user_id, :chat_id],
+      methods: [:date_json, :manager_json],
+      include: :reports_tasks
+    }).to_json
+  end
+
   def create_chat
-    # NEEDS TO BE SPED UP
-    chat = Chat.joins(:users_chats).where('user_id = ? OR user_id = ?', user.id, manager_id).andand.first
-    unless !!chat
-      chat = UsersReportsChat.create!({:type => TYPES[0], :users_report_id => self.id, :name => "#{employee.name} & #{manager.name}"})
-      employee.users_chats.where({:chat_id => chat.id}).first_or_create!
-      chat.users_chats.create!({:user_id => employee.id})
-      manager.users_chats.where({:chat_id => chat.id}).first_or_create!
-      chat.users_chats.create!({:user_id => manager.id})
+    chat = Chat.joins(:users_chats).where('user_id = ? OR user_id = ?', user.id, manager_id)
+    if (chat)
+      if chat.empty?
+        puts "creating chat"
+        chat = UsersReportsChat.create!({:type => TYPES[0], :users_report_id => self.id, :name => "#{employee.name} & #{manager.name}"})
+        employee.users_chats.where({:chat_id => chat.id}).first_or_create!
+        chat.users_chats.create!({:user_id => employee.id})
+        manager.users_chats.where({:chat_id => chat.id}).first_or_create!
+        chat.users_chats.create!({:user_id => manager.id})
+      end
+    else
+      update_attribute(:chat_id, chat.id)
     end
-    update_attribute(:chat_id, chat.id)
+  end
+
+  def data_json
+    {:date => date}.as_json
+  end
+
+  def manager_json
+    return manager.as_json({
+      only: [:name, :email, :employee_number, :id]
+    })
+  end
+
+  def get_report
+    @report = Report.where(id: report_id).first
+    unless @report
+      destroy_me!
+    end
+  end
+
+  def destroy_me!
+    reports_tasks.each do |rt|
+      rt.destroy
+    end
+    reports_parts.each do |rt|
+      rt.destroy
+    end
+    destroy
   end
 
   def date
-    @date ||= report.date
+    get_report.andand.date
   end
 
   def manager

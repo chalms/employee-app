@@ -1,10 +1,11 @@
 class User < ActiveRecord::Base
-  include JsonSerializingModel
-  attr_accessible :email, :name, :employee_number, :hours, :days_worked, :role, :password, :company_id, :assigned_tasks, :completed_tasks, :assigned_parts, :completed_parts, :tasks_completion_percent, :reports_completion_percent
+
+  attr_accessible :email, :employee_number, :hours, :days_worked, :role, :password, :company_id, :assigned_tasks, :completed_tasks, :assigned_parts, :completed_parts, :tasks_completion_percent, :reports_completion_percent, :setup, :name, :users_reports_as_json
+
   after_initialize :_set_defaults
-  validates_presence_of :password, :length => {:minimum  => 6},  on: :create!
   validate :email, :format => {:with => /\A[^@]+@[^@]+\.[^@]+\Z/}
   validates :employee_number, :uniqueness => true
+  validate :password_if_setup
   after_create :valid_employee_id?, :set_type
   has_one :contact
   has_many :users_reports
@@ -16,12 +17,80 @@ class User < ActiveRecord::Base
   has_many :users_messages
   has_many :messages, :through => :users_messages
 
+  def password_if_setup
+    if (self.setup)
+      raise Exceptions::StdError, "Password is less than 6 characters!" if (password.length < 6)
+    end
+  end
+
   def update(params)
     params = (params[type.to_sym] || params)
   end
 
+  def api_session_token=(tok)
+    @api_session_token = tok
+  end
+
+  def api_session_token
+    return @api_session_token
+  end
+
   def company
     @company ||= Company.find(company_id)
+  end
+
+  def to_json
+    return self.as_json({
+      only: [:name, :email, :id],
+      methods: [:users_reports_to_json, :users_chats_to_json, :api_session_token],
+      include: {
+        company: {
+          only: [:id, :name]
+        }
+      }
+    })
+  end
+
+  def destroy_me!
+    reports.each { |r| r.destroy_me! } if reports
+    users_reports.each {|ur| ur.destroy_me! } if users_reports
+    users_messages.destroy_all if users_messages
+  end
+
+  def users_chats_to_json(option = nil)
+    @users_chats = UsersChat.where({:user_id => id})
+    the_json = @users_chats.as_json({
+      only: [:name, :id, :chat_id],
+      include: {
+        chat: {
+          only: [:id],
+          methods: [:users_to_json, :get_messages]
+        }
+      }
+    })
+    unless option
+      return the_json
+    else
+      return the_json.to_json
+    end
+  end
+
+  def users_reports_to_json
+    return users_reports.joins(:report).where(reports: {:date => Date.today}).as_json({
+      include: {
+        reports_tasks: {
+          only: [:complete, :completion_time, :id, :note, :updated_at, :users_report_id],
+          include: {
+            task: {
+              only: [:description]
+            }
+          }
+        },
+        report: {
+          only: [:name]
+        }
+      }
+    })
   end
 
   def add_report(params)
@@ -32,10 +101,12 @@ class User < ActiveRecord::Base
     hash[:date] = string_to_date(params)
     puts "here is the date: #{hash[:date]}"
     hash[:summary] = params[:summary] || nil
+    hash[:name] = params[:name] || nil
     hash[:project_id] = params[:project_id].to_i || nil
     client_id =  params[:client_id] || Project.find(hash[:project_id]).clients.andand.first
     hash[:client_id] = client_id if (client_id)
     puts "hash ---> #{hash}"
+
     report = reports.create!(hash)
     return report
   end
@@ -125,8 +196,12 @@ class User < ActiveRecord::Base
     @days_worked = 0
     h = {}
     return @days_worked unless (self.role.downcase == 'employee')
-    get_users_reports(options).each { |u_r| h[u_r.date] = true }
-    h.each { |k, v| @days_worked += 1 }
+    puts "adding these options to use reports: #{options.inspect}"
+    get_users_reports(options).each do |u_r|
+      puts "got user reports now adding a date"
+      h[(u_r.date).to_s] = true
+    end
+    h.each { |k, v|  }
     @days_worked
   end
 

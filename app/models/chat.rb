@@ -13,6 +13,10 @@ class Chat < ActiveRecord::Base
     return true
   end
 
+  def users_to_json
+    users.map(&:id).uniq!
+  end
+
   def company
     if (!!self.company)
       @company ||= self.company
@@ -22,7 +26,16 @@ class Chat < ActiveRecord::Base
   end
 
   def get_messages
-    messages.order_by(:created_at, "DESC")
+    return messages.order(:created_at => :desc).map do |m|
+      m.as_json({
+        only: [:data, :created_at, :id],
+        include: {
+          photo: {
+            only: [:data]
+          }
+        }
+      })
+    end
   end
 
   def name

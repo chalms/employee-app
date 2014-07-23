@@ -1,0 +1,102 @@
+{
+    "api_session_token": {
+        "token": "es8ML4knOxAES2bXuQQii9gYfuXUHuEiuXKF3x6NjyRW68s1K9XxS03S8yWIeRoOeOyDCk2biQZjybbUjJG4i4EoOXJjsppvYBzVqCXrg3JdoxX0ws0TTR9IJaR5sPjl",
+        "ttl": 1199
+    },
+    "company": {
+        "id": 1,
+        "name": "GWPH"
+    },
+    "email": "John@Wilson.com",
+    "id": 3,
+    "name": "Andrew C",
+    "users_chats_to_json": [
+        {
+            "chat": {
+                "get_messages": [
+                    {
+                        "created_at": "2014-07-19T09:21:58.121Z",
+                        "data": "Hello!",
+                        "id": 1
+                    }
+                ],
+                "id": 1,
+                "users_to_json": [
+                    3,
+                    2
+                ]
+            },
+            "chat_id": 1,
+            "id": 1
+        },
+        {
+            "chat": {
+                "get_messages": [
+                    {
+                        "created_at": "2014-07-19T09:21:58.121Z",
+                        "data": "Hello!",
+                        "id": 1
+                    }
+                ],
+                "id": 1,
+                "users_to_json": [
+                    3,
+                    2
+                ]
+            },
+            "chat_id": 1,
+            "id": 2
+        }
+    ],
+    "users_reports_to_json": [
+        {
+            "chat_id": null,
+            "checkin": null,
+            "checkout": null,
+            "complete": false,
+            "id": 12,
+            "location_id": null,
+            "manager_id": null,
+            "report": {
+                "name": "Chalmeee"
+            },
+            "report_id": 6,
+            "reports_tasks": [
+                {
+                    "complete": true,
+                    "completion_time": null,
+                    "id": 22,
+                    "note": null,
+                    "task": {
+                        "description": "Chill for a bit"
+                    },
+                    "updated_at": "2014-07-23T06:40:49.464Z",
+                    "users_report_id": 12
+                },
+                {
+                    "complete": true,
+                    "completion_time": null,
+                    "id": 21,
+                    "note": null,
+                    "task": {
+                        "description": "Get Dome"
+                    },
+                    "updated_at": "2014-07-23T06:40:49.486Z",
+                    "users_report_id": 12
+                },
+                {
+                    "complete": true,
+                    "completion_time": null,
+                    "id": 23,
+                    "note": null,
+                    "task": {
+                        "description": "have fun"
+                    },
+                    "updated_at": "2014-07-23T06:40:49.501Z",
+                    "users_report_id": 12
+                }
+            ],
+            "user_id": 3
+        }
+    ]
+}

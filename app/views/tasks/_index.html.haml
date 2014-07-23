@@ -1,14 +1,9 @@
-%table.table{:id => "tasks-#{owner.id}"}
-  %h4 Tasks
-  .wrapper-right
-    %h5= link_to 'New Task', new_task_path({:data => {:owner => owner, :employees => [owner.user], :div => ".task[name=#{owner.id}]"}}), :remote => true
+%table.table{:id => "tasks-#{owner.id}", :class => "t-table", :style => "margin-top: 5px;"}
   .task{:name => owner.id}
     %tr
-      %td Name
       %td Description
       %td Completed
       %td Notes
-      %td
       %td
     - tasks.each do |task|
       = render partial: 'tasks/show', locals: { task: task }

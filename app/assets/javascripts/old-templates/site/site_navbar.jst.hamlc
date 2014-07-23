@@ -1,9 +1,0 @@
-#cssmenu.ui-header.ui-bar-f{"data-role" => "header", "data-theme" => "f", role: "banner"}  
-  %h1.ui-title{"aria-level" => "1", role: "heading"} TimeCard.com
-  .navbar.nav
-    %li.active
-      %a{:href=>"#reports", "data-toggle"=>"tab"} Reports
-    %li
-      %a{:href=>"#employees", "data-toggle"=>"tab"} Employees
-    %li
-      %a{href: "/signout"} Logout

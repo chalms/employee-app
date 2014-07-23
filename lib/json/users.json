@@ -1,0 +1,84 @@
+{
+    "api_session_token": {
+        "token": "chmF1Hsk3kOcTwT1HJaEyHmOXDyk18G5mFmOM8LW8DkbQBrNbvks8qGaNyh7fzsLaLh5WVC7h49GbsJ8sNADVhoDkTwRxTy8U9lxB8WiCX8xrLjbIxwfA58e9QgPPGv3",
+        "ttl": 1199
+    },
+    "email": "John@Wilson.com",
+    "id": 3,
+    "name": "Andrew C",
+    "users_chats_to_json": [
+        {
+            "chat": {
+                "get_messages": [
+                    {
+                        "created_at": "2014-07-19T09:21:58.121Z",
+                        "data": "Hello!",
+                        "id": 1
+                    }
+                ],
+                "id": 1,
+                "users_to_json": [
+                    3,
+                    2
+                ]
+            },
+            "chat_id": 1,
+            "id": 1
+        },
+        {
+            "chat": {
+                "get_messages": [
+                    {
+                        "created_at": "2014-07-19T09:21:58.121Z",
+                        "data": "Hello!",
+                        "id": 1
+                    }
+                ],
+                "id": 1,
+                "users_to_json": [
+                    3,
+                    2
+                ]
+            },
+            "chat_id": 1,
+            "id": 2
+        }
+    ],
+    "users_reports_to_json": [
+        {
+            "chat_id": null,
+            "checkin": null,
+            "checkout": null,
+            "complete": false,
+            "id": 10,
+            "location_id": null,
+            "manager_id": null,
+            "report_id": 4,
+            "reports_tasks": [
+                {
+                    "complete": null,
+                    "completion_time": null,
+                    "id": 13,
+                    "note": null,
+                    "task": {
+                        "description": "Complete this task"
+                    },
+                    "updated_at": "2014-07-22T21:56:31.558Z",
+                    "users_report_id": 10
+                },
+                {
+                    "complete": null,
+                    "completion_time": null,
+                    "id": 14,
+                    "note": null,
+                    "task": {
+                        "description": "And this one too"
+                    },
+                    "updated_at": "2014-07-22T21:56:42.593Z",
+                    "users_report_id": 10
+                }
+            ],
+            "user_id": 3
+        }
+    ]
+}

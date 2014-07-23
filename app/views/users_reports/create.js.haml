@@ -1,3 +1,3 @@
 :plain
   var appendix = $("#{escape_javascript(render partial: 'users_reports/show', :locals => {:users_report => @users_report})}");
-  $(".grid#report-table > .report > .gridrow.well:last").after(appendix);
+  $(".gridrow#report-table > table:last").after(appendix);

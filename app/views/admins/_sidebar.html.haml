@@ -1,3 +1,4 @@
 .block
   %h3 Links
-  = render partial: 'chats/index', :locals => { :users_chats => @user.users_chats }
+  #chatapp
+    = yield

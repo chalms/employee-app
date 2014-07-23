@@ -18,18 +18,16 @@ module AppHelper
   def admin!
     @load = true
     @load = false if (@user.company.employee_logs.count > 1)
-    @user = UserSerializer.new(@user)
     @route = 'admins/show'
   end
 
   def manager!
-    @user = UserSerializer.new(@user)
     @route = 'managers/' + @user.id.to_s
   end
 
   def employee!
-    @user = UserSerializer.new(@user).to_json
-    @route = 'users/' + @user.id.to_s
+    @user.api_session_token = @tok
+    @route = @user.to_json
   end
 
 end

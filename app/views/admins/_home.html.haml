@@ -1,11 +1,7 @@
 .block
   .content
     #display
-      #admin-data{:hidden => ""}
-        = render(:partial => 'admins/admin_data', locals: {user: @user})
       #project-data
         = render(:partial => 'projects/index', locals: {user: @user})
-      %ul.navigation#chats
-        %li{:hidden => ""}
     #hidden{:hidden => ""}
-- content_for :sidebar, render(partial: 'admins/sidebar')
+- content_for :sidebar, render(partial: 'admins/sidebar', locals: { user: @user})

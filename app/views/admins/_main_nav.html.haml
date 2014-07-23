@@ -1,7 +1,45 @@
-%ul.nav.navbar-nav.navbar-left
-  %li.active
-    %a{:href => '/projects'} Projects
-  %li
-    %a{:href => '/employees'} Employees
-  %li
-    %a{:href => '/clients'} Clients
+- active_nav = active_nav ? active_nav : '#projects-template'
+.navbar.navbar-fixed-top
+  .navbar-inner
+    .container
+      %a.btn.btn-navbar{"data-target" => ".nav-collapse", "data-toggle" => "collapse"}
+        %span.icon-bar
+        %span.icon-bar
+        %span.icon-bar
+      .nav-collapse.in.collapse{style: "height: auto;"}
+        %ul.nav
+          %a.brand{href: "#"} TimeCard
+          %li.active= link_to "Projects", projects_path, :remote => true, :class => 'navster'
+          %li= link_to "Profile", '/admins/admin_data', :remote => true, :class => 'navster'
+          %li= link_to "Managers", employees_path({:data => {:employees => 'name', :options => {:type => 'Manager'}, :div => active_nav}}), :remote => true, :class => 'navster'
+          %li= link_to "Clients", clients_path({:data => {:clients => 'name', :div => active_nav}}), :remote => true, :class => 'navster'
+          %li#accountmenu.dropdown
+            %a.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
+              Account Settings
+              %b.caret
+            %ul.dropdown-menu
+              %li
+                %a{href: "#"} Logout
+              %li.dropdown-submenu
+                %a{href: "#", tabindex: "-1"} More options
+                %ul.dropdown-menu
+                  %li
+                    %a{href: "#", tabindex: "-1"} Second level
+                  %li.dropdown-submenu
+                    %a{href: "#"} More..
+                    %ul.dropdown-menu
+                      %li
+                        %a{href: "#"} 3rd level
+                      %li
+                        %a{href: "#"} 3rd level
+                  %li
+                    %a{href: "#"} Second level
+                  %li
+                    %a{href: "#"} Second level
+              %li
+                %a{href: "#"} Register
+              %li.divider
+              %li
+                %a{href: "#"} Logout
+        %ul.nav.pull-right
+      / /.nav-collapse

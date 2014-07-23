@@ -1,6 +1,6 @@
 class Report < ActiveRecord::Base
   include JsonSerializingModel
-  attr_accessible :summary, :date, :complete, :assigned_parts, :assigned_tasks, :unused_parts, :completed_parts, :incomplete_tasks, :completed_tasks, :company, :complete?, :hours, :days_worked, :manager, :manager_id, :user_id, :project_id, :id, :chat_id, :client_id
+  attr_accessible :summary, :date, :complete, :assigned_parts, :assigned_tasks, :completed_parts, :incomplete_tasks, :completed_tasks, :company, :complete?, :hours, :days_worked, :manager, :manager_id, :user_id, :project_id, :id, :chat_id, :client_id, :name
   belongs_to :user
   belongs_to :admin
   belongs_to :project
@@ -14,22 +14,22 @@ class Report < ActiveRecord::Base
   has_many :tasks
   has_many :parts
   has_one :chat
-  after_create :create_chat
+  # after_create :create_chat
   TYPES = ['UsersReportsChat', 'ReportsChat']
 
-  def create_chat
-    chat = Chat.joins(:users_chats).where('user_id = ? OR user_id = ?', user.id, manager.id).andand.first
-    unless !!chat
-      chat = Chat.create!({:type => TYPES[1], :report_id => self.id})
-      users.each do |u|
-        user_chats = chat.users_chats.create!({:user_id => u.id})
-        chat.users_chats.where({:chat_id => chat.id}).find_or_create
-      end
-      user.users_chats.where({:chat_id => chat.id}).first_or_create
-      chat.users_chats.create!({:user_id => manager.id})
-    end
-    update_attribute(:chat_id, chat.id)
-  end
+  # def create_chat
+  #   chat = Chat.joins(:users_chats).where('user_id = ? OR user_id = ?', user.id, manager.id).andand.first
+  #   unless !!chat
+  #     chat = Chat.create!({:type => TYPES[1], :report_id => self.id})
+  #     users.each do |u|
+  #       user_chats = chat.users_chats.create!({:user_id => u.id})
+  #       chat.users_chats.where({:chat_id => chat.id}).find_or_create
+  #     end
+  #     user.users_chats.where({:chat_id => chat.id}).first_or_create
+  #     chat.users_chats.create!({:user_id => manager.id})
+  #   end
+  #   update_attribute(:chat_id, chat.id)
+  # end
 
 
   def add_tasks(ts = [])
@@ -45,6 +45,12 @@ class Report < ActiveRecord::Base
         ts.create!(task_hash)
       end
     end
+  end
+
+  def to_json
+    return self.as_json({
+      only: [:summary, :date, :complete, :id, :manager_id, :name, :client_id, :user_id, :project_id, :chat_id]
+    })
   end
 
   def manager
@@ -154,6 +160,13 @@ class Report < ActiveRecord::Base
     else
       false
     end
+  end
+
+  def destroy_me!
+    users_reports.each do |ur|
+      ur.destroy_me!
+    end
+    destroy
   end
 
   def company

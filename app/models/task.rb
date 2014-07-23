@@ -10,6 +10,7 @@ class Task < ActiveRecord::Base
   has_many :projects, :through => :reports
   attr_accessible :description, :name, :manager, :manager_id, :assignment, :owners, :report_id, :user_id
 
+
   def owners
     unless (@owners)
       h = {}

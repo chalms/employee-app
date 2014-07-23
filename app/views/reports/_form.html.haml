@@ -1,6 +1,6 @@
 - project_idd = project_id ? project_id : ''
 .grid
-  .well
+  .new-well
     %h3.lead{:style => 'text-align: center;'} New Report
     .form
       %form{'accept-charset' => "UTF-8", :class => "new_report",'method' => 'post', 'action' => 'reports/create.js', 'data-remote' => "true", 'id' => "new_report", 'onsubmit' => "return onSubmit()" }
