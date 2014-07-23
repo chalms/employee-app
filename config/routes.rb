@@ -34,7 +34,9 @@ Metrics::Application.routes.draw do
   post '/tasks/create' => 'tasks#create'
   post '/reports/create' => 'reports#create'
   get '/todays_reports' => 'reports#today'
-
+  post '/reports/:id/update' => 'reports#update'
+  post '/reports_tasks/:id/update' => 'reports_tasks#update'
+  get '/test' => 'users#test'
 
   namespace :api, defaults: {:format => 'json'} do
 

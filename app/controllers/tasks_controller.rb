@@ -76,7 +76,6 @@ class TasksController < ApplicationController
 
   def update
     user!
-    is_admin_manager!
     @task = Task.find(params[:id])
     if @task.update(params[:task])
       head :no_content

@@ -23,13 +23,12 @@ class LoginsController < ApplicationController
       @user = @login.save!
       puts "LoginsController [@user]: #{@user.inspect}"
       set_token!
-      @user.api_session_token = @token
-      puts "LoginsController [@user.token]: #{@user.inspect}"
       @route = route!
       puts "LoginsController [@user.inspect]: #{@user.inspect}"
       respond_to do |format|
-        format.html{ render haml: @route }
+        format.html{ render @route }
         format.json{ render json: @route }
+        format.js
       end
       return
     rescue Exceptions::StdError => e
@@ -47,11 +46,12 @@ class LoginsController < ApplicationController
   end
 
   private
+
   def set_token!
     token = current_api_session_token
-    puts "THE TOKEN IS: #{token.inspect}"
-    @token = { :token => token.token, :ttl => token.ttl }
-    puts "AND NOW IT IS: #{@token.inspect}"
+    token.user = @user
+    @tok = {:token => token.token, :ttl => token.ttl }
+    @token = token.token
     raise Exceptions::StdError, "Authorization is not accepted!" unless (@token)
   end
 

@@ -1,25 +1,26 @@
-%h2.title
-  = "#{user.company.name} Projects"
-.inner
-  %table.table.table-hover
-    %thead
-      %a{onclick: 'showAdminData()'} Admin Data
-    %tr
-      %th Name
-      %th Start Date
-      %th End Date
-      %th % Complete
-      %th Hours
-    - user.company.projects.each do |project|
-      %tr{:class => cycle("odd", "even")}
-        %td= link_to project.name, project_path(project), :remote => true
-        %td= project.start_date
-        %td= project.end_date
-        %td= project.tasks_completion_percent
-        %td= project.hours
+.new-well
+  %h2.title
+    = "#{user.company.name} Projects"
+  .inner
+    %table.table.table-hover
+      %thead
+        %a{onclick: 'showAdminData()'} Admin Data
+      %tr
+        %th Name
+        %th Start Date
+        %th End Date
+        %th % Complete
+        %th Hours
+      - user.company.projects.each do |project|
+        %tr{:class => cycle("odd", "even")}
+          %td= link_to project.name, project_path(project), :remote => true
+          %td= project.start_date
+          %td= project.end_date
+          %td= project.tasks_completion_percent
+          %td= project.hours
 
-:javascript
-  function showAdminData() {
-    $('#admin-data').show();
-    $('#project-data').hide();
-  }
+  :javascript
+    function showAdminData() {
+      $('#admin-data').show();
+      $('#project-data').hide();
+    }

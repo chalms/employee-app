@@ -21,6 +21,7 @@ class EmployeesController < ApplicationController
   end
 
   def index
+    @user = current_user
     manager_or_admin!
     puts params
     @data = params[:data]
@@ -70,11 +71,10 @@ class EmployeesController < ApplicationController
 
   def show
     @user = current_user
-    @user = @user.id
     @data = params[:data] || params
-    @data[:employee] = @user.company.employees.find(params[:id].to_i)
+    @data[:employee] = @user.company.users.find(params[:id].to_i)
     @data[:options] ||= {}
-    @div = @data.delete(:div)
+    @div = @data[:div]
     respond_to do |format|
       format.json { render json: @user }
       format.js

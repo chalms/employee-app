@@ -3,6 +3,7 @@ class ReportsTasksController < ApplicationController
   # GET /reports_tasks.json
   include ActionController::MimeResponds
   def index
+    @user = current_user
     @reports_tasks = ReportsTask.all
 
     render json: @reports_tasks
@@ -11,6 +12,7 @@ class ReportsTasksController < ApplicationController
   # GET /reports_tasks/1
   # GET /reports_tasks/1.json
   def show
+    @user = current_user
     @reports_task = ReportsTask.find(params[:id])
 
     render json: @reports_task
@@ -19,6 +21,7 @@ class ReportsTasksController < ApplicationController
   # POST /reports_tasks
   # POST /reports_tasks.json
   def create
+    @user = current_user
     @reports_task = ReportsTask.new(params[:reports_task])
 
     if @reports_task.save
@@ -31,12 +34,19 @@ class ReportsTasksController < ApplicationController
   # PATCH/PUT /reports_tasks/1
   # PATCH/PUT /reports_tasks/1.json
   def update
+    @user = current_user
+    puts "params => #{params}"
     @reports_task = ReportsTask.find(params[:id])
-
+    puts "attempting to update => #{params[:reports_task]}"
     if @reports_task.update(params[:reports_task])
-      head :no_content
+      respond_to do |format|
+        format.json { render status: 200, json: @reports_task.to_json }
+      end
     else
-      render json: @reports_task.errors, status: :unprocessable_entity
+      puts @reports_task.errors
+      respond_to do |format|
+        format.json {  render json: @reports_task.errors, status: :unprocessable_entity }
+      end
     end
   end
 

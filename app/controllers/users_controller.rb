@@ -18,4 +18,12 @@ class UsersController < ApplicationController
     @user = current_user
     render json: @user
   end
+
+  def test
+    if _authorization_header(tok) && current_api_session_token(tok).valid?
+      render status: 200
+    else
+      render status: 200
+    end
+  end
 end

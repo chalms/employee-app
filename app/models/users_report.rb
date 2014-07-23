@@ -45,8 +45,25 @@ class UsersReport < ActiveRecord::Base
     })
   end
 
+  def get_report
+    @report = Report.where(id: report_id).first
+    unless @report
+      destroy_me!
+    end
+  end
+
+  def destroy_me!
+    reports_tasks.each do |rt|
+      rt.destroy
+    end
+    reports_parts.each do |rt|
+      rt.destroy
+    end
+    destroy
+  end
+
   def date
-    @date ||= report.date
+    get_report.andand.date
   end
 
   def manager

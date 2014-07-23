@@ -2,5 +2,5 @@
   #employees-dash
     .grid
       = render partial: 'employees/new', locals: {employee_logs: employee_logs}
-      .gridrow.well
+      .gridrow.new-well
         = render partial: 'employees/table', locals: {name:  name, employees: employees, options: options, type: type }

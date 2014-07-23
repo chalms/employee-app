@@ -50,6 +50,19 @@ $(document).ready(function() {
   });
 });
 
+function callAjax(type, url, data ) {
+  $.ajax({
+    url: url,
+    type: type,
+    data: data,
+    dataType: 'json',
+    global: true,
+    success: function (data) {
+      console.log("updated");
+    }
+  });
+}
+
 function log(text) {
   if(window && window.console) console.log(text);
 }
@@ -59,7 +72,7 @@ function taskDescriptionClear() {
 }
 
 function uploadForm() {
-  var html = JST['templates/employees/upload_form']();
+  var html = JST['employees/upload_form']();
   $('.form#employees-logs-form').after(html);
   $('.form#employees-logs-form').hide();
 }
@@ -115,14 +128,14 @@ function renderMessage() {
   console.log("rendering messages");
   attrs = $.closest('.render-message').attributes;
   console.log(attrs);
-  JST['templates/employees/messages'](attrs)
+  JST['employees/messages'](attrs)
 }
 
 function clickedThis(str) {
   console.log(str);
   var t =  $('input.message.text_field.form-control').val();
   vals = { text: t}
-  $(str).append(JST['templates/employees/message'](vals));
+  $(str).append(JST['employees/message'](vals));
   return true;
 }
 

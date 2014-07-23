@@ -28,7 +28,8 @@ class ProjectsController < ApplicationController
 
   def show
     @user = current_user
-    puts params
+    puts params.inspect
+    puts @user.inspect
     @project = Project.find(params[:id])
     validate_permissions!
     puts @project.inspect

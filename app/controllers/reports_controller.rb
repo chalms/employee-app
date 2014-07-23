@@ -4,6 +4,7 @@ class ReportsController < ApplicationController
 
   def index
     @user = current_user
+    puts "#{@user.inspect}"
     validate_user_role!
     @data = params[:data]
     @data[:reports] = Report.where(params[:options]).order(:date)
@@ -57,7 +58,6 @@ class ReportsController < ApplicationController
       @data[:report] = Report.new(params[:options])
       @data[:options] = params[:options]
     end
-    @data[:options] =
     @div = params[:div] ||= nil
     @data[:div] = @div if @div
     validate_user_role!
@@ -99,33 +99,39 @@ class ReportsController < ApplicationController
     @user = current_user
     @report = Report.find(params[:id])
     if @report.update(params[:report])
+      puts "report, update -> #{@report.inspect}"
+      puts "report, update, to_json #{@report.to_json}"
       respond_to do |format|
-        format.json {render json: @report, status: :success }
+        format.json { render status: 200, json: @report.to_json.to_json }
         format.html {render haml: @report }
         format.js
       end
     else
       respond_to do |format|
-        format.json {render @report.errors status: :unprocessable_entity  }
+        format.json {render status: :unprocessable_entity  }
         format.html {render haml: @report }
-        format.js { head 500 }
+        format.js
       end
     end
+  rescue Exception => e
+    puts "#{e.inspect}"
+    puts "#{e.message}"
+    head 500
   end
 
   def destroy
     @report = Report.find(params[:id])
     @report.destroy
     head :no_content
-rescue Exceptions::StdError => e
+  rescue Exceptions::StdError => e
+    puts "#{e.inspect}"
     head 500
   end
-
 
   private
 
   def validate_user_role!
-    raise Exceptions::StdError, "Invalid permission to access" unless (@user.role == 'manager' || @user.role == 'companyAdmin')
+    raise Exceptions::StdError, "Invalid permission to access" if (@user.role.downcase == 'employee')
   end
 
 end

@@ -1,5 +1,3 @@
 :plain
   var appearance = $('#{ escape_javascript(render partial: 'reports/new', :locals => @data) }');
-  var div = $('#{@div}');
-  div.html(appearance);
-  div.show();
+  var div = $('.gridrow#report-table table:last').after(appearance).show();

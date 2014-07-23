@@ -2,9 +2,9 @@
   - if (employee.role.downcase == 'employee')
     - employee.assigned_reports.each do |u_r|
       .gridrow
-        .well
+        .new-well
           = render partial: 'users_reports/show', locals: { users_report: u_r}
   -else
     .gridrow
-      .well
+      .new-well
         = render partial: 'reports/index', locals: { reports: employee.assigned_reports, name: employee.name, id: employee.id, options: options}

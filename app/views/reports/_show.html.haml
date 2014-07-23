@@ -1,22 +1,28 @@
-.grid#report-table
+- reportName = report.name ? report.name : "Report: #{report.id}"
+- table_wrapper = (report.complete) ? '.success' : ''
+.grid
   .report
-    .gridrow.well
-      .wrapper
-        %h3="Report: #{report.id}"
-        %h4 Manager: #{report.manager.name}
-      .wrapper.right
-        %h4="Date: #{report.date}"
-        %h5
-          %a= link_to "New Report", new_report_path({:options => options, :div => div}), :remote => :true
-      .blockquotes
-        %h5
-          %em="#{report.summary}"
-      .add-employees
-        %h5
-          %a{:onclick => 'toggleEmployeeForm()'} Add Employees?
-      = render partial: 'reports/employee_form', :locals => {report: report}
-    - report.users_reports.each do |users_report|
-      = render partial: 'users_reports/show', locals: {users_report: users_report, options: options, report: report, :div => div}
+    .gridrow#report-table
+      %table.table.table_hover{:class => table_wrapper}
+        %tr
+          %td
+            %h3.h3#report-name{:name => "#{report.id}_"}= reportName
+          %td
+            %h3.h3="Date: #{report.date}"
+        %tr
+          %td
+            %h4.h4= "Manager: #{report.manager.name}"
+          %td
+        %tr
+          %td{"colspan" => 2}
+            .blockquotes
+              %h4.h4#report-summary{:name => "#{report.id}_"}= report.summary
+        %tr
+          %td{"colspan" => 2}
+            %a{:onclick => "toggleEmployeeForm()"} Add Employees
+            = render partial: 'reports/employee_form', :locals => {report: report}
+        - report.users_reports.each do |users_report|
+          = render partial: 'users_reports/show', locals: {users_report: users_report, options: options, report: report, :div => div}
 
 :javascript
   function toggleEmployeeForm() {
@@ -30,3 +36,71 @@
       prompt.hide();
     }
   }
+
+  // There are some options you can configure when initiating
+  // the editable feature as well as a callback function that
+  // will be called when textarea gets blurred.
+
+  function dataPresent(data) {
+    lock = false;
+    if (data) {
+      if (data === "") lock = true
+    } else {
+      lock = true;
+    }
+    return lock;
+  }
+
+  $('#report-name').editable({
+      touch : true, // Whether or not to support touch (default true)
+      lineBreaks : true, // Whether or not to convert \n to <br /> (default true)
+      toggleFontSize : true, // Whether or not it should be possible to change font size (default true),
+      closeOnEnter : true, // Whether or not pressing the enter key should close the editor (default false)
+      event : 'click', // The event that triggers the editor (default dblclick)
+      emptyMessage : '<em>Please add a report name</em>', // HTML that will be added to the editable element in case it gets empty (default false)
+      callback : function( data ) {
+
+          if( data.content ) {
+            var el = data.$el;
+            var id = el.attr('name').replace("_", "");
+            var hash = {};
+            hash["report"] = {}
+            hash["report"]["name"] = data.content;
+            var str =  "reports/" + id + "/update.json";
+            callAjax('post', str, hash)
+          }
+          if( data.fontSize ) {
+              // the font size has changed
+          }
+          // data.$el gives you a reference to the element that was edited
+      }
+  });
+
+
+  $('#report-summary').editable({
+      touch : true, // Whether or not to support touch (default true)
+      lineBreaks : true, // Whether or not to convert \n to <br /> (default true)
+      toggleFontSize : true, // Whether or not it should be possible to change font size (default true),
+      closeOnEnter : true, // Whether or not pressing the enter key should close the editor (default false)
+      event : 'click', // The event that triggers the editor (default dblclick)
+      emptyMessage : '<em>Please add a report name</em>', // HTML that will be added to the editable element in case it gets empty (default false)
+      callback : function( data ) {
+
+          if( data.content ) {
+            var el = data.$el;
+            var id = el.attr('name').replace("_", "");
+            var hash = {};
+            hash["report"] = {}
+            hash["report"]["summary"] = data.content;
+            var str =  "reports/" + id + "/update.json";
+            callAjax('post', str, hash)
+          }
+          if( data.fontSize ) {
+              // the font size has changed
+          }
+          // data.$el gives you a reference to the element that was edited
+      }
+  });
+
+
+

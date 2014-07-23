@@ -4,14 +4,21 @@
 - checkout = (users_report.checkout) ? users_report.checkout : '--'
 - checkout_class = (users_report.checkout) ? '.red' : '.green'
 - hours = (users_report.hours) ? users_report.hours : '--'
-.gridrow.well{:class => table_wrapper}
-  %table.table.table_hover
-    .wrapper
-      %h3= link_to "#{users_report.employee.name}", chats_path(users_report.chat), :remote => true
-      %h4 Total Hours: #{hours}
-    .wrapper.right
-      %h5= link_to 'Edit', '', :onclick => 'edit()'
-      %h5 Checkin: #{checkin}
-      %h5 Checkout: #{checkout}
-  - if (users_report.reports_tasks)
-    = render partial: 'tasks/index', locals: {tasks: users_report.reports_tasks, owner: users_report, name: "#{users_report.report.name} - #{users_report.employee.name}"}
+%table.table.u-table{:class => table_wrapper}
+  %tr
+    %td
+      %h4= link_to "#{users_report.employee.name}", chats_path(users_report.chat), :remote => true
+    %td
+      %h4.h4 Total Hours: #{hours}
+  %tr
+    %td
+      %h4.h4= "Checkin: #{checkin}"
+    %td
+      %h4.h4= "Checkout: #{checkout}"
+  %tr
+    %td{"colspan" => 2}
+      %h4.h4.span
+        Tasks
+      %h5.h5.span= link_to 'New Task', new_task_path({:data => {:owner => users_report, :employees => [users_report.user], :div => ".task[name=#{users_report.id}]"}}), :remote => true
+      - if (users_report.reports_tasks)
+        = render partial: 'tasks/index', locals: {tasks: users_report.reports_tasks, owner: users_report, name: "#{users_report.report.name} - #{users_report.employee.name}"}

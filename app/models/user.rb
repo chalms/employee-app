@@ -42,7 +42,12 @@ class User < ActiveRecord::Base
   def to_json
     return self.as_json({
       only: [:name, :email, :id],
-      methods: [:users_reports_to_json, :users_chats_to_json, :api_session_token]
+      methods: [:users_reports_to_json, :users_chats_to_json, :api_session_token],
+      include: {
+        company: {
+          only: [:id, :name]
+        }
+      }
     })
   end
 
@@ -74,6 +79,9 @@ class User < ActiveRecord::Base
               only: [:description]
             }
           }
+        },
+        report: {
+          only: [:name]
         }
       }
     })
@@ -87,10 +95,12 @@ class User < ActiveRecord::Base
     hash[:date] = string_to_date(params)
     puts "here is the date: #{hash[:date]}"
     hash[:summary] = params[:summary] || nil
+    hash[:name] = params[:name] || nil
     hash[:project_id] = params[:project_id].to_i || nil
     client_id =  params[:client_id] || Project.find(hash[:project_id]).clients.andand.first
     hash[:client_id] = client_id if (client_id)
     puts "hash ---> #{hash}"
+
     report = reports.create!(hash)
     return report
   end
@@ -180,8 +190,12 @@ class User < ActiveRecord::Base
     @days_worked = 0
     h = {}
     return @days_worked unless (self.role.downcase == 'employee')
-    get_users_reports(options).each { |u_r| h[u_r.date] = true }
-    h.each { |k, v| @days_worked += 1 }
+    puts "adding these options to use reports: #{options.inspect}"
+    get_users_reports(options).each do |u_r|
+      puts "got user reports now adding a date"
+      h[(u_r.date).to_s] = true
+    end
+    h.each { |k, v|  }
     @days_worked
   end
 

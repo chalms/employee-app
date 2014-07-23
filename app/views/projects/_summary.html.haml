@@ -1,9 +1,22 @@
-%dl.dl-horizontal
-  %dt Dates:
-  %dd="#{project.start_date} - #{project.end_date}"
-  %dt Hours:
-  %dd="#{project.hours}"
-  %dt Completion:
-  %dd="#{project.tasks_completion_percent}"
-  %dt Manager:
-  %dd{:href => 'managers/#{project.manager.id}'}="#{project.manager.name}"
+%table.table
+  %tbody
+    %tr.row
+      %td.col
+        %h4.h4 Dates:
+      %td.col
+        %h4.h4="#{project.start_date} - #{project.end_date}"
+    %tr.row
+      %td.col
+        %h4.h4 Employee Hours:
+      %td.col
+        %h4.h4="#{project.hours}"
+    %tr.row
+      %td.col
+        %h4.h4 Completion:
+      %td.col
+        %h4.h4="#{project.reports.count} Reports"
+    %tr.row
+      %td.col
+        %h4.h4 Project Manager:
+      %td.col
+        %h4.h4{:href => 'managers/#{project.manager.id}'}="#{project.manager.name}"
