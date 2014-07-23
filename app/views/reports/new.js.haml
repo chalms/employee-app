@@ -1,3 +1,3 @@
 :plain
-  var appearance = $('#{ escape_javascript(render partial: 'reports/new', :locals => @data) }');
-  var div = $('.gridrow#report-table table:last').after(appearance).show();
+  var appearance = $('#{ escape_javascript(render partial: 'reports/show', :locals => @data) }');
+  var div = $('#projects-template').html(appearance).show();

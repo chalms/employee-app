@@ -1,3 +1,4 @@
+- report = report ? report : (@report ? @report : nil)
 - reportName = report.name ? report.name : "Report: #{report.id}"
 - table_wrapper = (report.complete) ? '.success' : ''
 .grid

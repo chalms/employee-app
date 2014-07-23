@@ -160,6 +160,15 @@ function toggleMenu() {
     }
 }
 
+function deleteMe(report) {
+  event.preventDefault();
+  report = "#" + report;
+  console.log(report);
+  var l = $(report);
+  console.log(l);
+  l.hide();
+  //l.closest('table').load();
+}
 // Fix safari links opening in new window
 
 if(("standalone" in window.navigator) && window.navigator.standalone){

@@ -1,22 +1,27 @@
+- u_rep_id = (users_report.id) ? users_report.id : nil
+- table_id = (u_rep_id) ? "users-report-table-#{u_rep_id}" : nil
 - table_wrapper = (users_report.complete) ? '.success' : ''
 - checkin = (users_report.checkin) ? users_report.checkin : '--'
 - checkin_class = (users_report.checkin) ? '.red' : '.green'
 - checkout = (users_report.checkout) ? users_report.checkout : '--'
 - checkout_class = (users_report.checkout) ? '.red' : '.green'
 - hours = (users_report.hours) ? users_report.hours : '--'
-%table.table.u-table{:class => table_wrapper}
+%table.table.u-table{:class => table_wrapper, id: table_id}
   %tr
     %td
       %h4= link_to "#{users_report.employee.name}", chats_path(users_report.chat), :remote => true
     %td
       %h4.h4 Total Hours: #{hours}
+    %td
+      %h4= link_to "X", users_report_path({id: u_rep_id}), :method => 'delete', :remote => true, :onclick => "deleteMe('#{table_id}')"
   %tr
     %td
       %h4.h4= "Checkin: #{checkin}"
     %td
       %h4.h4= "Checkout: #{checkout}"
+    %td
   %tr
-    %td{"colspan" => 2}
+    %td{"colspan" => 3}
       %h4.h4.span
         Tasks
       %h5.h5.span= link_to 'New Task', new_task_path({:data => {:owner => users_report, :employees => [users_report.user], :div => ".task[name=#{users_report.id}]"}}), :remote => true

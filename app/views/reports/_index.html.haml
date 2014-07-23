@@ -1,12 +1,20 @@
 .reports
   %table.table
+    %thead
+      %h4.h4= link_to "New report", new_report_path, :format => :js, :remote => :true
     %tr
       %th Name
       %th Manager
       %th Date
+      %th
     - reports.each do |report|
       - rep_nam = report.name ? report.name : "Report #{report.id}"
-      %tr
+      - rep_id = "delete-report-#{report.id}"
+      %tr{:id => rep_id}
         %td=link_to rep_nam, report_path({:id =>report.id, :options => options, :div => div}), :remote => true
         %td= link_to report.manager.name, employee_path({:id => report.manager.id, :options => options}), :remote => true
         %td= report.date
+        %td=link_to "X", report_path({:id => report.id}), :method => 'delete', :remote => true, :onclick => "deleteMe('#{rep_id}')"
+
+
+

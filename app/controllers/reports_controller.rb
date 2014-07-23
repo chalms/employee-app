@@ -53,11 +53,10 @@ class ReportsController < ApplicationController
   def new
     @user = current_user
     validate_user_role!
+    @report = build_new_report!(params)
     @data = {}
-    if params[:options]
-      @data[:report] = Report.new(params[:options])
-      @data[:options] = params[:options]
-    end
+    @data[:report] = @report
+    @data[:users_reports] = @report.users_reports
     @div = params[:div] ||= nil
     @data[:div] = @div if @div
     validate_user_role!
@@ -71,7 +70,12 @@ class ReportsController < ApplicationController
   def create
     @user = current_user
     validate_user_role!
-    @div = params.delete(:div) if (params[:div])
+    if (@user.type == 'Admin')
+      @user = Admin.find(@user.id)
+    elsif (@user.type == 'Manager')
+      @user = Manager.find(@user.id)
+    end
+    @div = params[:div] if (params[:div])
     @report = @user.add_report(params)
     @data = {}
     @data[:report] = @report
@@ -79,7 +83,7 @@ class ReportsController < ApplicationController
     @data[:div] = @div
     if @report
       respond_to do |format|
-        format.json { render json: @api_report};
+        format.json { render json: @report};
         format.html { render haml: @report }
         format.js
       end
@@ -121,7 +125,7 @@ class ReportsController < ApplicationController
 
   def destroy
     @report = Report.find(params[:id])
-    @report.destroy
+    @report.destroy_me!
     head :no_content
   rescue Exceptions::StdError => e
     puts "#{e.inspect}"
@@ -130,6 +134,17 @@ class ReportsController < ApplicationController
 
   private
 
+  def build_new_report!(params)
+    data = {}
+    if params[:options]
+      data[:project_id] = params[:options][:project_id] if params[:options][:project_id]
+    end
+    data[:user_id] = @user.id
+    data[:date] = (Date.today + 1)
+    data[:name] = "#{@user.name}, #{data[:date].to_s}"
+    data[:summary] = "Add a report summary here!"
+    return @user.reports.create!(data)
+  end
   def validate_user_role!
     raise Exceptions::StdError, "Invalid permission to access" if (@user.role.downcase == 'employee')
   end
