@@ -1,6 +1,5 @@
 %label Add Chat:
   %input#add-chat
+  %p= @user_id
 %div
-  =@chat.get 'name'
   %a.remove-chat removes
-#footer

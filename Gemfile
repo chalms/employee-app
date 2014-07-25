@@ -16,6 +16,7 @@ gem 'hiredis'
 gem 'em-synchrony'
 gem 'cancan'
 gem 'roo'
+gem 'ancestry'
 
 # Assets
 gem 'sass-rails', '~> 4.0.0'

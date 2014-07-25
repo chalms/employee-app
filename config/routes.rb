@@ -20,10 +20,9 @@ Metrics::Application.routes.draw do
   resources :logins, only: [:new, :create]
   resources :signups, only: [:new, :create]
   resources :admins, only: [:show, :update]
-
   get '/login' => 'logins#new'
   get '/logout' => 'logins#logout'
-  root :to => 'signups#new'
+  root :to => 'home#show'
   get '/special_index' => 'employees#special_index'
   get '/companies/:id/employees' => 'employees#special_index'
   post '/chats/new_message' => 'chats#new_message'

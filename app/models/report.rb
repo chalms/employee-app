@@ -14,23 +14,24 @@ class Report < ActiveRecord::Base
   has_many :tasks
   has_many :parts
   has_one :chat
+  has_one :report_item
+
   # after_create :create_chat
   TYPES = ['UsersReportsChat', 'ReportsChat']
 
-  # def create_chat
-  #   chat = Chat.joins(:users_chats).where('user_id = ? OR user_id = ?', user.id, manager.id).andand.first
-  #   unless !!chat
-  #     chat = Chat.create!({:type => TYPES[1], :report_id => self.id})
-  #     users.each do |u|
-  #       user_chats = chat.users_chats.create!({:user_id => u.id})
-  #       chat.users_chats.where({:chat_id => chat.id}).find_or_create
-  #     end
-  #     user.users_chats.where({:chat_id => chat.id}).first_or_create
-  #     chat.users_chats.create!({:user_id => manager.id})
-  #   end
-  #   update_attribute(:chat_id, chat.id)
-  # end
-
+  def create_chat
+    chat = Chat.joins(:users_chats).where('user_id = ? OR user_id = ?', user.id, manager.id).andand.first
+    unless !!chat
+      chat = Chat.create!({:type => TYPES[1], :report_id => self.id})
+      users.each do |u|
+        user_chats = chat.users_chats.create!({:user_id => u.id})
+        chat.users_chats.where({:chat_id => chat.id}).find_or_create
+      end
+      user.users_chats.where({:chat_id => chat.id}).first_or_create
+      chat.users_chats.create!({:user_id => manager.id})
+    end
+    update_attribute(:chat_id, chat.id)
+  end
 
   def add_tasks(ts = [])
     if (ts.is_a? Hash)

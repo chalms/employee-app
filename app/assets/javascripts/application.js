@@ -66,6 +66,7 @@ function callAjax(type, url, data ) {
   });
 }
 
+
 function log(text) {
   if(window && window.console) console.log(text);
 }

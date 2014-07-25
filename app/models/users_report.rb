@@ -33,6 +33,8 @@ class UsersReport < ActiveRecord::Base
     else
       update_attribute(:chat_id, chat.id)
     end
+    chat = chat.first if (chat.is_a? Array)
+    manager.users_chats.where(:chat_id => chat.id).first_or_create
   end
 
   def data_json

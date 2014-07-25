@@ -1,7 +1,6 @@
-class Metrics.Models.Chat extends Backbone.Model
+class Metrics.Models.Message extends Backbone.Model
   defaults: {
-    'name': "",
-    'unread_count': 0
+    'data': ""
   }
 
   initialize: ->
@@ -11,7 +10,4 @@ class Metrics.Models.Chat extends Backbone.Model
     for key in @defaults
       if (@.get(key) is null)
         @.set(key, @defaults.key)
-
-
-
 

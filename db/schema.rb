@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140723061401) do
+ActiveRecord::Schema.define(version: 20140725022211) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -182,6 +182,7 @@ ActiveRecord::Schema.define(version: 20140723061401) do
     t.integer  "task_id"
     t.integer  "users_report_id"
     t.integer  "status",          default: 0
+    t.string   "ancestry"
   end
 
   create_table "tasks", force: true do |t|
