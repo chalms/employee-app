@@ -1,6 +1,6 @@
 class Report < ActiveRecord::Base
   include JsonSerializingModel
-  attr_accessible :summary, :date, :complete, :assigned_parts, :assigned_tasks, :completed_parts, :incomplete_tasks, :completed_tasks, :company, :complete?, :hours, :days_worked, :manager, :manager_id, :user_id, :project_id, :id, :chat_id, :client_id, :name
+  attr_accessible :summary, :date, :complete, :assigned_parts, :assigned_tasks, :completed_parts, :incomplete_tasks, :completed_tasks, :company, :complete?, :hours, :days_worked, :manager, :user_id, :project_id, :id, :chat_id, :client_id, :name
   belongs_to :user
   belongs_to :admin
   belongs_to :project
@@ -15,6 +15,7 @@ class Report < ActiveRecord::Base
   has_many :parts
   has_one :chat
   has_one :report_item
+
 
   # after_create :create_chat
   TYPES = ['UsersReportsChat', 'ReportsChat']
@@ -58,9 +59,7 @@ class Report < ActiveRecord::Base
     @manager ||= user
   end
 
-  def manager_id
-    manager.id
-  end
+
 
   def employee_reports(employee)
     users_reports.where(:user_id => employee.id)

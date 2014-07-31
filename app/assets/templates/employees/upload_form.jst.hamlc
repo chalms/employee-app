@@ -4,7 +4,7 @@
     %td Employee ID
     %td Role
 .format
-  %form{:action=>"employees/upload", :method=>"post", :enctype=>"multipart/form-data", "data-remote" => "true", :onsubmit => 'showOldForm()'}
+  %form{:action=>"employees/upload.js", :method=>"post", :enctype=>"multipart/form-data", "data-remote" => "true", :onsubmit => 'showOldForm()'}
     %input{:type => 'hidden', :name=> 'user_auth', :value => sessionStorage.auth}
     %input{:type=>"file",:name=>"file"}
     %input{:type=>"submit",:value=>"Upload"}

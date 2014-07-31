@@ -1,5 +1,7 @@
 
 Metrics::Application.routes.draw do
+  resources :items, except: [:new, :edit]
+  resources :custom_reports, except: [:new, :edit]
   resources :reports_parts, except: [:new, :edit]
   resources :contacts
   resources :companies, only: [:show, :index]
@@ -30,6 +32,7 @@ Metrics::Application.routes.draw do
   get '/employees/hours_timesheet' => 'employees#hours_timesheet', as: :employees_hours_timesheet
   post '/employees/save_data' => 'employees#save_data'
   post '/employees/upload' => 'employees#upload'
+  post '/employee_logs/delete' => 'employee_logs#delete_employee'
   post '/tasks/create' => 'tasks#create'
   post '/reports/create' => 'reports#create'
   get '/todays_reports' => 'reports#today'

@@ -54,7 +54,7 @@ class User < ActiveRecord::Base
   def destroy_me!
     reports.each { |r| r.destroy_me! } if reports
     users_reports.each {|ur| ur.destroy_me! } if users_reports
-    users_messages.destroy_all if users_messages
+    self.delete
   end
 
   def users_chats_to_json(option = nil)

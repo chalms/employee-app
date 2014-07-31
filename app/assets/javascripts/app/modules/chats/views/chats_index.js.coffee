@@ -1,4 +1,4 @@
-class Metrics.Views.ChatsIndex extends Backbone.View
+  class Metrics.Views.ChatsIndex extends Backbone.View
   el: '#chatsapp'
   template: JST['chats/index']
   events:
@@ -12,14 +12,14 @@ class Metrics.Views.ChatsIndex extends Backbone.View
   addChat: (chat) ->
     @render()
     view = new Metrics.Views.ChatsItem({ model: chat })
-    $(@el).find('#chats-index').append(view.render().el)
-    @
+    # $(@el).find('#chats-index').append(view.render().el)
+    # @
 
   render: ->
     @collection.each (chat) =>
-      view = new Metrics.Views.ChatsItem model: chat
-      $('#chats-index').append(view.render().el)
-    @
+      # view = new Metrics.Views.ChatsItem model: chat
+      # $('#chats-index').append(view.render().el)
+    # @
     console.log "rendering chats tmeplate "
     $(@el).html(@template())
     footerView = new Metrics.Views.Footer collection: @collection

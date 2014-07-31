@@ -23,13 +23,21 @@ class EmployeeCsv
     @csv.delete_at(0)
     @employee_logs = []
     @csv.each do |row|
-      hash = validate_row(row)
+      employee_log = nil
       begin
-        puts hash
-        puts "#{@user.company.employee_logs.inspect}"
-        @employee_logs << @user.company.employee_logs.create!(hash)
-      rescue Exceptions::StdError => e
-        raise Exceptions::StdError, "Error with csv contents found on line #{@row}: #{e.message}"
+        begin
+            hash = validate_row(row)
+            puts hash
+            puts "#{@user.company.employee_logs.inspect}"
+            employee_log = @user.company.employee_logs.create!(hash)
+        rescue Exceptions::StdError => e
+          raise Exceptions::StdError, "Error with csv contents found on line #{@row}: #{e.message}"
+        end
+      rescue ActiveRecord::RecordInvalid => e
+        puts e.to_s
+      end
+      if (employee_log)
+        @employee_logs << employee_log
       end
     end
   end

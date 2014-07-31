@@ -7,6 +7,6 @@
     %th Hours
     %th Days Working on #{name}
   - employees.each do |employee|
-    %tr.table-row
+    %tr.table-row{id: "#{employee.email}"}
       %td= link_to employee.name, "employees/#{employee.id}", remote: true
       = render partial: 'employees/table_row', locals: { employee: employee, options: options, type: type}

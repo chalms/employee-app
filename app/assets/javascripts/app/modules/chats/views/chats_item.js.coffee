@@ -1,4 +1,4 @@
-class Metrics.Views.ChatsItem extends Backbone.View
+  class Metrics.Views.ChatsItem extends Backbone.View
   template: JST['chats/item']
   events:
     'click a.remove-chat' : 'removeChat'
