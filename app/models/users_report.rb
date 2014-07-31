@@ -29,10 +29,13 @@ class UsersReport < ActiveRecord::Base
         chat.users_chats.create!({:user_id => employee.id})
         manager.users_chats.where({:chat_id => chat.id}).first_or_create!
         chat.users_chats.create!({:user_id => manager.id})
+      else
+        chat = chat.first
       end
     else
       update_attribute(:chat_id, chat.id)
     end
+    manager.users_chats.where(:chat_id => chat.id).first_or_create
   end
 
   def data_json
@@ -67,7 +70,8 @@ class UsersReport < ActiveRecord::Base
   end
 
   def manager
-    @manager ||= User.find(report.manager_id)
+
+    @manager ||= User.find(report.user.id)
     if (@manager.present?)
       raise Exceptions::StdError, "User report cant find manager!" if (@manager.role == 'employee')
     end

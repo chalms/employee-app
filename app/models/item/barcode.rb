@@ -1,0 +1,3 @@
+class Barcode < Item
+
+end

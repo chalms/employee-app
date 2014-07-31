@@ -1,5 +1,7 @@
 
 Metrics::Application.routes.draw do
+  resources :items, except: [:new, :edit]
+  resources :custom_reports, except: [:new, :edit]
   resources :reports_parts, except: [:new, :edit]
   resources :contacts
   resources :companies, only: [:show, :index]
@@ -20,10 +22,9 @@ Metrics::Application.routes.draw do
   resources :logins, only: [:new, :create]
   resources :signups, only: [:new, :create]
   resources :admins, only: [:show, :update]
-
   get '/login' => 'logins#new'
   get '/logout' => 'logins#logout'
-  root :to => 'signups#new'
+  root :to => 'home#show'
   get '/special_index' => 'employees#special_index'
   get '/companies/:id/employees' => 'employees#special_index'
   post '/chats/new_message' => 'chats#new_message'
@@ -31,6 +32,7 @@ Metrics::Application.routes.draw do
   get '/employees/hours_timesheet' => 'employees#hours_timesheet', as: :employees_hours_timesheet
   post '/employees/save_data' => 'employees#save_data'
   post '/employees/upload' => 'employees#upload'
+  post '/employee_logs/delete' => 'employee_logs#delete_employee'
   post '/tasks/create' => 'tasks#create'
   post '/reports/create' => 'reports#create'
   get '/todays_reports' => 'reports#today'

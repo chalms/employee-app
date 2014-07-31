@@ -12,13 +12,6 @@
 //= require backbone.wreqr
 //= require backbone.babysitter
 //= require backbone.marionette
-//= require metrics
-//= require_tree ../templates
-//= require_tree ./models
-//= require_tree ./collections
-//= require_tree ./routers
-//= require_tree ./views
-//= require_tree .
 
 
 $(document).ready(function() {
@@ -65,6 +58,7 @@ function callAjax(type, url, data ) {
     }
   });
 }
+
 
 function log(text) {
   if(window && window.console) console.log(text);
@@ -141,6 +135,26 @@ function clickedThis(str) {
   $(str).append(JST['employees/message'](vals));
   return true;
 }
+function addEmpRow() {
+  var h = {};
+  $('tr.last input').each(function () {
+    h[$(this)[0].name] = $(this)[0].value;
+    $(this)[0].text = "";
+  });
+  var p = {};
+  var q = {};
+  p['email'] = h["email"];
+  p['employee_number'] = h["employee_number"];
+  p['role'] = $('tr.last select')[0].value
+  q['log'] = p;
+  console.log(p);
+  console.log(q)
+  var next = JST['employees/task_row'](q)
+  console.log(next);
+  var last = $('tr.last');
+  console.log(last);
+  last.before($(next));
+}
 
 var menuOpen;
 
@@ -173,6 +187,28 @@ function deleteMe(report) {
   //l.closest('table').load();
 }
 // Fix safari links opening in new window
+
+function deleteRow(email) {
+  // console.log(deleting row);
+  callAjaxWithCallback('POST', 'employee_logs/delete', { email: email },function(str){
+    $(str).hide();
+  });
+}
+
+function callAjaxWithCallback(type, url, d, callback) {
+  $.ajax({
+    url: url,
+    type: type,
+    data: d,
+    dataType: 'json',
+    global: true,
+    success: function (data) {
+      var str = '#row-' + d['email'];
+      callback(str);
+      console.log("updated");
+    }
+  });
+}
 
 if(("standalone" in window.navigator) && window.navigator.standalone){
     var noddy, remotes = false;

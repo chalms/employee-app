@@ -1,4 +1,8 @@
 .block
   %h3 Links
   #chatsapp
-    = yield :javascript
+    :javascript
+      jQuery(document).ready(function() {
+         window.Metrics.init();
+         Backbone.history.start();
+      })

@@ -2,17 +2,9 @@ class ChatsController < ApplicationController
   include ActionController::MimeResponds
   def index
     @user = current_user
-    @users_chats = []
-    @user.users_chats.each do |u_c|
-      name = u_c.name
-      name = "#{u_c.name[0...10]}..." if (u_c.name.length > 13)
-      @users_chats << { :name => name, :id => u_c.id, :unread_count => u_c.unread.count }
-    end
-    @users_chats << Chat.new
-    respond_to do |format|
-      format.json { render json: @users_chats.to_json }
-      format.js
-    end
+    the_response = @user.users_chats_to_json
+    puts "#{the_response}"
+    render json: the_response
   end
 
   def show

@@ -39,6 +39,10 @@ class ReportsTasksController < ApplicationController
     @reports_task = ReportsTask.find(params[:id])
     puts "attempting to update => #{params[:reports_task]}"
     if @reports_task.update(params[:reports_task])
+      # if @reports_task.users_report
+      #   report = @reports_task.users_report
+      #   report.update_attribute(:checkin, @reports_task.updated_at)  if (!report.checkin)
+      # end
       respond_to do |format|
         format.json { render status: 200, json: @reports_task.to_json }
       end

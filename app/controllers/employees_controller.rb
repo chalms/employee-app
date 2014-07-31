@@ -100,7 +100,10 @@ class EmployeesController < ApplicationController
     @employee_logs.each do |log|
       render 'employees/log_row', :locals => {:log => log}, :formats => [:js]
     end
-    return head :ok
+    @data = { :employee_logs => @employee_logs}
+    respond_to do |format|
+      format.js { render :form }
+    end
   end
 
   def upload_form

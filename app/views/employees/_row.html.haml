@@ -12,5 +12,6 @@
     %td
       %h5.h5{:id => employee_role_id}= log.role
     %td
-      %h5.h5= link_to "X", employee_log_path({id: email}), :method => 'delete', remote: true, :onclick => "destroy_row('#{log.email}')"
+      %h5.h5
+      %button{:onclick => "deleteRow(#{email});"} X
     = render partial: 'employees/logs_script', :locals => {:email_id => email_id, :employee_number_id => employee_number_id, :employee_role_id => employee_role_id }

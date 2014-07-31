@@ -9,15 +9,12 @@
   %body
     #container
       #header
-        %h1
+        %h1.h1
           %a{:href => "/"} TimeCard
         #user-navigation
           = yield :user_nav
         #main-navigation
           = yield :main_nav
-      #wrapper.wat-cf
-        %ul.navigation#chats
-          %li{:hidden => ""}
         #main
           #my-flash
           .flash

@@ -1,45 +1,28 @@
-.form#employees-logs-form
-  %h5
-    %a{onclick: 'uploadForm()'} Came prepared? Upload a CSV instead
-  %form{ :method => 'post', action: 'employees/save_data.js', 'accept-charset' => "UTF-8", :class => "update_employee_logs", 'data-remote' => "true", 'id' => "update_employee_logs"}
-    %table.table
-      %tbody
-        %tr
-          %th Email
-          %th Employee ID
-          %th Role
-          %th="  "
-        .employee-logs
-          - if (employee_logs)
-            - employee_logs.each do |log|
-              %tr
-                = render partial: 'employees/row', locals: { log: log }
-            %tr.last
-              %td
-                %input.text_field{:type => "text", :name => "email", :placeholder => "employee@email.com" }
-              %td
-                %input.text_field{:type => "text", :name => "employee_number", :placeholder => "employee number" }
-              %td
-                %select{:type => "select", :name => "role"}
-                  %option Admin
-                  %option Manager
-                  %option Employee
-              %td
-                %input.submit_field.form-control{:type => "submit", :name => "submit", :onclick => 'return addEmpRow();'}
--# javascript:
--#   addEmpRow = function () {
--#     var k = $('.form#employees-logs-form');
--#     var h = {};
--#     k.find('input').each(function () {
--#       h[$(this)[0].name] = $(this)[0].value;
--#       $(this)[0].text = "";
--#     }
--#     var p = {};
--#     p["email"] = h["email"];
--#     p["employee_number"] = h["employee_number"];
--#     p["role"] =  k.find('select')[0].value
--#     var next = $("#{render :partial => 'employees/row', locals: { log: p }}");
--#     var last = k.find('tr').last();
--#     last.before(next);
--#   }
-
+%h5
+  %a{onclick: 'uploadForm()'} Came prepared? Upload a CSV instead
+%table.table
+  %tbody
+    %tr
+      %th Email
+      %th Employee ID
+      %th Role
+      %th="  "
+    .employee-logs
+      - if (employee_logs)
+        - employee_logs.each do |log|
+          %tr{id: "#row-#{log.email}"}
+            = render partial: 'employees/row', locals: { log: log }
+      .form#employees-logs-form
+        %form{ :method => 'post', action: 'employees/save_data.js', 'accept-charset' => "UTF-8", :class => "update_employee_logs", 'data-remote' => "true", 'id' => "update_employee_logs"}
+          %tr.last
+            %td
+              %input.text_field{:type => "text", :name => "email", :placeholder => "employee@email.com" }
+            %td
+              %input.text_field{:type => "text", :name => "employee_number", :placeholder => "employee number" }
+            %td
+              %select{:type => "select", :name => "role"}
+                %option Admin
+                %option Manager
+                %option Employee
+            %td
+              %input.submit_field.form-control{:type => "submit", :name => "submit", :onclick => 'return addEmpRow();'}

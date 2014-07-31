@@ -10,3 +10,9 @@
           %tr
             %h4{:style => "color: blue"}= m.text
   = render partial: 'chats/form', :locals => { id: id, div:  "#users-chat-#{id}"}
+
+  $(document).ready(function(){
+    if (Backbone.History.started == false) {
+      window.Metrics.init();
+    }
+  });
