@@ -1,0 +1,7 @@
+%table.table{:style => "margin-top: 10px; padding-top: 0px;"}
+  %h3{:style=> "text-align: center;"}= "#{@project.name}"
+  %tr#projects-nav
+    %td.active= link_to "Summary", project_summary_path({:data => {:div => '#projects-template'}, :project_id => project.id}), :remote => :true, :class => 'linkster'
+    %td= link_to "Reports", reports_path({:data => {:reports => 'date', :options => {:project_id => @project.id}, :div => '#projects-template'}}), :remote => :true, :class => 'linkster'
+    %td= link_to "Employees", employees_path({:data => {:employees => 'name', :name => project.name, :options => {:project_id => project.id, :type => 'Employee'}, :div => '#projects-template'}}), :remote => true, :class => 'linkster'
+    = render partial: 'projects/jscript'

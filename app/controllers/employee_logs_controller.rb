@@ -12,6 +12,7 @@ class EmployeeLogsController < ApplicationController
       @employee_log = employee_log.update_attributes!(params)
       unless (!!@user)
         @user = User.create!(employee_log)
+        UserMailer.welcome_email(@user).deliver
       end
       @user.update_attributes!(params)
       return head :no_content

@@ -14,6 +14,7 @@ Metrics::Application.routes.draw do
   resources :reports
   resources :employee_logs
   resources :clients
+  resources :charges
   resources :projects do
     get 'summary'
   end
