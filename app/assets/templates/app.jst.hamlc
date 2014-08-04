@@ -1,0 +1,8 @@
+#container
+  #header
+    %h1.h1
+      %a{:href => "/"} TimeCard
+    #navbar
+  #my-flash
+  #main
+  #sidebar

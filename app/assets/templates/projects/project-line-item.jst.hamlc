@@ -1,0 +1,6 @@
+%tr
+  %td{name: "/projects/#{project.id}"}= project.name
+  %td= project.start_date
+  %td= project.end_date
+  %td= project.tasks_completion_percent
+  %td= project.hours

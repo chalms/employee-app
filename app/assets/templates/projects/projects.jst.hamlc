@@ -1,0 +1,12 @@
+.new-well
+  %h2.title
+    = "#{@company_name} Projects"
+  .inner
+    %table.table.table-hover
+      %tr
+        %th Name
+        %th Start Date
+        %th End Date
+        %th % Complete
+        %th Hours
+      #projects

@@ -12,6 +12,7 @@
 //= require backbone.wreqr
 //= require backbone.babysitter
 //= require backbone.marionette
+//= require app/app
 
 
 $(document).ready(function() {

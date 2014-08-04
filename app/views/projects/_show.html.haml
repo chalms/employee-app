@@ -8,3 +8,7 @@
       = render partial: 'projects/jscript'
   #projects-template
     = render partial: 'projects/summary', :locals => {:project => project}
+    :javascript
+      jQuery(document).ready(function() {
+        Web.start()
+      })
