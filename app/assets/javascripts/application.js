@@ -100,7 +100,7 @@ $(document).ready(function() {
 function projectPage(){
    console.log(history.getHistory() + '/projects');
    $.ajax({
-    url: '/admins/1/projects',
+    url: '/projects',
     type: type,
     data: data,
     dataType: 'js',
@@ -227,28 +227,29 @@ function addEmpRow() {
     h[$(this)[0].name] = $(this)[0].value;
     $(this)[0].text = "";
     var f = true;
-    var p = null;
+    var n = $(this);
     while (f) {
-      if (($(this).parent() !== undefined) && ($(this).parent() !== null)) {
-        if ($(this).parent().is('tr')) {
-          h['id'] = $(this).parent().attr('id')
+      if ((n.parent() !== undefined) && (n.parent() !== null)) {
+        if (n.parent().is('tr')) {
+          h["id"] = n.parent().attr('id')
           f = false;
         };
       } else {
         f = false;
       }
+      n = n.parent();
     }
-  }
+  });
 
   var p = {};
   p["email"] = h["email"];
   p["employee_number"] = h["employee_number"];
-  p["role"] =  k.find('select')[0].value
+  p["type"] =  k.find('select')[0].value;
   if ("id" in h) {
      p["id"] = h["id"];
   }
-
-  var next = JST['employees/row'](log: p);
+  var logPath = '/employees/' + p["id"];
+  var next = JST['employees/row'](p);
   var last = k.find('tr').last();
   last.before(next);
 }
@@ -290,6 +291,75 @@ function deleteMe(report) {
   console.log(l);
   l.hide();
   //l.closest('table').load();
+}
+
+function makeAllEditable(logID) {
+  console.log(logID);
+  console.log("MAKE ALL EDITABle");
+
+  var emailID = "h5[id='employee-log-email-" + logID + "']";
+  var empNumID = "h5[id='employee-log-employee-number-" + logID + "']";
+  var empRoleID = "h5[id='employee-log-role-" + logID + "']";
+
+  $(emailID).editable({
+      closeOnEnter : true, // Whether or not pressing the enter key should close the editor (default false)
+      event : 'click', // The event that triggers the editor (default dblclick)
+      emptyMessage : 'Employee Email', // HTML that will be added to the editable element in case it gets empty (default false)
+      callback : function( data ) {
+        console.log(data);
+        if( data.content ) {
+          var el = data.$el;
+          var id = logID;
+          var hash = {};
+          hash["employee_log"] = {}
+          hash["employee_log"]["email"] = data.content;
+          var str =  "employee_log/" + id + "/update.json";
+          callAjax('post', str, hash)
+        }
+        if( data.fontSize ) {
+            // the font size has changed
+        }
+          // data.$el gives you a reference to the element that was edited
+      }
+  });
+
+  $(empNumID).editable({
+      closeOnEnter : true, // Whether or not pressing the enter key should close the editor (default false)
+      event : 'click', // The event that triggers the editor (default dblclick)
+      emptyMessage : 'Employee Number', // HTML that will be added to the editable element in case it gets empty (default false)
+      callback : function( data ) {
+          console.log(data);
+          if( data.content ) {
+            var el = data.$el;
+            var id = logID;
+            var hash = {};
+            hash["employee_log"] = {}
+            hash["employee_log"]["employee_number"] = data.content;
+            var str =  "employee_log/" + id + "/update.json";
+            callAjax('post', str, hash);
+          }
+          if( data.fontSize ) { }
+      }
+  });
+
+  $(empRoleID).editable({
+      closeOnEnter : true, // Whether or not pressing the enter key should close the editor (default false)
+      event : 'click', // The event that triggers the editor (default dblclick)
+      emptyMessage : 'Employee Email', // HTML that will be added to the editable element in case it gets empty (default false)
+      callback : function( data ) {
+          if( data.content ) {
+            console.log(data);
+            var el = data.$el;
+            var id = logID;
+            var hash = {};
+            hash["employee_log"] = {}
+            hash["employee_log"]["employee_role"] = data.content;
+            var str =  "employee_log/" + id + "/update.json";
+            callAjax('post', str, hash)
+          }
+          if( data.fontSize ) { }
+      }
+  });
 }
 // Fix safari links opening in new window
 

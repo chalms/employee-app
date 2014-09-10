@@ -5,8 +5,9 @@
         - if log.email then log_id = log.email else log_id = null
         - if log.email then email = log.email else email = null
         - if log_id then email_id = "employee-log-email-#{log_id}" else email_id = null
-        - if log_id then employee_number_id = "employee-log-employee-number-#{log_id}" else log_id = null
-        - if log_id then employee_role_id = "employee-log-role-#{log_id}" else null
+        - if log_id then employee_number_id = "employee-log-employee-number-#{log_id}" else employee_number_id = null
+        - if log_id then employee_role_id = "employee-log-role-#{log_id}" else employee_role_id = null
+        - if log_id then destroy_row_path = 'destroyRow("#{log.id}");' else destroy_row_path = 'destroyRow("#{email}");'
         %td
           %h5{:id => email_id}= log.email
         %td
@@ -14,15 +15,15 @@
         %td
           %h5{:id => employee_role_id}= log.role
         %td
-          %h5= link_to "X", employee_log_path({id: log.id}), :method => 'delete', remote: true, :onclick => "destroyRow('#{log.id}');"
+          %a{:href => "X", :onclick => 'destroyRow("#{path}");'}
   - else
     %tr
       - if (log.email)
         - if log.email then log_id = log.email else log_id = null
         - if log.email then email = log.email else email = null
         - if log_id then email_id = "employee-log-email-#{log_id}" else email_id = null
-        - if log_id then employee_number_id = "employee-log-employee-number-#{log_id}" else log_id = null
-        - if log_id then employee_role_id = "employee-log-role-#{log_id}" else null
+        - if log_id then employee_number_id = "employee-log-employee-number-#{log_id}" else employee_number_id = null
+        - if log_id then employee_role_id = "employee-log-role-#{log_id}" else employee_role_id = null
         %td
           %h5{:id => email_id}= log.email
         %td
@@ -31,59 +32,60 @@
           %h5{:id => employee_role_id}= log.role
         %td
 
-:javascript
-  $("##{email_id}").editable({
-      closeOnEnter : true, // Whether or not pressing the enter key should close the editor (default false)
-      event : 'click', // The event that triggers the editor (default dblclick)
-      emptyMessage : 'Employee Email', // HTML that will be added to the editable element in case it gets empty (default false)
-      callback : function( data ) {
-          if( data.content ) {
-            var el = data.$el;
-            var id = el.attr.id();
-            var hash = {};
-            hash["employee_log"] = {}
-            hash["employee_log"]["email"] = data.content;
-            var str =  "employee_log/" + id + "/update.json";
-            callAjax('post', str, hash)
-          }
-          if( data.fontSize ) {
-              // the font size has changed
-          }
-          // data.$el gives you a reference to the element that was edited
-      }
-  });
-  $("##{employee_number_id}").editable({
-      closeOnEnter : true, // Whether or not pressing the enter key should close the editor (default false)
-      event : 'click', // The event that triggers the editor (default dblclick)
-      emptyMessage : 'Employee Number', // HTML that will be added to the editable element in case it gets empty (default false)
-      callback : function( data ) {
-          if( data.content ) {
-            var el = data.$el;
-            var id = el.attr.id();
-            var hash = {};
-            hash["employee_log"] = {}
-            hash["employee_log"]["employee_number"] = data.content;
-            var str =  "employee_log/" + id + "/update.json";
-            callAjax('post', str, hash)
-          }
-          if( data.fontSize ) { }
-      }
-  });
+  :javascript
+    makeAllEditable("#{log_id}");
+    -# $("##{email_id}").editable({
+    -#     closeOnEnter : true, // Whether or not pressing the enter key should close the editor (default false)
+    -#     event : 'click', // The event that triggers the editor (default dblclick)
+    -#     emptyMessage : 'Employee Email', // HTML that will be added to the editable element in case it gets empty (default false)
+    -#     callback : function( data ) {
+    -#         if( data.content ) {
+    -#           var el = data.$el;
+    -#           var id = el.attr.id();
+    -#           var hash = {};
+    -#           hash["employee_log"] = {}
+    -#           hash["employee_log"]["email"] = data.content;
+    -#           var str =  "employee_log/" + id + "/update.json";
+    -#           callAjax('post', str, hash)
+    -#         }
+    -#         if( data.fontSize ) {
+    -#             // the font size has changed
+    -#         }
+    -#         // data.$el gives you a reference to the element that was edited
+    -#     }
+    -# });
+    -# $("##{employee_number_id}").editable({
+    -#     closeOnEnter : true, // Whether or not pressing the enter key should close the editor (default false)
+    -#     event : 'click', // The event that triggers the editor (default dblclick)
+    -#     emptyMessage : 'Employee Number', // HTML that will be added to the editable element in case it gets empty (default false)
+    -#     callback : function( data ) {
+    -#         if( data.content ) {
+    -#           var el = data.$el;
+    -#           var id = el.attr.id();
+    -#           var hash = {};
+    -#           hash["employee_log"] = {}
+    -#           hash["employee_log"]["employee_number"] = data.content;
+    -#           var str =  "employee_log/" + id + "/update.json";
+    -#           callAjax('post', str, hash)
+    -#         }
+    -#         if( data.fontSize ) { }
+    -#     }
+    -# });
 
-  $("##{employee_role_id}").editable({
-      closeOnEnter : true, // Whether or not pressing the enter key should close the editor (default false)
-      event : 'click', // The event that triggers the editor (default dblclick)
-      emptyMessage : 'Employee Email', // HTML that will be added to the editable element in case it gets empty (default false)
-      callback : function( data ) {
-          if( data.content ) {
-            var el = data.$el;
-            var id = el.attr.id();
-            var hash = {};
-            hash["employee_log"] = {}
-            hash["employee_log"]["employee_role"] = data.content;
-            var str =  "employee_log/" + id + "/update.json";
-            callAjax('post', str, hash)
-          }
-          if( data.fontSize ) { }
-      }
-  });
+    -# $("##{employee_role_id}").editable({
+    -#     closeOnEnter : true, // Whether or not pressing the enter key should close the editor (default false)
+    -#     event : 'click', // The event that triggers the editor (default dblclick)
+    -#     emptyMessage : 'Employee Email', // HTML that will be added to the editable element in case it gets empty (default false)
+    -#     callback : function( data ) {
+    -#         if( data.content ) {
+    -#           var el = data.$el;
+    -#           var id = el.attr.id();
+    -#           var hash = {};
+    -#           hash["employee_log"] = {}
+    -#           hash["employee_log"]["employee_role"] = data.content;
+    -#           var str =  "employee_log/" + id + "/update.json";
+    -#           callAjax('post', str, hash)
+    -#         }
+    -#         if( data.fontSize ) { }
+    -#     }
+    -# });

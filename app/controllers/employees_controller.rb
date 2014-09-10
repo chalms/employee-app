@@ -136,7 +136,9 @@ class EmployeesController < ApplicationController
       employee = nil
       user = nil
     else
+      hash[:role] = params[:role].downcase
       EmployeeLog.create!(hash)
+      hash[:role] = nil
       hash[:type] = params[:role].downcase
       if (hash[:type] == "companyadmin" || hash[:type] == "admin" )
         Admin.create!(hash)

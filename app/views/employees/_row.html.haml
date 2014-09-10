@@ -13,4 +13,5 @@
       %h5{:id => employee_role_id}= log.role
     %td
       %h5= link_to "X", employee_log_path({id: log.id}), :method => 'delete', remote: true, :onclick => "destroyRow('#{log.id}');"
-    = render partial: 'employees/logs_script', :locals => {:email_id => email_id, :employee_number_id => employee_number_id, :employee_role_id => employee_role_id }
+    :javascript
+      makeAllEditable("#{log_id}");

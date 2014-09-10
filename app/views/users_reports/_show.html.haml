@@ -11,7 +11,7 @@
 %table.table.u-table{:class => table_wrapper, id: table_id}
   %tr
     %td
-      %h4= link_to "#{users_report.employee.name}", chats_path(users_report.chat), :remote => true
+      %h4= link_to "#{users_report.employee.get_name}", chats_path(users_report.chat), :remote => true
     %td
       %h4.h4 Total Hours: #{hours}
     %td
