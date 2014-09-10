@@ -4,7 +4,7 @@
 %h5{:hidden => upload}= link_to "Or, Upload a Csv instead: ", 'tasks/upload_form', :div => '#tasks-form', :remote => true
 %tr
   .form
-    %form{'accept-charset' => "UTF-8", :class => "new_task", 'action'=>'tasks/create.js', 'data-remote' => "true", 'id' => "new_task-#{owner_idd}", 'method'=>"post"}
+    %form{'accept-charset' => "UTF-8", :class => "new_task", 'action'=>'/tasks/create.js', 'data-remote' => "true", 'id' => "new_task-#{owner_idd}", 'method'=>"post"}
       %input{:type => 'hidden', :value => div, :name => 'div'}
       = render partial: 'tasks/embedded_form', locals: { owner: owner, owner_id: owner_idd, employees: employees, :options => options, :div => "#new_task-#{owner_idd}" }
       %input{:type => 'hidden', :name => 'submit'}

@@ -2,6 +2,8 @@ class AdminsController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
+    puts params.to_s
+    @token = params[:token]
     @user = Admin.all.find(params[:id])
     is_admin!
     respond_to do |format|

@@ -25,12 +25,13 @@ class LoginsController < ApplicationController
       set_token!
       @route = route!
       puts "LoginsController [@user.inspect]: #{@user.inspect}"
-      respond_to do |format|
-        format.html{ render @route }
-        format.json{ render json: @route }
-        format.js
-      end
-      return
+      # respond_to do |format|
+      #   puts format.to_s
+      #   format.html{ render @route }
+      #   format.json{ render json: @route }
+      #   format.js
+      # end
+      return redirect_to admin_path(:id => @user.id, :token => @token)
     rescue Exceptions::StdError => e
       puts e
       flash[:error] = e
@@ -42,7 +43,7 @@ class LoginsController < ApplicationController
   def logout
     @user = current_user
     current_api_session_token.delete!
-    render :new
+    redirect_to('/')
   end
 
   private

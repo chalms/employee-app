@@ -1,1 +1,2 @@
+switchSidebar('#projects')
 $('#display').prepend('<%= escape_javascript(render partial: 'projects/index', locals => {user: @user}) %>');

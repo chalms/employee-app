@@ -1,15 +1,16 @@
-- content_for :user_nav, render(:partial => 'signups/user_nav')
-.page-header
-  %h1.h1 TimeCard
-  %h3 Give your business a 'start-up' edge
-.block.bounded
-  - if (flash[:error])
-    .error-message
-      %h3=flash[:error]
-  %div.signup
-    = render partial: 'sign_up_form', :locals => {:companies => @signup.companies}
-:javascript
-  function makeWhite() {
-    $('body').css("background","white");
-  }
-  makeWhite();
+.ui-wrapper
+  - content_for :user_nav, render(:partial => 'signups/user_nav')
+  .page-header
+    %h1.h1 TimeCard
+    %h3 Give your business a 'start-up' edge
+  .block.bounded
+    - if (flash[:error])
+      .error-message
+        %h3=flash[:error]
+    %div.signup
+      = render partial: 'sign_up_form', :locals => {:companies => @signup.companies}
+  :javascript
+    function makeWhite() {
+      $('body').css("background","white");
+    }
+    makeWhite();

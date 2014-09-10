@@ -16,14 +16,13 @@
         #main-navigation
           = yield :main_nav
       #wrapper.wat-cf
-        %ul.navigation#chats
-          %li{:hidden => ""}
         #main
-          #my-flash
-          .flash
+          #my-flash.flash
             - flash.each do |type, message|
               %div{:class => "message #{type}"}
                 %p= message
-          = yield
-        #sidebar
-          = yield :sidebar
+          #app
+            = yield
+        - if (@user)
+          #sidebar-wrapper
+            = yield :sidebar

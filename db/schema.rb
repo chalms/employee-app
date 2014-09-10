@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140723061401) do
+ActiveRecord::Schema.define(version: 20140910084951) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,6 +70,18 @@ ActiveRecord::Schema.define(version: 20140723061401) do
     t.string  "email"
   end
 
+  create_table "items", force: true do |t|
+    t.string   "ancestry"
+    t.string   "type"
+    t.string   "data"
+    t.string   "name"
+    t.boolean  "complete"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "items", ["ancestry"], name: "index_items_on_ancestry", using: :btree
+
   create_table "locations", force: true do |t|
     t.string   "address"
     t.string   "city"
@@ -79,6 +91,9 @@ ActiveRecord::Schema.define(version: 20140723061401) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "client_id"
+    t.float    "longitude"
+    t.float    "latitude"
+    t.integer  "users_reports_id"
   end
 
   create_table "locations_reports", force: true do |t|
@@ -162,6 +177,11 @@ ActiveRecord::Schema.define(version: 20140723061401) do
     t.string  "name"
   end
 
+  create_table "reports_items", force: true do |t|
+    t.integer "report_id"
+    t.integer "item_id"
+  end
+
   create_table "reports_parts", force: true do |t|
     t.boolean  "complete"
     t.boolean  "false"
@@ -217,6 +237,11 @@ ActiveRecord::Schema.define(version: 20140723061401) do
   end
 
   add_index "users_chats", ["user_id", "chat_id"], name: "index_users_chats_on_user_id_and_chat_id", using: :btree
+
+  create_table "users_items", force: true do |t|
+    t.integer "user_id"
+    t.integer "item_id"
+  end
 
   create_table "users_messages", force: true do |t|
     t.integer "users_chat_id"

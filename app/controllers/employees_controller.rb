@@ -111,13 +111,21 @@ class EmployeesController < ApplicationController
     end
   end
 
+  def clean_params(params)
+    h = {}
+    h[:company_id] = @user.company.id
+    h[:employee_number] = params[:employee_number].gsub('/\s+/', "")
+    h[:email] = params[:email].gsub('/\s+/',"")
+    return h
+  end
+
+
   def save_data
     @user = current_user
-    hash = params
-    hash[:company_id] = @user.company.id
-    emp_num = hash[:employee_number].gsub('/\s+/', "")
-    employee = EmployeeLog.find_by_employee_number(emp_num)
-    employee ||= EmployeeLog.find_by_email(hash[:email].gsub('/\s+/',""))
+    hash = clean_params(params)
+    employee = EmployeeLog.find_by_employee_number(hash[:employee_number])
+    employee ||= EmployeeLog.find_by_email(hash[:email])
+
     if (employee)
       user = User.find_by_email(employee.email)
       user ||= User.find_by_employee_number(employee.employee_number)
@@ -129,9 +137,16 @@ class EmployeesController < ApplicationController
       user = nil
     else
       EmployeeLog.create!(hash)
-      User.create!(hash)
+      hash[:type] = params[:role].downcase
+      if (hash[:type] == "companyadmin" || hash[:type] == "admin" )
+        Admin.create!(hash)
+      elsif (hash[:type] == "manager")
+        Manager.create!(hash)
+      else
+        Employee.create!(hash)
+      end
     end
-    render :nothing => true
+    return head :ok
   rescue Exceptions::StdError => e
     @error_message = "Logs could not be saved due to error: #{e.message}"
     flash[:error] = @error_message

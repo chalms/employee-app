@@ -22,15 +22,23 @@ class EmployeeLogsController < ApplicationController
 
   def destroy
     @user = current_user
-    raise Exceptions::StdError, "Unauthorized" if (@user.role.downcase != 'admin')
+    raise Exceptions::StdError, "Unauthorized" if (@user.role.downcase != 'admin' && @user.role.downcase != 'companyadmin' )
+
     puts "params => #{params.inspect}"
-    employee_log = EmployeeLog.find_by_email(params[:id])
-    user = User.find_by_email(employee_log.email)
-    user ||= User.find_by_employee_number(employee_log.employee_number)
-    employee_log.destroy
-    user.destroy_me!
+    employee_log = EmployeeLog.find(params[:id])
+    if (employee_log.present?)
+      user = User.find_by_email(employee_log.email)
+      user ||= User.find_by_employee_number(employee_log.employee_number)
+
+      employee_log.destroy
+      if (user.present?)
+        user.destroy_me!
+      end
+    end
+
     return head :no_content
   rescue Exceptions::StdError => e
+    puts e.to_s
     head 500
   end
 end

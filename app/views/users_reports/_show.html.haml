@@ -6,6 +6,8 @@
 - checkout = (users_report.checkout) ? users_report.checkout : '--'
 - checkout_class = (users_report.checkout) ? '.red' : '.green'
 - hours = (users_report.hours) ? users_report.hours : '--'
+- map_id = (u_rep_id) ? "map-#{u_rep_id}" : '--'
+
 %table.table.u-table{:class => table_wrapper, id: table_id}
   %tr
     %td
@@ -20,6 +22,11 @@
     %td
       %h4.h4= "Checkout: #{checkout}"
     %td
+  - if (users_report.checkin_location.andand.longitude.present? && users_report.checkin_location.andand.latitude.present? )
+    %tr
+      %td{"colspan" => 3, id: map_id}
+        :javascript
+          $('##{map_id}').html(JST['/map'](long: users_report.checkin_location.longitude, lat: users_report.checkin_location.latitude))
   %tr
     %td{"colspan" => 3}
       %h4.h4.span

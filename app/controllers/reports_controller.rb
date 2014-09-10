@@ -135,6 +135,7 @@ class ReportsController < ApplicationController
   private
 
   def build_new_report!(params)
+
     data = {}
     if params[:options]
       data[:project_id] = params[:options][:project_id] if params[:options][:project_id]
@@ -146,7 +147,10 @@ class ReportsController < ApplicationController
     return @user.reports.create!(data)
   end
   def validate_user_role!
-    raise Exceptions::StdError, "Invalid permission to access" if (@user.role.downcase == 'employee')
+    if (@user.present?)
+
+      raise Exceptions::StdError, "Invalid permission to access" if (@user.role.downcase == 'employee')
+    end
   end
 
 end

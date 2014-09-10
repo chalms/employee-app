@@ -21,8 +21,8 @@ Metrics::Application.routes.draw do
   resources :signups, only: [:new, :create]
   resources :admins, only: [:show, :update]
 
-  get '/login' => 'logins#new'
-  get '/logout' => 'logins#logout'
+  get '/login' => 'logins#new', as: :home
+  get '/logout' => 'logins#logout', as: :logout
   root :to => 'signups#new'
   get '/special_index' => 'employees#special_index'
   get '/companies/:id/employees' => 'employees#special_index'
@@ -86,7 +86,7 @@ Metrics::Application.routes.draw do
         resources :chats,  only: [:create, :index]
     end
 
-    root :to => 'users#new', :as => :new
+    # root :to => 'users#new', :as => :new
   end
 
   #   get '/signout' => 'login#signout'

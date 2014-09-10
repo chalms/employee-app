@@ -450,7 +450,6 @@ jQuery.extend({
 				if ( i in arr && arr[ i ] === elem ) {
 					return i;
 				}
-			}
 		}
 
 		return -1;

@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
     @data = { :error => e, :div => '#my-flash'}
     respond_to do |format|
       format.js { render 'layouts/flash_error' }
-      format.html { render partial: 'layouts/flash_error', locals: @data }
+      format.html { render 'logins/new', locals: @data }
     end
     return
   rescue Exceptions::StdError => e

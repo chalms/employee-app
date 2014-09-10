@@ -6,6 +6,7 @@
 //= require json2
 //= require underscore
 //= require jquery.jeditable
+//= require jquery.boxfit
 //= require bootstrap
 //= require bootstrap-datepicker
 //= require backbone
@@ -22,6 +23,7 @@
 
 
 $(document).ready(function() {
+
  // window.Metrics.init();
   $( document ).ajaxSend(function(elem, xhr, options) {
     console.log("before send");
@@ -50,7 +52,85 @@ $(document).ready(function() {
     }
     return true;
   });
+
+   var $body = $('body'); //Cache this for performance
+
+      var setBodyScale = function() {
+          var scaleSource = $body.width(),
+              scaleFactor = 0.35,
+              maxScale = 125;
+              minScale = 5; //Tweak these values to taste
+
+          var fontSize = scaleSource * scaleFactor; //Multiply the width of the body by the scaling factor:
+
+          if (fontSize > maxScale) fontSize = maxScale;
+          if (fontSize < minScale) fontSize = minScale; //Enforce the minimum and maximums
+
+          $('body').css('font-size', fontSize + '%');
+      }
+
+      $(window).resize(function(){
+          setBodyScale();
+      });
+
+      //Fire it when the page first loads:
+      setBodyScale();
+    var DELAY = 700, clicks = 0, timer = null;
+    $(function(){
+      $("#sidebar-wrapper").on("click", function(e){
+          clicks++;  //count clicks
+          if(clicks === 1) {
+              timer = setTimeout(function() {
+                   //single slick action
+                  clicks = 0;             //after action performed, reset counter
+              }, DELAY);
+          } else {
+              clearTimeout(timer);
+              $("#wrapper").toggleClass("toggled");
+              clicks = 0;             //after action performed, reset counter
+          }
+      })
+      .on("dblclick", function(e){
+          e.preventDefault();  //cancel system double-click event
+      });
+    });
 });
+
+
+function projectPage(){
+   console.log(history.getHistory() + '/projects');
+   $.ajax({
+    url: '/admins/1/projects',
+    type: type,
+    data: data,
+    dataType: 'js',
+    global: true,
+    success: function (data) {
+      console.log("updated!!!!!!");
+    }
+  });
+}
+
+
+function switchSidebar(newPage) {
+  var activeTarget = null;
+  var done;
+    console.log(newPage)
+  $('#sidebar ul.sidebar-nav li.sidebar-brand a').each(function (target) {
+    if (target.hasClass('active')) activeTarget = target;
+    if ( target.attr('href') === newPage)  {
+      target.addClass('active');
+      history.setHistory(newPage);
+      if (activeTarget !== null) {
+        activeTarget.removeClass('active')
+      }
+      target.removeClass('active')
+    }
+  });
+
+  projectPage();
+}
+
 
 
 function callAjax(type, url, data ) {
@@ -114,6 +194,12 @@ function removeView() {
   return true;
 }
 
+function destroyRow(rowId) {
+  console.log(rowId);
+  var str = "#emp-row-" + rowId;
+  $(str).remove();
+}
+
 function onSubmit() {
 console.log('onSubmit');
   var b1 = $("input.task-description-text.text_field").is(':focus');
@@ -132,6 +218,39 @@ function renderMessage() {
   attrs = $.closest('.render-message').attributes;
   console.log(attrs);
   JST['employees/messages'](attrs)
+}
+
+function addEmpRow() {
+  var k = $('.form#employees-logs-form');
+  var h = {};
+  k.find('input').each(function () {
+    h[$(this)[0].name] = $(this)[0].value;
+    $(this)[0].text = "";
+    var f = true;
+    var p = null;
+    while (f) {
+      if (($(this).parent() !== undefined) && ($(this).parent() !== null)) {
+        if ($(this).parent().is('tr')) {
+          h['id'] = $(this).parent().attr('id')
+          f = false;
+        };
+      } else {
+        f = false;
+      }
+    }
+  }
+
+  var p = {};
+  p["email"] = h["email"];
+  p["employee_number"] = h["employee_number"];
+  p["role"] =  k.find('select')[0].value
+  if ("id" in h) {
+     p["id"] = h["id"];
+  }
+
+  var next = JST['employees/row'](log: p);
+  var last = k.find('tr').last();
+  last.before(next);
 }
 
 function clickedThis(str) {

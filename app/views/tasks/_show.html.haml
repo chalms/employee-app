@@ -10,7 +10,7 @@
   %td= task.note
   %td
     .form
-      %form{'accept-charset' => "UTF-8", :class => "#{new_task_id_name}", :action=>"reports_tasks/#{new_task_id_name}.json", 'data-remote' => "true", :method=>"delete", :onsubmit => "return greeting('##{new_task_id_name}')" }
+      %form{'accept-charset' => "UTF-8", :class => "#{new_task_id_name}", :action=>"/reports_tasks/#{new_task_id_name}.json", 'data-remote' => "true", :method=>"delete", :onsubmit => "return greeting('##{new_task_id_name}')" }
         %input{'type' => :hidden, :name => 'id', :value => new_task_id_name}
         %input.btn.btn-danger{:type => 'submit', :id => "#{new_task_id_name}", :name => 'submit', :value => 'X' }
 
