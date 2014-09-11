@@ -27,14 +27,11 @@ class EmployeesController < ApplicationController
     @data = params[:data]
     @div = @data.delete(:div)
     type = @data[:options].delete(:type)
-
-
     if @data[:options][:project_id].present?
       if type != 'Employee'
         q1 = User.joins(:reports).where(reports: @data[:options], user: { type: ('Manager' || 'Admin')} ).uniq!
         puts q1.inspect
         @data[:employees] = q1
-
       else
         q2 = User.joins(users_reports: [:user, :report]).where(reports: @data[:options], users: { type: 'Employee'} ).uniq!
         puts q2.inspect
@@ -169,6 +166,7 @@ class EmployeesController < ApplicationController
   end
 
   def manager_or_admin!
+    puts @user.inspect
     raise Exceptions::StdError, "User is an employee" if (@user.role.downcase == 'employee')
   end
 

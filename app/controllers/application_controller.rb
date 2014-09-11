@@ -30,6 +30,12 @@ class ApplicationController < ActionController::Base
 
   def current_user(tok = nil)
     raise Exceptions::StdError, "No current user" unless (_authorization_header(tok) && current_api_session_token(tok).valid?)
+    if (_authorization_header(tok))
+      puts "authorization header"
+    end
+    if (current_api_session_token(tok).valid?)
+      puts "current_api_session_token => #{current_api_session_token.inspect}"
+    end
     return current_api_session_token.user
   end
 

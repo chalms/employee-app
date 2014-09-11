@@ -1,4 +1,5 @@
 :plain
+  console.log("show.js.haml called");
   var appearance = $("#{escape_javascript(render(:partial => 'projects/show', :locals => { project: @project } ))}");
   $("#hidden").innerHtml = $("#sector").html();
   $("#sector").html(appearance);

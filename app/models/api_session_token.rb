@@ -3,14 +3,18 @@ class ApiSessionToken
   include ActiveModel::Serialization
   include JsonSerializingModel
 
+  PRINT = true
+
   TTL = 20.minutes
 
   def initialize(existing_token=nil, redis=_redis_connection)
     puts "existing token: #{existing_token}"
     @token = existing_token
     @redis = redis
-
+    puts "The token is: #{@token}"
+    puts "Redis is: #{@redis}"
     unless expired?
+      puts "Expired called"
       self.last_seen = Time.now
     end
   end
@@ -42,7 +46,6 @@ class ApiSessionToken
       puts "expired"
       return
     end
-
     @user ||= _retrieve_user
   end
 
@@ -92,7 +95,8 @@ class ApiSessionToken
   end
 
   def _retrieve_user
-    puts "retreiving user"
+    puts "retreiving user => _user_id_key => #{_user_id_key}"
+    puts @redis.inspect
     user_id = @redis[_user_id_key]
     puts "redis user id #{user_id}"
     User.find(user_id) if user_id

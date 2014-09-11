@@ -27,6 +27,7 @@ class ProjectsController < ApplicationController
   end
 
   def show
+    puts "in projects/show"
     @user = current_user
     puts params.inspect
     puts @user.inspect
