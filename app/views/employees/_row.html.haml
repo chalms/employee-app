@@ -6,12 +6,16 @@
     - employee_number_id = log_id ? "employee-log-employee-number-#{log_id}" : nil
     - employee_role_id = log_id ? "employee-log-role-#{log_id}" : nil
     %td
-      %h5.h5{:id => email_id}= log.email
+      %h5{:id => email_id}= log.email
     %td
-      %h5.h5{:id => employee_number_id}= log.employee_number
+      %h5{:id => employee_number_id}= log.employee_number
     %td
-      %h5.h5{:id => employee_role_id}= log.role
+      %h5{:id => employee_role_id}= log.role
     %td
       %h5.h5
       %button{:onclick => "deleteRow(#{email});"} X
     = render partial: 'employees/logs_script', :locals => {:email_id => email_id, :employee_number_id => employee_number_id, :employee_role_id => employee_role_id }
+-# =======
+-#       %h5= link_to "X", employee_log_path({id: log.id}), :method => 'delete', remote: true, :onclick => "destroyRow('#{log.id}');"
+-#     :javascript
+-#       makeAllEditable("#{log_id}");

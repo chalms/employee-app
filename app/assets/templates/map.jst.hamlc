@@ -1,0 +1,12 @@
+%script{src: "http://maps.googleapis.com/maps/api/js?sensor=false"}
+%link{rel: "stylesheet", type: "text/css", href: "css/jquery-gmaps-latlon-picker.css"}
+%script{src: "js/jquery-gmaps-latlon-picker.js"}
+%fieldset.gllpLatlonPicker
+%input.gllpSearchField{:type => "text"}
+%input.gllpSearchButton{:type => "button", :value => "search"}
+.gllpMap Google Maps
+- lat = (lat is undefined) ? lat : 0
+- long = (long is undefined) ? long : 0
+%input.gllpLatitude{:type => "hidden", :value => @lat}
+%input.gllpLongitude{:type => "hidden", :value => @long}
+%input.gllpZoom{:type => "hidden", :value => "3"}

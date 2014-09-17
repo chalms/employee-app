@@ -1,1 +1,1 @@
-$('#display').prepend('<%= escape_javascript(render partial: 'projects/index', locals => {user: @user}) %>');
+$('#sector').html('#{ escape_javascript(render partial: 'projects/index', :locals => {user: @user}) }').show();

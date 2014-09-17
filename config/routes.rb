@@ -23,9 +23,16 @@ Metrics::Application.routes.draw do
   resources :logins, only: [:new, :create]
   resources :signups, only: [:new, :create]
   resources :admins, only: [:show, :update]
-  get '/login' => 'logins#new'
-  get '/logout' => 'logins#logout'
-  root :to => 'home#show'
+# <<<<<<< HEAD
+#   get '/login' => 'logins#new'
+#   get '/logout' => 'logins#logout'
+#   root :to => 'home#show'
+# =======
+
+  get '/login' => 'logins#new', as: :home
+  get '/logout' => 'logins#logout', as: :logout
+  root :to => 'signups#new'
+
   get '/special_index' => 'employees#special_index'
   get '/companies/:id/employees' => 'employees#special_index'
   post '/chats/new_message' => 'chats#new_message'
@@ -41,6 +48,8 @@ Metrics::Application.routes.draw do
   post '/reports_tasks/:id/update' => 'reports_tasks#update'
   get '/test' => 'users#test'
   post '/employee_logs/:id/update' => 'employee_logs#update'
+  post '/contacts' => 'contacts#create'
+  get '/client/:id/contacts' => 'clients#contacts'
 
   namespace :api, defaults: {:format => 'json'} do
 
@@ -89,7 +98,7 @@ Metrics::Application.routes.draw do
         resources :chats,  only: [:create, :index]
     end
 
-    root :to => 'users#new', :as => :new
+    # root :to => 'users#new', :as => :new
   end
 
   #   get '/signout' => 'login#signout'

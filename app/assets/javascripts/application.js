@@ -6,6 +6,7 @@
 //= require json2
 //= require underscore
 //= require jquery.jeditable
+//= require jquery.boxfit
 //= require bootstrap
 //= require bootstrap-datepicker
 //= require backbone
@@ -14,40 +15,110 @@
 //= require backbone.marionette
 //= require app/app
 
-
 $(document).ready(function() {
- // window.Metrics.init();
   $( document ).ajaxSend(function(elem, xhr, options) {
-    console.log("before send");
+    console.log(elem + "," + xhr + "," + options);
     xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
     var lock = false
     try {
       var data = $('#tok').attr('data');
-      console.log(data);
-      console.log("that was the content");
+      console.log("token: " + data);
       if (data && data !== "undefined") {
         sessionStorage.auth = data;
-        console.log("setting auth");
+        console.log("setting auth token");
         xhr.setRequestHeader('AUTHORIZATION', data);
+      } else {
+        console.log("not setting data because: ");
+        if (!data) console.log("data is boolean false");
+        if (data === "undefined") console.log("data equals undefined");
       }
     } catch (err) {
       lock = true
-      console.log("No auth token");
+      console.log("No auth token created, exception thrown");
+      console.log(err)
     }
     if (!lock) {
       if (sessionStorage.auth && sessionStorage.auth !== "undefined") {
         xhr.setRequestHeader('AUTHORIZATION', sessionStorage.auth);
       } else {
         console.log("session storage not found... looking");
-
       }
     }
     return true;
   });
+
+  var $body = $('body'); //Cache this for performance
+  var setBodyScale = function() {
+    console.log("setBodyScale");
+    var scaleSource = $body.width(),
+        scaleFactor = 0.35,
+        maxScale = 125;
+        minScale = 5; //Tweak these values to taste
+    var fontSize = scaleSource * scaleFactor;
+    if (fontSize > maxScale) fontSize = maxScale;
+    if (fontSize < minScale) fontSize = minScale; //Enforce the minimum and maximums
+    $('body').css('font-size', fontSize + '%');
+  }
+  $(window).resize(function(){
+      setBodyScale();
+  });
+  setBodyScale();
+  var DELAY = 700, clicks = 0, timer = null;
+  $(function(){
+    $("#sidebar-wrapper").on("click", function(e){
+        clicks++;  //count clicks
+        if(clicks === 1) {
+            timer = setTimeout(function() {
+                 //single slick action
+                clicks = 0;             //after action performed, reset counter
+            }, DELAY);
+        } else {
+            clearTimeout(timer);
+            $("#wrapper").toggleClass("toggled");
+            clicks = 0;             //after action performed, reset counter
+        }
+    })
+    .on("dblclick", function(e){
+        e.preventDefault();  //cancel system double-click event
+    });
+  });
 });
 
+function projectPage(){
+  console.log("projectPage()")
+  $.ajax({
+    url: '/projects',
+    type: type,
+    data: data,
+    dataType: 'js',
+    global: true,
+    success: function (data) {
+      console.log("updated!!!!!!");
+    }
+  });
+}
+
+function switchSidebar(newPage) {
+  console.log("switchSidebar(" + newPage + ")");
+  var activeTarget = null;
+  var done;
+    console.log(newPage)
+  $('#sidebar ul.sidebar-nav li.sidebar-brand a').each(function (target) {
+    if (target.hasClass('active')) activeTarget = target;
+    if ( target.attr('href') === newPage)  {
+      target.addClass('active');
+      history.setHistory(newPage);
+      if (activeTarget !== null) {
+        activeTarget.removeClass('active')
+      }
+      target.removeClass('active')
+    }
+  });
+  projectPage();
+}
 
 function callAjax(type, url, data ) {
+  console.log("callAjax(" + type + "," + url + "," + data);
   $.ajax({
     url: url,
     type: type,
@@ -60,27 +131,42 @@ function callAjax(type, url, data ) {
   });
 }
 
+function callAjaxWithCallback(type, url, data, fn ) {
+  console.log("callAjaxWithCallback(" + type + "," + url + "," + "data"+ fn + ")");
+  $.ajax({
+    url: url,
+    type: type,
+    data: data,
+    dataType: 'json',
+    global: true,
+    success: fn(data)
+  });
+}
 
 function log(text) {
   if(window && window.console) console.log(text);
 }
 
 function taskDescriptionClear() {
+  console.log("taskDescriptionClear()");
   $('.task-description-text').val("");
 }
 
 function uploadForm() {
+  console.log("uploadForm()");
   var html = JST['employees/upload_form']();
   $('.form#employees-logs-form').after(html);
   $('.form#employees-logs-form').hide();
 }
 
 function showOldForm() {
+  console.log("showOldForm()");
   $('.form#employees-logs-form').after().hide();
   $('.form#employees-logs-form').show();
 }
 
 function loadBros() {
+  console.log("loadBros()");
   var s = $("select.employee-select.form-control");
   console.log(s[0]);
   console.log(s[0]['options'][0]);
@@ -105,12 +191,19 @@ function loadBros() {
 }
 
 function removeView() {
-  console.log('sheeet');
+  console.log('removeView()');
   return true;
 }
 
+function destroyRow(rowId) {
+  console.log("destroyRow(V)")
+  console.log(rowId);
+  var str = "#emp-row-" + rowId;
+  $(str).remove();
+}
+
 function onSubmit() {
-console.log('onSubmit');
+  console.log("onSubmit()");
   var b1 = $("input.task-description-text.text_field").is(':focus');
   console.log(b1);
   var b2 = $("select.employee-select.form-control").is(":focus");
@@ -123,14 +216,55 @@ console.log('onSubmit');
 }
 
 function renderMessage() {
-  console.log("rendering messages");
+  console.log("renderMessage()");
   attrs = $.closest('.render-message').attributes;
   console.log(attrs);
   JST['employees/messages'](attrs)
 }
 
+function replaceLastRow() {
+    var logPath = '/employees/' +  id;
+    var next = JST['employees/row'](json);
+    var last = $('#employees-logs-form').find('tr.last');
+    last.before(next);
+}
+
+function addEmpRow() {
+  console.log("addEmpRow()");
+  var k = $('.form#employees-logs-form');
+  var h = {};
+  k.find('input').each(function () {
+    h[$(this)[0].name] = $(this)[0].value;
+    $(this)[0].text = "";
+    var f = true;
+    var n = $(this);
+    while (f) {
+      if ((n.parent() !== undefined) && (n.parent() !== null)) {
+        if (n.parent().is('tr')) {
+          h["id"] = n.parent().attr('id')
+          f = false;
+        };
+      } else {
+        f = false;
+      }
+      n = n.parent();
+    }
+  });
+  var p = {};
+  p["email"] = h["email"];
+  p["employee_number"] = h["employee_number"];
+  p["type"] =  k.find('select')[0].value;
+  if ("id" in h) {
+     p["id"] = h["id"];
+  }
+  var logPath = '/employees/' + p["id"];
+  var next = JST['employees/row'](p);
+  var last = k.find('tr').last();
+  last.before(next);
+}
+
 function clickedThis(str) {
-  console.log(str);
+  console.log("clickedThis(" + str + ")");
   var t =  $('input.message.text_field.form-control').val();
   vals = { text: t}
   $(str).append(JST['employees/message'](vals));
@@ -157,6 +291,18 @@ function addEmpRow() {
   last.before($(next));
 }
 
+function dataPresent(data) {
+  console.log("dataPresent(" + data + ")");
+  lock = false;
+  if (data) {
+    if (data === "") lock = true
+  } else {
+    lock = true;
+  }
+  return lock;
+}
+
+
 var menuOpen;
 
 $(function() {
@@ -164,6 +310,7 @@ $(function() {
 });
 
 function toggleMenu() {
+    console.log('toggleMenu()');
     if (menuOpen) {
       menuOpen = false;
       $(".content").animate({position:'relative', top:'0px', left:'0px', width:'100%'}, 250, function() {
@@ -179,6 +326,7 @@ function toggleMenu() {
 }
 
 function deleteMe(report) {
+  console.log('deleteMe('+ report + ')')
   event.preventDefault();
   report = "#" + report;
   console.log(report);
@@ -187,6 +335,7 @@ function deleteMe(report) {
   l.hide();
   //l.closest('table').load();
 }
+
 // Fix safari links opening in new window
 
 function deleteRow(email) {

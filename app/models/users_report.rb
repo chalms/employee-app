@@ -1,13 +1,14 @@
 class UsersReport < ActiveRecord::Base
   include JsonSerializingModel
-  attr_accessible :complete, :checkin, :checkout, :parts, :tasks, :location, :date, :hours, :employee, :manager, :report_id, :user_id, :chat_id
-
+  attr_accessible :complete, :checkin, :checkout, :parts, :tasks, :date, :hours, :employee, :manager, :report_id, :user_id, :chat_id, :checkout_location, :checkin_location
   belongs_to :report
   belongs_to :user
   has_many :reports_parts
   has_many :reports_tasks
   has_one :chat
-  has_and_belongs_to_many :locations
+  has_many :locations
+
+
   after_create :create_chat
   TYPES = ['UsersReportsChat', 'ReportsChat']
 
@@ -17,6 +18,14 @@ class UsersReport < ActiveRecord::Base
       methods: [:date_json, :manager_json],
       include: :reports_tasks
     }).to_json
+  end
+
+  def checkin_location
+    l = Location.where(:users_reports_id => self.id).andand.first
+    if (!l.present?)
+      return
+    end
+    l.order('created_at DESC').first
   end
 
   def create_chat

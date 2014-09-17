@@ -1,28 +1,117 @@
-%h5
-  %a{onclick: 'uploadForm()'} Came prepared? Upload a CSV instead
-%table.table
-  %tbody
-    %tr
-      %th Email
-      %th Employee ID
-      %th Role
-      %th="  "
-    .employee-logs
-      - if (employee_logs)
-        - employee_logs.each do |log|
-          %tr{id: "#row-#{log.email}"}
-            = render partial: 'employees/row', locals: { log: log }
-      .form#employees-logs-form
-        %form{ :method => 'post', action: 'employees/save_data.js', 'accept-charset' => "UTF-8", :class => "update_employee_logs", 'data-remote' => "true", 'id' => "update_employee_logs"}
-          %tr.last
-            %td
-              %input.text_field{:type => "text", :name => "email", :placeholder => "employee@email.com" }
-            %td
-              %input.text_field{:type => "text", :name => "employee_number", :placeholder => "employee number" }
-            %td
-              %select{:type => "select", :name => "role"}
-                %option Admin
-                %option Manager
-                %option Employee
-            %td
-              %input.submit_field.form-control{:type => "submit", :name => "submit", :onclick => 'return addEmpRow();'}
+.form#employees-logs-form
+  %h5
+    %a{onclick: 'uploadForm()'} Came prepared? Upload a CSV instead
+  %form{ :method => 'post', action: '/employees/save_data.js', 'accept-charset' => "UTF-8", :class => "update_employee_logs", 'data-remote' => "true", 'id' => "update_employee_logs"}
+    %div.no-more-tables
+      %table.table
+        %tbody
+          .employee-logs
+            %tr
+              %th Email
+              %th Employee ID
+              %th Role
+              %th="  "
+              - if (employee_logs)
+                - employee_logs.each do |log|
+                  %tr{:id => "emp-row-#{log.id}"}
+                    = render partial: 'employees/row', locals: { log: log }
+                %tr.last
+                  %td
+                    %h5{:id => "last-email"} Employee Email
+                  %td
+                    %h5{:id => "employee-number-sum"} Employee Number
+                  %td
+                    %h5{:id => "employee-role-sum"} Employee Role
+                  %td
+                    %a.btn.btn-success#add-employee-sum +
+
+                  :javascript
+                    $('#last-email').editable({
+                      closeOnEnter : true,
+                      event : 'click',
+                      emptyMessage : 'Employee Email',
+                      callback : function( data ) {
+                        console.log(data);
+                      }
+                    });
+
+                    $('#employee-number-sum').editable({
+                      closeOnEnter : true,
+                      event : 'click',
+                      emptyMessage : 'Employee Number',
+                      callback : function( data ) {
+                        console.log(data);
+                      }
+                    });
+
+                    $('#employee-role-sum').on('click', function () {
+                      var input = $('<select id="'+ 'employee-select-sum' + '"><option>Admin</option><option>Manager</option><option>Employee</option></input>');
+                      var label = $('#employee-role-sum');
+                      input.width(label.width);
+                      input.height(label.height);
+                      input.css("margin", label.css("margin"));
+                      input.blur(function () {
+                        console.log("on.blur()");
+                        var data = input.val();
+                        console.log("-> data");
+                        console.log(data);
+                        input.remove();
+                        var label = $('#employee-role-sum');
+                        label.text(data);
+                        label.show();
+                      });
+                      label.after(input);
+                      label.hide();
+                    });
+
+                    $('#add-employee-sum').click(function () {
+                      var data = {};
+                      data["employee_log"] = {};
+                      data["employee_log"]["last_email"] = $('#last-email').text();
+                      data["employee_log"]["employee_number"] = $('#employee-number-sum').text();
+                      data["employee_log"]["employee_role"] = $('#employee-role-sum').text();
+                      var str =  "/employee_logs#create";
+                      var json;
+                      console.log("below is the data");
+                      console.log(data);
+                      callAjaxWithCallback('post', str, data, function(d) {
+                        console.log("ajax with callback return data ->");
+                        console.log(d);
+                        json = d;
+                        console.log($(this));
+                        var last = $(this).find('tr.last');
+                        console.log("last -> ");
+                        console.log(last);
+                        replaceLastRow(d["id"], json, last);
+                      });
+                    });
+
+-# %h5
+-#   %a{onclick: 'uploadForm()'} Came prepared? Upload a CSV instead
+-# %table.table
+-#   %tbody
+-#     %tr
+-#       %th Email
+-#       %th Employee ID
+-#       %th Role
+-#       %th="  "
+-#     .employee-logs
+-#       - if (employee_logs)
+-#         - employee_logs.each do |log|
+-#           %tr{id: "#row-#{log.email}"}
+-#             = render partial: 'employees/row', locals: { log: log }
+-#       .form#employees-logs-form
+-#         %form{ :method => 'post', action: 'employees/save_data.js', 'accept-charset' => "UTF-8", :class => "update_employee_logs", 'data-remote' => "true", 'id' => "update_employee_logs"}
+-#           %tr.last
+-#             %td
+-#               %input.text_field{:type => "text", :name => "email", :placeholder => "employee@email.com" }
+-#             %td
+-#               %input.text_field{:type => "text", :name => "employee_number", :placeholder => "employee number" }
+-#             %td
+-#               %select{:type => "select", :name => "role"}
+-#                 %option Admin
+-#                 %option Manager
+-#                 %option Employee
+-#             %td
+-#               %input.submit_field.form-control{:type => "submit", :name => "submit", :onclick => 'return addEmpRow();'}
+-# =======

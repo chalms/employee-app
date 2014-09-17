@@ -11,7 +11,7 @@
         %th Hours
       - user.company.projects.each do |project|
         %tr{:class => cycle("odd", "even")}
-          %td= link_to project.name, project_path(project), :remote => true
+          %td= link_to project.name, project_path(project.id), :remote => true
           %td= project.start_date
           %td= project.end_date
           %td= project.tasks_completion_percent

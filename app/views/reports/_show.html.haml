@@ -106,7 +106,7 @@
             var hash = {};
             hash["report"] = {}
             hash["report"]["name"] = data.content;
-            var str =  "reports/" + id + "/update.json";
+            var str =  "/reports/" + id + "/update.json";
             callAjax('post', str, hash)
           }
           if( data.fontSize ) {
@@ -131,7 +131,7 @@
             var hash = {};
             hash["report"] = {}
             hash["report"]["summary"] = data.content;
-            var str =  "reports/" + id + "/update.json";
+            var str =  "/reports/" + id + "/update.json";
             callAjax('post', str, hash)
           }
           if( data.fontSize ) {

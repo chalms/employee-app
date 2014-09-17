@@ -1,8 +1,19 @@
-.block
-  %h3 Links
-  #chatsapp
-    :javascript
-      jQuery(document).ready(function() {
-         window.Metrics.init();
-         Backbone.history.start();
-      })
+%ul.sidebar-nav
+  %li.sidebar-brand
+    %a= link_to "Projects",projects_path, :remote => true
+  %li.sidebar-brand
+    %a= link_to "Clients", clients_path({:data => {:clients => 'name', :div => '#display'}}), :remote => true
+  %li.sidebar-brand
+    %a{:href => "#employees"} Employees
+  %li.sidebar-brand
+    %a{:href => "#reports"} Reports
+-# <<<<<<< HEAD
+-# .block
+-#   %h3 Links
+-#   #chatsapp
+-#     :javascript
+-#       jQuery(document).ready(function() {
+-#          window.Metrics.init();
+-#          Backbone.history.start();
+-#       })
+-# =======

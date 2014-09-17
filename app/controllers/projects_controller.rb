@@ -5,6 +5,7 @@ class ProjectsController < ApplicationController
   def summary
     @user = current_user
     @project = Project.find(params[:project_id])
+    check_user
     @data = params[:data]
     @data[:project] = @project
     @div = params[:data][:div]
@@ -22,14 +23,15 @@ class ProjectsController < ApplicationController
       format.html { render haml: @projects };
       format.js
     end
-  rescue Exceptions::StdError => e
+    rescue Exceptions::StdError => e
     head 500, :content_type => 'text/html'
   end
 
   def show
+    puts "in projects/show"
     @user = current_user
     puts params.inspect
-    puts @user.inspect
+    check_user
     @project = Project.find(params[:id])
     validate_permissions!
     puts @project.inspect
@@ -45,6 +47,7 @@ class ProjectsController < ApplicationController
 
   def create
     @user = current_user
+    check_user
     @clients = params[:project][:clients]
     params[:project].delete(:clients)
     @project = @user.company.projects.create!(params[:project])
@@ -62,6 +65,7 @@ class ProjectsController < ApplicationController
 
   def update
     @user = current_user
+    check_user
     @project = Project.find(params[:id])
     validate_permissions!
     params = clean!
@@ -77,6 +81,7 @@ class ProjectsController < ApplicationController
 
   def destroy
     @user = current_user
+    check_user
     @project = Project.find(params[:id])
     validate_permissions!
     @project.destroy
@@ -86,6 +91,15 @@ class ProjectsController < ApplicationController
   end
 
   private
+
+  def check_user
+    if @user
+      @user.inspect
+    else
+      "User cannot be located!"
+    end
+  end
+
 
   def clean!
     params[:project]

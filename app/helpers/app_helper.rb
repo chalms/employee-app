@@ -18,16 +18,22 @@ module AppHelper
   def admin!
     @load = true
     @load = false if (@user.company.employee_logs.count > 1)
-    @route = 'admins/show'
+    @route = "/admins/#{@user.id}"
+    puts @route
+    @route
   end
 
   def manager!
     @route = 'managers/' + @user.id.to_s
+    puts @route
+    @route
   end
 
   def employee!
     @user.api_session_token = @tok
     @route = @user.to_json
+    puts @route
+    @route
   end
 
 end

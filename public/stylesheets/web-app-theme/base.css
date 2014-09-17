@@ -49,7 +49,10 @@ body {
 }
 
 #main {
+/*<<<<<<< HEAD
   width: 70%;
+=======*/
+  width: 100%;
   float: left;
 }
 
@@ -66,7 +69,7 @@ body {
   float: right;
   padding: 1px 0;
 }
-
+/*
 #sidebar {
   width: 25%;
   float: right;
@@ -95,10 +98,10 @@ body {
 #sidebar .block .sidebar-block, #sidebar .notice {
   padding:10px;
 }
-
-#wrapper {
+*/
+/*#wrapper {
   padding-top: 20px;
-}
+}*/
 
 #main .block {
   margin-bottom: 20px;

@@ -12,7 +12,7 @@
           .form-group
             %select.form-control{:class => 'employee-select', :name => 'user_id'}
               - report.manager.company.employees.each do |employee|
-                %option{:value => employee.id}=employee.name
+                %option{:value => employee.id}=employee.get_name
         .row
           .form-group
             %input.form-control{:type => 'submit', :name => 'submit'}

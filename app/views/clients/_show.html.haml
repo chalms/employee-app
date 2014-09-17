@@ -1,19 +1,49 @@
-.client
+#client-data.client
   %h2= "#{client.name}"
-  .summary
-    %ul
-      %li.group Assigned Tasks: #{client.assigned_tasks}
-      %li.group % Completion: #{client.tasks_percent_completion}
-      %li.group Hours: #{client.hours}
-  .projects
-    - if (client.projects)
-      = render partial: 'projects/index', locals: { projects: client.projects }, :remote => true
-  .locations
-    - if (client.locations)
-      = render partial: 'locations/map', locals: { locations: client.locations }
-    %button.button= link_to "Add a new location for client", :data => { :belongs_to => client }, :remote => true
-  .contacts
-    - if (client.contacts)
-      - client.contacts.each do |contact|
-        = render partial: 'contacts/show', locals: { contact: contact}
-    %button.button= link_to "Add a New Contact", 'contact/new', :data => { :belongs_to => client }, :remote => true
+  %table.table.ui-table
+    %tbody
+      - if (client.projects)
+        - client.projects.each do |p|
+          %tr
+            %td= link_to p.name, project_path(p.id), :remote => true
+            %td= link_to "#{p.reports.count} Reports", reports_path({:data => {:reports => 'date', :options => {:project_id => @project.id}, :div => '#projects-template'}}), :remote => :true, :class => 'linkster'
+      .client-locations
+        - if (client.locations)
+          - client.locations.each do |c|
+            %tr
+              %td{"colspan" => 2, :id => "client-locations-#{c.id}"}
+                :javascript
+                  $("client-locations-#{c.id}").html(JST['/map'](long: c.location.andand.longitude, lat: c.location.andand.latitude))
+      %tr
+        %td
+          %button.button= link_to "Add a new location for client", :data => { :belongs_to => client }, :remote => true
+        %td
+      .contacts
+        %tr#contact-add-remove{:value => "#{client.id}"}
+          %td Clients
+          %td
+            %a#new-contact-listener New Contact
+            :javascript
+              $("#new-contact-listener").click(function (e) {
+                console.log("new-contact-listener executor");
+                var newClientForm = JST['clients/form']();
+                console.log(newClientForm);
+                if (!newClientForm || newClientForm === undefined || newClientForm === "undefined") return ;
+                $("#contact-add-remove").after().html(newClientForm).show();
+                console.log("clicked");
+              });
+        #contacts-rows
+          :javascript
+            $.ajax({
+              type: 'GET',
+              url: '/contacts.json',
+              dataType: json,
+              success: function (data) {
+                console.log(data);
+                var contactsJSON  = data;
+                $("#contacts-rows").html("");
+                for (var row in contactsJSON) {
+                  $("#contacts-rows").append('<tr> <td>' + row.name + ' - ' + row.email + '</td><td>' + row.phone + '</td></tr>')
+                }
+              }
+            })

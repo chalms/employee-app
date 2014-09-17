@@ -1,2 +1,2 @@
-var newClient = $('<%= escape_javascript(render partial: 'clients/show', locals => @data) %>');
+var newClient = $('#{ escape_javascript(render partial: 'clients/show', locals => @data}) }');
 $(@div).html(newClient);

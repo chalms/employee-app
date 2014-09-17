@@ -1,4 +1,5 @@
 #tok{:data => "#{@token}"}
+#user{:data => "#{@user.to_json.to_s}"}
 - content_for :user_nav, render(:partial => 'admins/user_nav')
 #sector
   = render(:partial => 'admins/home', locals: {user: @user})

@@ -193,3 +193,9 @@ table.table.u-table. {
   border: 0px;
   box-shadow: 0;
 }
+
+.ui-wrapper {
+  width: 50%;
+  height: 50%;
+  margin: auto;
+}

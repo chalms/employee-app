@@ -8,10 +8,10 @@ class ApplicationController < ActionController::Base
 
   def go_home(e)
     @data = { :error => e, :div => '#my-flash'}
-    respond_to do |format|
-      format.js { render 'layouts/flash_error' }
-      format.html { render partial: 'layouts/flash_error', locals: @data }
-    end
+    # respond_to do |format|
+    #   format.js { render 'layouts/flash_error' }
+    #   format.html { render 'logins/new', locals: @data }
+    # end
     return
   rescue Exceptions::StdError => e
     respond_to do |format|
@@ -30,6 +30,12 @@ class ApplicationController < ActionController::Base
 
   def current_user(tok = nil)
     raise Exceptions::StdError, "No current user" unless (_authorization_header(tok) && current_api_session_token(tok).valid?)
+    if (_authorization_header(tok))
+      puts "authorization header"
+    end
+    if (current_api_session_token(tok).valid?)
+      puts "current_api_session_token => #{current_api_session_token.inspect}"
+    end
     return current_api_session_token.user
   end
 
