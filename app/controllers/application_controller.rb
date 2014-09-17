@@ -8,10 +8,10 @@ class ApplicationController < ActionController::Base
 
   def go_home(e)
     @data = { :error => e, :div => '#my-flash'}
-    respond_to do |format|
-      format.js { render 'layouts/flash_error' }
-      format.html { render 'logins/new', locals: @data }
-    end
+    # respond_to do |format|
+    #   format.js { render 'layouts/flash_error' }
+    #   format.html { render 'logins/new', locals: @data }
+    # end
     return
   rescue Exceptions::StdError => e
     respond_to do |format|

@@ -5,7 +5,7 @@ class ApiSessionToken
 
   PRINT = true
 
-  TTL = 20.minutes
+  TTL = 60.minutes
 
   def initialize(existing_token=nil, redis=_redis_connection)
     puts "existing token: #{existing_token}"

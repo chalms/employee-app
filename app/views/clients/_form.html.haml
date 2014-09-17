@@ -1,13 +1,7 @@
-- if (!embedded)
-  .form
-    %form{:action => 'clients', :method => 'post'}
-      .form-group
-        %input.form-control{:name => "name", :type => "text", :placeholder => 'Client Name'}
-      .form-group
-        %button.btn.btn-default=link_to "Add Another Contact", '/contacts/new', :data => {:embedded => true}, :remote => true
+.form
+  %form{:action => 'clients', :method => 'post'}
+    .form-group
+      %input.form-control{:name => "name", :type => "text"}
       %input.submit{:name => "submit", :type => "submit"}
-- else
-  .form-group
-    %input.form-control{:name => "name", :type => "text"}
-  .form-group
-    %button.btn.btn-default=link_to "Add Another Contact", '/contacts/new', :data => {:embedded => true}, :remote => true
+    .form-group
+      %button.btn.btn-default=link_to "Add Another Contact", '/contacts/new', :data => {:embedded => true}, :remote => true

@@ -21,7 +21,6 @@
 //= require_tree ./views
 //= require_tree .
 
-
 $(document).ready(function() {
   $( document ).ajaxSend(function(elem, xhr, options) {
     console.log(elem + "," + xhr + "," + options);
@@ -49,7 +48,6 @@ $(document).ready(function() {
         xhr.setRequestHeader('AUTHORIZATION', sessionStorage.auth);
       } else {
         console.log("session storage not found... looking");
-
       }
     }
     return true;
@@ -62,7 +60,7 @@ $(document).ready(function() {
         scaleFactor = 0.35,
         maxScale = 125;
         minScale = 5; //Tweak these values to taste
-    var fontSize = scaleSource * scaleFactor; //Multiply the width of the body by the scaling factor:
+    var fontSize = scaleSource * scaleFactor;
     if (fontSize > maxScale) fontSize = maxScale;
     if (fontSize < minScale) fontSize = minScale; //Enforce the minimum and maximums
     $('body').css('font-size', fontSize + '%');
@@ -92,7 +90,6 @@ $(document).ready(function() {
   });
 });
 
-
 function projectPage(){
   console.log("projectPage()")
   $.ajax({
@@ -106,7 +103,6 @@ function projectPage(){
     }
   });
 }
-
 
 function switchSidebar(newPage) {
   console.log("switchSidebar(" + newPage + ")");
@@ -127,8 +123,6 @@ function switchSidebar(newPage) {
   projectPage();
 }
 
-
-
 function callAjax(type, url, data ) {
   console.log("callAjax(" + type + "," + url + "," + data);
   $.ajax({
@@ -140,6 +134,18 @@ function callAjax(type, url, data ) {
     success: function (data) {
       console.log("updated");
     }
+  });
+}
+
+function callAjaxWithCallback(type, url, data, fn ) {
+  console.log("callAjaxWithCallback(" + type + "," + url + "," + "data"+ fn + ")");
+  $.ajax({
+    url: url,
+    type: type,
+    data: data,
+    dataType: 'json',
+    global: true,
+    success: fn(data)
   });
 }
 
@@ -217,10 +223,16 @@ function onSubmit() {
 
 function renderMessage() {
   console.log("renderMessage()");
-  console.log("rendering messages");
   attrs = $.closest('.render-message').attributes;
   console.log(attrs);
   JST['employees/messages'](attrs)
+}
+
+function replaceLastRow() {
+    var logPath = '/employees/' +  id;
+    var next = JST['employees/row'](json);
+    var last = $('#employees-logs-form').find('tr.last');
+    last.before(next);
 }
 
 function addEmpRow() {
@@ -265,17 +277,16 @@ function clickedThis(str) {
   return true;
 }
 
-
-  function dataPresent(data) {
-    console.log("dataPresent(" + data + ")");
-    lock = false;
-    if (data) {
-      if (data === "") lock = true
-    } else {
-      lock = true;
-    }
-    return lock;
+function dataPresent(data) {
+  console.log("dataPresent(" + data + ")");
+  lock = false;
+  if (data) {
+    if (data === "") lock = true
+  } else {
+    lock = true;
   }
+  return lock;
+}
 
 
 var menuOpen;
@@ -328,113 +339,3 @@ if(("standalone" in window.navigator) && window.navigator.standalone){
     }
     ,false);
 }
-
-// function makeAllEditable(logID) {
-//   console.log("makeAllEditable(" + logID + ")");
-//   var emailID = "h5[id='employee-log-email-" + logID + "']";
-//   var empNumID = "h5[id='employee-log-employee-number-" + logID + "']";
-//   var empRoleID = "h5[id='employee-log-role-" + logID + "']";
-
-//   $(emailID).editable({
-//       closeOnEnter : true, // Whether or not pressing the enter key should close the editor (default false)
-//       event : 'click', // The event that triggers the editor (default dblclick)
-//       emptyMessage : 'Employee Email', // HTML that will be added to the editable element in case it gets empty (default false)
-//       callback : function( data ) {
-//         console.log(data);
-//         if( data.content ) {
-//           var el = data.$el;
-//           var id = logID;
-//           var hash = {};
-//           hash["employee_log"] = {}
-//           hash["employee_log"]["email"] = data.content;
-//           var str =  "/employee_log/" + id + "/update.json";
-//           callAjax('post', str, hash)
-//         }
-//         if( data.fontSize ) {
-//             // the font size has changed
-//         }
-//           // data.$el gives you a reference to the element that was edited
-//       }
-//   });
-
-//   $(empNumID).editable({
-//       closeOnEnter : true, // Whether or not pressing the enter key should close the editor (default false)
-//       event : 'click', // The event that triggers the editor (default dblclick)
-//       emptyMessage : 'Employee Number', // HTML that will be added to the editable element in case it gets empty (default false)
-//       callback : function( data ) {
-//         console.log('$(empNumId).callback( data -> ');
-//         console.log(data);
-//         if( data.content ) {
-//           var el = data.$el;
-//           var id = logID;
-//           var hash = {};
-//           hash["employee_log"] = {}
-//           hash["employee_log"]["employee_number"] = data.content;
-//           var str =  "/employee_log/" + id + "/update.json";
-//           callAjax('post', str, hash);
-//         }
-//         if( data.fontSize ) { }
-//       }
-//   });
-
-//   var roleSelectVal = 'ep-' + logID;
-//   function callR() {
-//     console.log("callR()");
-//     console.log(roleSelectVal);
-//     $(roleSelectVal)
-//       .blur(function () {
-//           console.log("second clicked");
-//           var input = $(roleSelectVal)
-//           var data = input.val();
-//           if ((data === null)  ||  (data === "") || (!data)) {
-//             console.log("data is null");
-//             input.remove();
-//             var label = $(empRoleID);
-//             label.show();
-//           } else {
-//             var hash = {report : {date : data}};
-//             console.log("calling ajax");
-//             callAjax('post', "/reports/" + logID + "/update", hash );
-//             input.remove();
-//             var label = $(empRoleID);
-//             label.text(data);
-//             label.show();
-//           }
-//       })
-//       .focusout(function(event) {
-//         var input = $(roleSelectVal)
-//           var data = input.val();
-//           if ((data === null)  ||  (data === "") || (!data)) {
-//             console.log("data is null");
-//             input.remove();
-//             var label = $(empRoleID);
-//             label.show();
-//           } else {
-//             var hash = {report : {date : data}};
-//             console.log("calling ajax");
-//             callAjax('post', "/reports/" + logID + "/update", hash );
-//             input.remove();
-//             var label = $(empRoleID);
-//             label.text(data);
-//             label.show();
-//           }
-//       });
-//   }
-
-//   $(empRoleID).on('click', function () {
-//       console.log("clicked");
-//       callR();
-//       var input = $('<select id="'+ roleSelectVal + '"><option>Admin</option><option>Manager</option><option>Employee</option></input>');
-//       var label = $(empRoleID)
-//       input.width(label.width);
-//       input.height(label.height);
-//       input.css("margin", label.css("margin"));
-//       input.on('keyup', function (e) {
-//           if( e.keyCode == 13 ) {
-//               $(input).blur();
-//           }
-//       });
-//       label.after(input);
-//       label.hide();
-//   });
-// }

@@ -1,22 +1,6 @@
 .clients-table
-  %table.table
-    %thead.header
-      - if (project.present?)
-        %h3.title= "#{project.name} Clients"
-      - else
-        %h3.title= "Clients"
-    %tr.headers
-      %th Name
-      %th Assigned Tasks
-      %th % Complete
-      %th Hours
-      %th Contact
+  .grid
     - clients.each do |client|
-      %tr
-        %td= link_to client.name, clients_path(client.id)
-        %td= client.assigned_tasks
-        %td= client.tasks_percent_completion
-        %td= client.hours
-        %td= client.contact.name
-    %tfooter
-      %h5=link_to 'Add a client!', '/clients/new', :remote => true
+      .gridrow
+        %p="#{client.id}"
+        = render(:partial => 'clients/show', locals: {:client => client})

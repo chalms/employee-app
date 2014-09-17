@@ -1,8 +1,8 @@
 %ul.sidebar-nav
   %li.sidebar-brand
-    %a{:href => "#projects"} Projects
+    %a= link_to "Projects",projects_path, :remote => true
   %li.sidebar-brand
-    %a{:href => "#clients"} Clients
+    %a= link_to "Clients", clients_path({:data => {:clients => 'name', :div => '#display'}}), :remote => true
   %li.sidebar-brand
     %a{:href => "#employees"} Employees
   %li.sidebar-brand

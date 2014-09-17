@@ -1,0 +1,41 @@
+%tr#new-contact-form
+  %td{:colspan => 2}
+    %input{:name => "name", :type => "text"}
+    %input{:name => "email", :type => "text"}
+    %input{:name => "phone", :type => "text"}
+    %button.btn.btn-success#new-contact-form-button +
+    %a#hide-new-contact-form Hide
+      :javascript
+        $('#new-contact-form-button').click(function (e) {
+          var data = {};
+          var $inputs = $('#new-contact-form :input');
+          $inputs.each(function() {
+              data[this.name] = $(this).val();
+          });
+          var idValue = $("#contact-add-remove").attr('value');
+          data["id"] = idValue;
+          console.log(idValue);
+          $.ajax({
+            type: 'post',
+            url: '/contacts.json',
+            data: data,
+            dataType: 'json',
+            success: function (data) {
+              console.log("return from ajax!");
+              console.log(data);
+              var contactsJSON = data["contacts"];
+              console.log("^data, VcontactsJSON");
+              console.log(contactsJSON);
+              $("#contacts-rows").html("");
+              for (var key in contactsJSON) {
+                var row = contactsJSON[key];
+                $("#contacts-rows").append('<tr> <td>' + row.name + ' - ' + row.email + '</td><td>' + row.phone + '</td></tr>')
+              }
+            }
+          })
+          console.log(data);
+        })
+        $('#hide-new-contact-form').click(function () {
+          console.log("click to hide new contact form");
+          $('tr[id="new-contact-form"]').remove();
+        })

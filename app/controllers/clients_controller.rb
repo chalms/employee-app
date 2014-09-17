@@ -5,21 +5,31 @@ class ClientsController < ApplicationController
 
   def index
     @user = current_user
-    @data = params[:data]
+    @d = params[:data]
     puts params
-    if @data[:options][:project_id].present?
-      @data[:project] =  Project.find(@data[:options][:project_id])
-
-      @data[:clients] = Client.where(:project_id => @data[:options][:project_id]).all
-    end
-    @div = @data.delete(:div)
+    @data = {}
+    @div = @d[:div]
+    @data[:div] = @div
+    @data[:clients] = current_user.company.andand.clients
     respond_to do |format|
-      format.json { render json: @clients };
+      format.json { render json: @data};
       format.js
     end
   rescue Exceptions::StdError => e
     puts e.message
     redirect_to :root_url
+  end
+
+  def contacts
+    @user = current_user
+    @client = @user.company.clients.find_by_id(params[:id])
+    json_arr = []
+    Contact.where(:client_id => client.id).each do |c|
+      json_arr << c.as_json
+    end
+    respond_to do |format|
+      format.json { render json: json_arr }
+    end
   end
 
   # GET /api/clients/1
