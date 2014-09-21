@@ -99,6 +99,19 @@ class ReportsController < ApplicationController
     end
   end
 
+  def upload
+    @user = current_user(params[:user_auth])
+    is_admin!
+    puts "params: => #{params}"
+    file_data = params[:file]
+    puts "file_data: => #{file_data}"
+    @report = ReportCsv.new(file_data, @user).report
+    respond_to do |format|
+      format.js { render haml: @report }
+    end
+  end
+
+
   def update
     @user = current_user
     @report = Report.find(params[:id])

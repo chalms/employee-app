@@ -1,0 +1,10 @@
+%table.table#upload-table
+  %tr
+    %td Email
+    %td Employee ID
+    %td Role
+.format
+  %form{:action=>"reports/upload.js", :method=>"post", :enctype=>"multipart/form-data", "data-remote" => "true", :onsubmit => 'showOldForm()'}
+    %input{:type => 'hidden', :name=> 'user_auth', :value => sessionStorage.auth}
+    %input{:type=>"file",:name=>"file"}
+    %input{:type=>"submit",:value=>"Upload"}

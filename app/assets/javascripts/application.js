@@ -159,10 +159,24 @@ function uploadForm() {
   $('.form#employees-logs-form').hide();
 }
 
+function uploadReportForm() {
+  console.log("uploadForm()");
+  var html = JST['reports/upload_form']();
+  $('.form#reports-logs-form').after(html);
+  $('.form#reports-logs-form').hide();
+}
+
+
 function showOldForm() {
   console.log("showOldForm()");
   $('.form#employees-logs-form').after().hide();
   $('.form#employees-logs-form').show();
+}
+
+function showOldReportForm() {
+  console.log("showOldReportForm()");
+  $('.form#reports-logs-form').after().hide();
+  $('.form#reports-logs-form').show();
 }
 
 function loadBros() {
@@ -229,39 +243,39 @@ function replaceLastRow() {
     last.before(next);
 }
 
-function addEmpRow() {
-  console.log("addEmpRow()");
-  var k = $('.form#employees-logs-form');
-  var h = {};
-  k.find('input').each(function () {
-    h[$(this)[0].name] = $(this)[0].value;
-    $(this)[0].text = "";
-    var f = true;
-    var n = $(this);
-    while (f) {
-      if ((n.parent() !== undefined) && (n.parent() !== null)) {
-        if (n.parent().is('tr')) {
-          h["id"] = n.parent().attr('id')
-          f = false;
-        };
-      } else {
-        f = false;
-      }
-      n = n.parent();
-    }
-  });
-  var p = {};
-  p["email"] = h["email"];
-  p["employee_number"] = h["employee_number"];
-  p["type"] =  k.find('select')[0].value;
-  if ("id" in h) {
-     p["id"] = h["id"];
-  }
-  var logPath = '/employees/' + p["id"];
-  var next = JST['employees/row'](p);
-  var last = k.find('tr').last();
-  last.before(next);
-}
+// function addEmpRow() {
+//   console.log("addEmpRow()");
+//   var k = $('.form#employees-logs-form');
+//   var h = {};
+//   k.find('input').each(function () {
+//     h[$(this)[0].name] = $(this)[0].value;
+//     $(this)[0].text = "";
+//     var f = true;
+//     var n = $(this);
+//     while (f) {
+//       if ((n.parent() !== undefined) && (n.parent() !== null)) {
+//         if (n.parent().is('tr')) {
+//           h["id"] = n.parent().attr('id')
+//           f = false;
+//         };
+//       } else {
+//         f = false;
+//       }
+//       n = n.parent();
+//     }
+//   });
+//   var p = {};
+//   p["email"] = h["email"];
+//   p["employee_number"] = h["employee_number"];
+//   p["type"] =  k.find('select')[0].value;
+//   if ("id" in h) {
+//      p["id"] = h["id"];
+//   }
+//   var logPath = '/employees/' + p["id"];
+//   var next = JST['employees/row'](p);
+//   var last = k.find('tr').last();
+//   last.before(next);
+// }
 
 function clickedThis(str) {
   console.log("clickedThis(" + str + ")");

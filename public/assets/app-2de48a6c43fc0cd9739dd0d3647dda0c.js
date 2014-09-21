@@ -96,3 +96,9 @@
   Metrics.nativeAndroidVersion = '0.9.3';
 
 }).call(this);
+
+s = [["Gimme Shelter", 1990, 100], ["Birthday Sex", 1988, 100], ["Hideaway", 1990, 200]]
+function f(l, fn) { for (var i in l) {l[i] = l[i][0] + l[i][1]; }  fn(l)};
+function run(s, l, fn, fn2) { for (var arr in s) { l[arr[1]] = l[arr[1]] ? [(l[arr[1]][0] + arr[2]),(l[arr[1]][1] += 1)] : [arr[2], 1] ; } fn(l, fn2);};
+run(s, {}, f, function (l) { console.log(l); });
+
