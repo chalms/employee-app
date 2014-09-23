@@ -14,6 +14,7 @@
 //= require backbone.babysitter
 //= require backbone.marionette
 //= require app/app
+//= require cloudinary
 
 $(document).ready(function() {
   $( document ).ajaxSend(function(elem, xhr, options) {

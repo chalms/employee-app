@@ -11,10 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-# <<<<<<< HEAD
-# ActiveRecord::Schema.define(version: 20140725055111) do
-# =======
-ActiveRecord::Schema.define(version: 20140910084951) do
+ActiveRecord::Schema.define(version: 20140923040153) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -205,6 +202,13 @@ ActiveRecord::Schema.define(version: 20140910084951) do
     t.integer  "task_id"
     t.integer  "users_report_id"
     t.integer  "status",          default: 0
+  end
+
+  create_table "reports_tasks_pictures", force: true do |t|
+    t.integer  "reports_task_id"
+    t.string   "picture"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "tasks", force: true do |t|

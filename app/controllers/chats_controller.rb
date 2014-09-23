@@ -27,10 +27,19 @@ class ChatsController < ApplicationController
     id = params[:id]
     users_chat = UsersChat.find(id)
     message = users_chat.chat.send_message(params[:text], nil, users_chat.user.id)
-    hash = {}
-    hash = {:message => "<p>#{message.data}</p>"}
+    # hash = {}
+    # hash = {:message => "<p>#{message.data}</p>"}
+    Pusher['#{users_chat.id}'].trigger('greet', {
+      :greeting => "#{message.data}!"
+    })
+    # respond_to do |format|
+    #   format.json { render json: hash.to_json }
+    # end
+    head :ok
+    return
+  rescue Exceptions::StdError => e
     respond_to do |format|
-      format.json { render json: hash.to_json }
+      format.json { render json: {"error" => "Message could not be sent"}}
     end
   end
 end

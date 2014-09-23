@@ -1,0 +1,6 @@
+:javascript
+  var pusher = new Pusher('#{Pusher.key}'); // uses your APP KEY
+  var channel = pusher.subscribe('#{channel}');
+  channel.bind('greet', function(data) {
+    alert(data.greeting);
+  });

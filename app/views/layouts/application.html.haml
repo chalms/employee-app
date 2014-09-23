@@ -5,7 +5,9 @@
     = stylesheet_link_tag "web-app-theme/base", "web-app-theme/themes/drastic-dark/style"
     = stylesheet_link_tag "application"
     = javascript_include_tag :application
+    = cloudinary_js_config
     = csrf_meta_tag
+    %script{:src => "http://js.pusher.com/2.0/pusher.min.js"}
   %body
     #container
       #header

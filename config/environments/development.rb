@@ -22,9 +22,17 @@ Metrics::Application.configure do
   # Raise an error on page load if there are pending migrations
   config.active_record.migration_error = :page_load
 
+  ENV["REDISTOGO_URL"] = 'redis://redistogo:7ec277035f3bf7e08b28a12c2839f1d4@viperfish.redistogo.com:9394/'
+
+    ENV["CLOUDINARY_URL"] = 'cloudinary://885971285344791:L9YRPXnS8h4Pkp6mKlZfwWOi3Hg@hcvhui1zf'
+
+
+  Pusher.app_id = '90368'
+  Pusher.key    = 'dc854e6535beecc1afe1'
+  Pusher.secret = 'e97e960f0487dc25e7a4'
   # Debug mode disables concatenation and preprocessing of assets.
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
   config.assets.debug = true
-  
+
 end

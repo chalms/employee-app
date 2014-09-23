@@ -18,7 +18,9 @@ gem 'cancan'
 gem 'roo'
 gem 'ancestry'
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
-
+gem 'carrierwave'
+gem 'cloudinary'
+gem 'pusher'
 # Assets
 gem 'sass-rails', '~> 4.0.0'
 gem 'uglifier', '>= 1.3.0'
